@@ -7,6 +7,7 @@ set -o nounset
 set -o pipefail
 set -o errexit
 
+# On local machine
 mount-output() {
   # NOTE: Requires host defined in ~/.ssh/config
   sshfs broome: ~/broome
@@ -41,5 +42,26 @@ render-all() {
   done
 }
 
+# On local machine
+
+readonly EXR_DIR=~/broome/git/pbrt-video
+
+exr-to-jpg() {
+  local exr=$1
+  convert $exr $(basename $exr .exr).jpg
+}
+
+all-jpg() {
+  echo $EXR_DIR/?.exr | xargs --verbose -n 1 -- $0 exr-to-jpg
+}
+
+
+# NOTE: Tried 'convert' from imagemagick but it didn't seem to work
+
+# https://superuser.com/questions/249101/how-can-i-combine-30-000-images-into-a-timelapse-movie
+
+make-video() {
+  time ffmpeg -f image2 -r 1/5 -i %01d.jpg -c:v libx264 -pix_fmt yuv420p out.mp4
+}
 
 "$@"
