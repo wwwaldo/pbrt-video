@@ -7,6 +7,13 @@ set -o nounset
 set -o pipefail
 set -o errexit
 
+mount-output() {
+  # NOTE: Requires host defined in ~/.ssh/config
+  sshfs broome: ~/broome
+
+  ls ~/broome/git/pbrt-video
+}
+
 deps() {
   pip3 install numpy matplotlib
 }
