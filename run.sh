@@ -2,6 +2,13 @@
 #
 # Usage:
 #   ./run.sh <function name>
+#
+# Examples:
+#
+#   ./run.sh frames      # generates .pbrt files
+#   ./run.sh render-all  # generates .exr files
+#   ./run.sh all-jpg     # generates .jpg files
+#   ./run.sh make-video  # generate .mp4 file
 
 set -o nounset
 set -o pipefail
@@ -61,7 +68,7 @@ all-jpg() {
 # https://superuser.com/questions/249101/how-can-i-combine-30-000-images-into-a-timelapse-movie
 
 make-video() {
-  # imagemagick
+  # with imagemagick
   # http://jupiter.ethz.ch/~pjt/makingMovies.html 
   time convert -delay 6 -quality 95 *.jpg movie.mp4
   return
