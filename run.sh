@@ -59,7 +59,7 @@ exr-to-jpg() {
 }
 
 all-jpg() {
-  echo $EXR_DIR/?.exr | xargs --verbose -n 1 -- $0 exr-to-jpg
+  echo $EXR_DIR/k-*.exr | xargs --verbose -n 1 -P 2 -- $0 exr-to-jpg
 }
 
 
@@ -70,7 +70,7 @@ all-jpg() {
 make-video() {
   # with imagemagick
   # http://jupiter.ethz.ch/~pjt/makingMovies.html 
-  time convert -delay 6 -quality 95 *.jpg movie.mp4
+  time convert -delay 6 -quality 95 k-*.jpg movie.mp4
   return
 
   time ffmpeg -f image2 -r 1/5 -i %01d.jpg -c:v libx264 -pix_fmt yuv420p out.mp4
