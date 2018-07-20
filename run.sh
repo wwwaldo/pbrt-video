@@ -61,6 +61,11 @@ all-jpg() {
 # https://superuser.com/questions/249101/how-can-i-combine-30-000-images-into-a-timelapse-movie
 
 make-video() {
+  # imagemagick
+  # http://jupiter.ethz.ch/~pjt/makingMovies.html 
+  time convert -delay 6 -quality 95 *.jpg movie.mp4
+  return
+
   time ffmpeg -f image2 -r 1/5 -i %01d.jpg -c:v libx264 -pix_fmt yuv420p out.mp4
 }
 
