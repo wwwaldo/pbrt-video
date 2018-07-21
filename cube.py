@@ -69,8 +69,8 @@ def LinePlaneIntersect():
 def main(argv):
   print('Hello from cube.py')
   p0 = np.array([0.5, 0.5, 0.5])  # center of the cube
-  p1 = np.array([1, 2, 3])
-  p2 = np.array([2, 1, 3])
+  p1 = np.array([1, 2, 2])
+  p2 = np.array([2, 1, 2])
   p01 = p1 - p0
   p02 = p2 - p0
 
@@ -96,11 +96,25 @@ def main(argv):
 
   fig = plt.figure()
   ax = fig.gca(projection='3d')  # create 3d axes?
-  x = np.array([0, 1])
-  y = np.array([0, 1])
-  z = np.array([0, 1])
 
-  ax.plot(x, y, z)
+  #x = np.array([0, 1])
+  #y = np.array([0, 1])
+  #z = np.array([0, 1])
+  #ax.plot(x, y, z)
+
+  for la, lb in EDGES:
+    x = np.array([la[0], lb[0]])
+    y = np.array([la[1], lb[1]])
+    z = np.array([la[2], lb[2]])
+
+    ax.plot(x, y, z)
+
+  for v in (p1, p2):
+    x = np.array([p0[0], v[0]])
+    y = np.array([p0[1], v[1]])
+    z = np.array([p0[2], v[2]])
+
+    ax.plot(x, y, z)
 
   plt.show()
 
