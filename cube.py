@@ -7,6 +7,8 @@ cube.py
 import sys
 
 import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 
 # TODO: Generate these
@@ -91,6 +93,16 @@ def main(argv):
   #print(np.cross([1,2,3], [4,5,6]))
 
   # OK now plot the plane, the edges, and the intersection points
+
+  fig = plt.figure()
+  ax = fig.gca(projection='3d')  # create 3d axes?
+  x = np.array([0, 1])
+  y = np.array([0, 1])
+  z = np.array([0, 1])
+
+  ax.plot(x, y, z)
+
+  plt.show()
 
 
 if __name__ == '__main__':
