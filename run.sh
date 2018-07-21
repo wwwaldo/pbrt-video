@@ -22,6 +22,11 @@ mount-output() {
   ls ~/broome/git/pbrt-video
 }
 
+# OS X deps: https://www.xquartz.org/
+# Ubuntu deps: ipython3
+# TODO: Try Jupyter too
+
+# ubuntu deps
 deps() {
   pip3 install numpy matplotlib
 }
