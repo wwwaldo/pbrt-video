@@ -1,10 +1,13 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 from __future__ import print_function
 """
 cube.py
 """
 
 import sys
+
+import numpy as np
+
 
 # TODO: Generate these
 VERTICES = [
@@ -42,13 +45,52 @@ for line in EDGE_STR.splitlines():
   u, v = line.split()
   u = int(u)
   v = int(v)
-  EDGES.append((VERTICES[u], VERTICES[v]))
+  u = np.array(VERTICES[u])
+  v = np.array(VERTICES[v])
+  EDGES.append((u, v))
 
 print(EDGES)
+
+# https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
+#
+# triangle: p0, p1, p2 (9 params)
+# vectors: p0 -> p1
+#          p0 -> p2
+# but really I want to start with a normal vector and distance d?
+#   Then take any two vectors in the plane that the normal vector defines0
+
+
+def LinePlaneIntersect():
+  pass
 
 
 def main(argv):
   print('Hello from cube.py')
+  p0 = np.array([0.5, 0.5, 0.5])  # center of the cube
+  p1 = np.array([1, 2, 3])
+  p2 = np.array([2, 1, 3])
+  p01 = p1 - p0
+  p02 = p2 - p0
+
+  for la, lb in EDGES:
+    cr = np.cross(p01, p02)  # isn't this just the normal vector?
+    numerator = np.dot(cr, la - p0)
+    print('n=%f' % numerator)
+
+    lab = la - lb
+    denominator = np.dot(-lab, cr)
+    print('d=%f' % denominator)
+    if denominator == 0.0:
+      continue
+
+    t = numerator / denominator
+    print('t=%f' % t)
+    print()
+
+  #print(np.dot([1,2,3], [4,5,6]))
+  #print(np.cross([1,2,3], [4,5,6]))
+
+  # OK now plot the plane, the edges, and the intersection points
 
 
 if __name__ == '__main__':
