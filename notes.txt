@@ -47,6 +47,16 @@ the 2 points!  So the line segment works.
 https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
 
 Do we then need a plane / hyperplane intersection in 4D?
+Or face / hyperplane intersection?
+
+I think the 4D version is:
+
+- Enumerate edges (not faces or hyperfaces) of 4D polytope
+  - These are lines in 4 space.  So p1 = (x,y,z,w) and p2 = (x,y,z,w)
+- intersect with a volume
+  - how many cases are there?  line/plane intersection has 3 cases: 0
+    (parallel), 1, and all (contained in plane)
+
 
 Polyhedra, Regular Polyhedra, Regular Polytopes
 -----------------------------------------------
