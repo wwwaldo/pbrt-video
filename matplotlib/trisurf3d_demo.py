@@ -36,24 +36,19 @@ if 0:
 # Compute z to make the pringle surface.
   z = np.sin(-x*y)
 else:
-  points = np.array([
+  t1 = np.array([
     [0, 0, 0],
     [0, 1, 0],
     [1, 1, 0],
-    #[1, 1, 1],
-    [2, 2, 2],
+  ])
+  t2 = np.array([
+    [0, 1, 0],
+    [1, 1, 0],
+    [0, 0, 1],
   ])
 
-  print(points)
-  print(points.shape)
-
-  x = points[:, 0]
-  y = points[:, 1]
-  z = points[:, 2]
-
-  print(x)
-  print(y)
-  print(z)
+  print(t1)
+  print(t1.shape)
 
 #import sys
 #sys.exit()
@@ -61,6 +56,12 @@ else:
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 
-ax.plot_trisurf(x, y, z, linewidth=0.2, antialiased=True)
+for t in [t1, t2]:
+  print('T %s' % t)
+  x = t[:, 0]
+  y = t[:, 1]
+  z = t[:, 2]
+  # NOTE: This takes color and cmap
+  ax.plot_trisurf(x, y, z, linewidth=0.2, antialiased=True)
 
 plt.show()
