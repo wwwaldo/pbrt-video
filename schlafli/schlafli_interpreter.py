@@ -102,7 +102,7 @@ def vert2key(vert):
 def regular_polytope(schlafli):
   dim = len(schlafli) + 1
   if dim == 1:
-    return [[0],[1]], []
+    return [[0],[1]], []  # base case
 
   gens = calcSymmetryGenerators(schlafli)
 
@@ -141,7 +141,7 @@ def regular_polytope(schlafli):
     iElt = 0
     while iElt < len(elts):  # while elts is growing
       for iGen in range(len(gens)):
-        # Hm this is just generating a canonical sorted form for every
+        # andychu: Hm this is just generating a canonical sorted form for every
         # edge/face, and then we check it's already there?
         newElt = tuple(sorted([multiplicationTable[iVert][iGen]
                                for iVert in elts[iElt]]))
@@ -201,14 +201,16 @@ def main():
       name1 = '%r-cells' % eltDim
     print('%d %s (%d vertices each)' % (len(elts), name1, len(elts[0])))
     for elt in elts:
-      print(' '.join([repr(i) for i in elt]))
+      print(' '.join(str(i) for i in elt))
 
   # Assert the generalization of Euler's formula: N0-N1+N2-... = #
   # 1+(-1)**(dim-1).
   N = [len(elts) for elts in [verts]+edgesEtc]
   eulerCharacteristic = sum((-1)**i * N[i] for i in range(len(N)))
-  print("Euler characteristic: "+repr(eulerCharacteristic))
+  print('')
+  print('Euler characteristic: %s' % eulerCharacteristic)
   if 2.5 not in schlafli:
     assert eulerCharacteristic == 1 + (-1)**len(schlafli)
 
-main()
+if __name__ == '__main__':
+  main()
