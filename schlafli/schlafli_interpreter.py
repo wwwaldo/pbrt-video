@@ -20,7 +20,6 @@
 import argparse
 import sys
 from math import *
-vertexlimit = 1e100
 
 # vector minus vector.
 def vmv(a,b): return [x-y for x,y in zip(a,b)]
@@ -51,15 +50,19 @@ def identity(dim): return [[(1 if i==j else 0) for j in range(dim)]
                                                for i in range(dim)]
 # https://en.wikipedia.org/wiki/Householder_transformation. v must be unit.
 # Not homogeneous (makehomo the result if you want that).
-def householderReflection(v): return mmm(identity(len(v)), sxm(2, outer(v,v)))
+def householderReflection(v):
+  return mmm(identity(len(v)), sxm(2, outer(v,v)))
 
 def sinAndCosHalfDihedralAngle(schlafli):
   # note, cos(pi/q)**2 generally has a nicer expression with no trig and often
   # no radicals, see http://www.maths.manchester.ac.uk/~cds/articles/trig.pdf
   ss = 0
-  for q in schlafli: ss = cos(pi/q)**2 / (1 - ss)
-  if abs(1-ss) < 1e-9: ss = 1  # prevent glitch in planar tiling cases
+  for q in schlafli:
+    ss = cos(pi/q)**2 / (1 - ss)
+  if abs(1-ss) < 1e-9:
+    ss = 1  # prevent glitch in planar tiling cases
   return sqrt(ss), sqrt(1 - ss)
+
 
 # Calculate a set of generators of the symmetry group of a {p,q,r,...} with
 # edge length 1.
@@ -82,27 +85,36 @@ def calcSymmetryGenerators(schlafli):
   generators.append(makehomo(householderReflection(v)))
   return generators
 
+#
+# NOTE(andychu): Can we get rid of this ???  Seems ugly.
+#
+
 # Key for comparing coords with roundoff error.  Makes sure the formatted
 # numbers are not very close to 0, to avoid them coming out as "-0" or "1e-16".
 # This isn't reliable in general, but it suffices for this application
 # (except for very large {p}, no doubt).
-def vert2key(vert): return ' '.join(['%.9g'%(x+.123) for x in vert])
+
+def vert2key(vert):
+  return ' '.join(['%.9g' % (x+.123) for x in vert])
+
 
 # Returns a pair verts,edgesEtc where edgesEtc is [edges,faces,...]
 def regular_polytope(schlafli):
   dim = len(schlafli) + 1
-  if dim == 1: return [[0],[1]],[]
+  if dim == 1:
+    return [[0],[1]], []
 
   gens = calcSymmetryGenerators(schlafli)
 
-  facetVerts,facetEdgesEtc = regular_polytope(schlafli[:-1])
+  facetVerts, facetEdgesEtc = regular_polytope(schlafli[:-1])
 
   # First get all the verts, and make a multiplication table.
   # Start with the verts of the first facet (padded to full dimensionality),
   # so indices will match up.
   verts = [facetVert+[0] for facetVert in facetVerts]
-  vert2index = dict([[vert2key(vert),i] for i,vert in enumerate(verts)])
+  vert2index = dict([[vert2key(vert), i] for i, vert in enumerate(verts)])
   multiplicationTable = []
+
   iVert = 0
   while iVert < len(verts):  # while verts is growing
     multiplicationTable.append([None] * len(gens))
@@ -125,20 +137,22 @@ def regular_polytope(schlafli):
   edgesEtc = []
   for facetElementsOfSomeDimension in facetEdgesEtc:
     elts = facetElementsOfSomeDimension[:]
-    elt2index = dict([[elt,i] for i,elt in enumerate(elts)])
+    elt2index = dict([[elt, i] for i, elt in enumerate(elts)])
     iElt = 0
     while iElt < len(elts):  # while elts is growing
       for iGen in range(len(gens)):
+        # Hm this is just generating a canonical sorted form for every
+        # edge/face, and then we check it's already there?
         newElt = tuple(sorted([multiplicationTable[iVert][iGen]
                                for iVert in elts[iElt]]))
-        if(newElt[0] != -1):
-          if newElt not in elt2index:
+        if newElt[0] != -1:
+          if newElt not in elt2index:  # deduplicate
             elt2index[newElt] = len(elts)
             elts.append(newElt)
       iElt += 1
     edgesEtc.append(elts)
 
-  return verts,edgesEtc
+  return verts, edgesEtc
 
 
 # So input numbers can be like any of "8", "2.5", "7/3"
@@ -147,19 +161,21 @@ def parseNumberOrFraction(s):
   return float(tokens[0])/float(tokens[1]) if len(tokens)==2 else float(s)
 
 
-def main():
-  schlafli = []
+vertexlimit = 1e100
 
+def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('numbers', type=str, nargs='+')
   parser.add_argument('-vlimit', type=int, default=-1)
   args = parser.parse_args()
 
+  global vertexlimit
   #print(args.numbers)
   #print(args.vlimit)
   if args.vlimit != -1:  # TODO: Get rid of this?
     vertexlimit = args.vlimit
 
+  schlafli = []
   for q in args.numbers:
     schlafli = schlafli + [parseNumberOrFraction(q)]
 
@@ -175,11 +191,15 @@ def main():
     print(' '.join([repr(fudge(x)) for x in v]))
 
   for eltDim in range(1, len(edgesEtc)+1):
-    print("")
+    print('')
     elts = edgesEtc[eltDim-1]
-    print(repr(len(elts))+' '+('Edges' if eltDim==1
-                          else 'Faces' if eltDim==2
-                          else repr(eltDim)+'-cells')+" ("+repr(len(elts[0]))+" vertices each):")
+    if eltDim == 1:
+      name1 = 'Edges' 
+    elif eltDim == 2:
+      name1 =  'Faces' 
+    else:
+      name1 = '%r-cells' % eltDim
+    print('%d %s (%d vertices each)' % (len(elts), name1, len(elts[0])))
     for elt in elts:
       print(' '.join([repr(i) for i in elt]))
 
