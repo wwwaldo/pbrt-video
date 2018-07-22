@@ -51,31 +51,7 @@ light = LightSource(0, 0)
 # Generate face colors for a shaded surface using either
 # a color map or the uniform rgb color specified above.
 
-illuminated_surface = light.shade_rgb(red, Z)
-
-# Create a subplot with 3d plotting capabilities.
-# This command will fail if Axes3D was not imported.
-if 0:
-  ax = fig.add_subplot(2,2,1, projection='3d')
-  ax.view_init(altitude, azimuth)
-  ax.plot_surface(X, Y, Z, rstride=1, cstride=1, linewidth=0,
-		  antialiased=False, facecolors=illuminated_surface)
-
-  light = LightSource(90, 0)
-  illuminated_surface = light.shade_rgb(green, Z)
-
-  ax = fig.add_subplot(2,2,2, projection='3d')
-  ax.view_init(altitude, azimuth)
-  ax.plot_surface(X, Y, Z, rstride=1, cstride=1, linewidth=0,
-		  antialiased=False, facecolors=illuminated_surface)
-
-  light = LightSource(90, 45)
-  illuminated_surface = light.shade_rgb(blue, Z)
-
-  ax = fig.add_subplot(2,2,3, projection='3d')
-  ax.view_init(altitude, azimuth)
-  ax.plot_surface(X, Y, Z, rstride=1, cstride=1, linewidth=0,
-		  antialiased=False, facecolors=illuminated_surface)
+#illuminated_surface = light.shade_rgb(red, Z)
 
 if 1:
   light = LightSource(180, 45)
@@ -88,5 +64,7 @@ if 1:
 
 # ------------------------------------------------------------------------- 
 plt.tight_layout()
-plt.savefig('shading.png')
-#plt.show()
+#plt.savefig('shading.png')
+# NOTE: This is very slow to show interactively.  Doesn't matter if it's over
+# X or not.
+plt.show()
