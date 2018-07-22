@@ -11,6 +11,7 @@ import sys
 
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 from scipy.spatial import ConvexHull
 
 
@@ -29,9 +30,12 @@ def main(argv):
     points = np.random.rand(30, 3)   # 30 random points in 2-D
     hull = ConvexHull(points)
 
-    plt.plot(points[:,0], points[:,1], 'o')
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')  # create 3d axes?
+
+    ax.plot(points[:,0], points[:,1], points[:,2], 'o')
     for simplex in hull.simplices:
-      plt.plot(points[simplex, 0], points[simplex, 1], 'k-')
+      ax.plot(points[simplex, 0], points[simplex, 1], points[simplex, 2], 'k-')
 
   else:
     raise AssertionError(action)
