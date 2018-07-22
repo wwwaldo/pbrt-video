@@ -28,7 +28,8 @@ mount-output() {
 
 # ubuntu deps
 deps() {
-  pip3 install numpy matplotlib
+  # scipy: for ConvexHull
+  pip3 install numpy matplotlib scipy
 }
 
 pbrt() {
