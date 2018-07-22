@@ -15,6 +15,9 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import numpy as np
 
+from matplotlib import cm  # color maps
+from matplotlib.colors import LightSource  # for shading surface plots
+
 
 n_radii = 8
 n_angles = 36
@@ -56,12 +59,20 @@ else:
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 
+light = LightSource(180, 45)
+
 for t in [t1, t2]:
   print('T %s' % t)
   x = t[:, 0]
   y = t[:, 1]
   z = t[:, 2]
-  # NOTE: This takes color and cmap
-  ax.plot_trisurf(x, y, z, linewidth=0.2, antialiased=True)
+
+  # This is weird
+  #illuminated_surface = light.shade(z, cmap=cm.coolwarm)
+
+  # NOTE: This takes color= and cmap=
+  ax.plot_trisurf(x, y, z, linewidth=0.2, antialiased=True,
+                  #facecolors=illuminated_surface)
+                  cmap='viridis')
 
 plt.show()
