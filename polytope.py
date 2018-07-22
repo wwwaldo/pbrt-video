@@ -55,16 +55,8 @@ def Intersect(edges, plane_normal, p0):
   return intersections
 
 
-def Draw(edges, plane, intersections):
+def Draw(ax, edges, plane, intersections):
   p0, p1, p2 = plane
-
-  fig = plt.figure()
-  ax = fig.gca(projection='3d')  # create 3d axes?
-
-  #x = np.array([0, 1])
-  #y = np.array([0, 1])
-  #z = np.array([0, 1])
-  #ax.plot(x, y, z)
 
   for la, lb in edges:
     x = np.array([la[0], lb[0]])
@@ -86,8 +78,6 @@ def Draw(edges, plane, intersections):
     y = np.array([inter[1]])
     z = np.array([inter[2]])
     ax.scatter(x, y, z, c='r')  # scatter plot of a single point
-
-  plt.show()
 
 
 def main(argv):
@@ -120,7 +110,12 @@ def main(argv):
 
   intersections = Intersect(edges, plane_normal, p0)
 
-  Draw(edges, plane, intersections)
+  fig = plt.figure()
+  ax = fig.gca(projection='3d')  # create 3d axes?
+
+  Draw(ax, edges, plane, intersections)
+
+  plt.show()
 
 
 if __name__ == '__main__':
