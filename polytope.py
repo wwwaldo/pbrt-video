@@ -11,6 +11,7 @@ from schlafli import schlafli_interpreter
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from scipy.spatial import ConvexHull
 
 
 # https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
@@ -93,6 +94,20 @@ def Draw4dSlice(ax, intersections):
     # TODO: How to project it?  SVD?  Or just change the axes?
     ax.scatter(x, y, z, c='r')  # scatter plot of a single point
 
+  return
+
+  # Change intersections to ndarray of shape (N, 3)
+  print('number of intersections: %d' % len(intersections))
+  inter_array = np.array(intersections)
+  # No intersections?
+  print(inter_array)
+
+  hull = ConvexHull(inter_array)
+
+  #ax.plot(intersections[:,0], intersections[:,1], intersections[:,2], 'o')
+  for simplex in hull.simplices:
+    ax.plot(points[simplex, 0], points[simplex, 1], points[simplex, 2], 'k-')
+
 
 def main(argv):
   p0 = np.array([0.5, 0.5, 0.5])  # center of the cube
@@ -135,9 +150,13 @@ def main(argv):
     Draw(ax, edges, plane, intersections)
 
   elif len(schlafli) == 3:
-    p0 = np.array([0.5, 0.5, 0.5, 0.5])
+    # NOTES:
+    # 3 3 3 - has no intersections
+    # 4 3 3 - QHull gives verbose error!  Less than 4 dimensional!
 
+    p0 = np.array([0.5, 0.5, 0.5, 0.5])
     plane_normal = np.array([1, 2, 2, 1])
+
     intersections = Intersect(edges, plane_normal, p0)
 
     fig = plt.figure()

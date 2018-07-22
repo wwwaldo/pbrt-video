@@ -28,12 +28,21 @@ def main(argv):
 
   elif action == '3d':
     points = np.random.rand(30, 3)   # 30 random points in 2-D
+    #print(points)
+    #print(type(points))  # ndarray of (30, 3)
+    #print(points.shape)
+    #return
+
     hull = ConvexHull(points)
 
     fig = plt.figure()
     ax = fig.gca(projection='3d')  # create 3d axes?
 
     ax.plot(points[:,0], points[:,1], points[:,2], 'o')
+    for simplex in hull.simplices:
+      print('simplex = %s' % simplex)
+
+    # Does this look right?
     for simplex in hull.simplices:
       ax.plot(points[simplex, 0], points[simplex, 1], points[simplex, 2], 'k-')
 
