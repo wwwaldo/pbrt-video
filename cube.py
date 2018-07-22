@@ -8,53 +8,10 @@ import sys
 
 from schlafli import schlafli_interpreter
 
-
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-
-# TODO: Generate these
-VERTICES = [
-    (0, 0, 0),
-    (0, 0, 1),
-    (0, 1, 0),
-    (0, 1, 1),
-    (1, 0, 0),
-    (1, 0, 1),
-    (1, 1, 0),
-    (1, 1, 1),
-]
-
-# https://codegolf.stackexchange.com/questions/114280/schl%C3%A4fli-convex-regular-polytope-interpreter
-v = VERTICES
-EDGE_STR = """
-0 1
-0 2
-0 4
-1 3
-1 5
-2 3
-2 6
-3 7
-4 5
-4 6
-5 7
-6 7
-"""
-
-EDGES = []
-for line in EDGE_STR.splitlines():
-  if not line:
-    continue
-  u, v = line.split()
-  u = int(u)
-  v = int(v)
-  u = np.array(VERTICES[u])
-  v = np.array(VERTICES[v])
-  EDGES.append((u, v))
-
-print(EDGES)
 
 # https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
 #
@@ -140,8 +97,6 @@ def Draw(edges, plane, intersections):
 
 
 def main(argv):
-  #poly = (VERTICES, EDGES)
-
   p0 = np.array([0.5, 0.5, 0.5])  # center of the cube
   # These are useful for plotting, but we don't quite need them (just use the
   # normal vector).
@@ -153,7 +108,7 @@ def main(argv):
 
   plane = (p0, p1, p2)
 
-  CUBE = [4, 3]
+  CUBE = [3, 5]
   vertices, edges_etc = schlafli_interpreter.regular_polytope(CUBE)
 
   edge_numbers = edges_etc[0]
@@ -166,11 +121,6 @@ def main(argv):
   intersections = Intersect(edges, plane)
 
   Draw(edges, plane, intersections)
-
-  #print(np.dot([1,2,3], [4,5,6]))
-  #print(np.cross([1,2,3], [4,5,6]))
-
-  # OK now plot the plane, the edges, and the intersection points
 
 
 if __name__ == '__main__':
