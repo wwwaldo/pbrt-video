@@ -108,8 +108,10 @@ def main(argv):
 
   plane = (p0, p1, p2)
 
-  CUBE = [5, 3]
-  vertices, edges_etc = schlafli_interpreter.regular_polytope(CUBE)
+  schlafli = [int(a) for a in sys.argv[1:]]  # e.g. 4 3 for cube
+  if len(schlafli) not in (2, 3):
+    raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
+  vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
 
   edge_numbers = edges_etc[0]
   vertices = [np.array(v) for v in vertices]
