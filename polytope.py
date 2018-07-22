@@ -31,20 +31,14 @@ from mpl_toolkits.mplot3d import Axes3D
 #   - allow user to rotate the plane?
 # - could make the intersection nicer?  Use a polygon to plot?
 
-def Intersect(edges, plane):
-  p0, p1, p2 = plane
-
-  p01 = p1 - p0
-  p02 = p2 - p0
-  normal = np.cross(p01, p02)
-
+def Intersect(edges, plane_normal, p0):
   intersections = []
   for la, lb in edges:
-    numerator = np.dot(normal, la - p0)
+    numerator = np.dot(plane_normal, la - p0)
     print('n=%f' % numerator)
 
     lab = lb - la
-    denominator = np.dot(-lab, normal)
+    denominator = np.dot(-lab, plane_normal)
     print('d=%f' % denominator)
     if denominator == 0.0:
       continue
@@ -120,7 +114,11 @@ def main(argv):
   for a, b in edge_numbers:
     edges.append((vertices[a], vertices[b]))
 
-  intersections = Intersect(edges, plane)
+  p01 = p1 - p0
+  p02 = p2 - p0
+  plane_normal = np.cross(p01, p02)
+
+  intersections = Intersect(edges, plane_normal, p0)
 
   Draw(edges, plane, intersections)
 
