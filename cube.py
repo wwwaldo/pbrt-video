@@ -77,21 +77,21 @@ def Draw(edges, plane, intersections):
     y = np.array([la[1], lb[1]])
     z = np.array([la[2], lb[2]])
 
-    ax.plot(x, y, z)
+    ax.plot(x, y, z, c='b')
 
   for v in (p1, p2):
     x = np.array([p0[0], v[0]])
     y = np.array([p0[1], v[1]])
     z = np.array([p0[2], v[2]])
 
-    ax.plot(x, y, z)
+    ax.plot(x, y, z, c='g')
 
   for inter in intersections:
     print(inter)
     x = np.array([inter[0]])
     y = np.array([inter[1]])
     z = np.array([inter[2]])
-    ax.scatter(x, y, z)  # scatter plot of a single point
+    ax.scatter(x, y, z, c='r')  # scatter plot of a single point
 
   plt.show()
 
@@ -108,7 +108,7 @@ def main(argv):
 
   plane = (p0, p1, p2)
 
-  CUBE = [3, 5]
+  CUBE = [5, 3]
   vertices, edges_etc = schlafli_interpreter.regular_polytope(CUBE)
 
   edge_numbers = edges_etc[0]
