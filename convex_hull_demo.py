@@ -27,7 +27,7 @@ def main(argv):
       plt.plot(points[simplex, 0], points[simplex, 1], 'k-')
 
   elif action == '3d':
-    points = np.random.rand(30, 3)   # 30 random points in 2-D
+    points = np.random.rand(30, 3)   # 30 random points in 3-D
     #print(points)
     #print(type(points))  # ndarray of (30, 3)
     #print(points.shape)
@@ -39,12 +39,14 @@ def main(argv):
     ax = fig.gca(projection='3d')  # create 3d axes?
 
     ax.plot(points[:,0], points[:,1], points[:,2], 'o')
-    for simplex in hull.simplices:
-      print('simplex = %s' % simplex)
+    #for simplex in hull.simplices:
+    #  print('simplex = %s' % simplex)
 
     # Does this look right?
     for simplex in hull.simplices:
-      ax.plot(points[simplex, 0], points[simplex, 1], points[simplex, 2], 'k-')
+      # Make it a closed loop!
+      to_plot = np.append(simplex, simplex[0])
+      ax.plot(points[to_plot, 0], points[to_plot, 1], points[to_plot, 2], 'k-')
 
   else:
     raise AssertionError(action)
