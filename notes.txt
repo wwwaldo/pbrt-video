@@ -122,6 +122,9 @@ Schläfli Convex Regular Polytope Interpreter --- Python and Ruby!
 
 https://codegolf.stackexchange.com/questions/114280/schl%C3%A4fli-convex-regular-polytope-interpreter
 
+https://github.com/aruth2/schlafli
+
+
 Matlab code!  And visualization
 
 http://www.cs.dartmouth.edu/~mckeeman/references/polytopes/polydemo.html
