@@ -140,42 +140,55 @@ def regular_polytope(schlafli):
 
   return verts,edgesEtc
 
+
 # So input numbers can be like any of "8", "2.5", "7/3"
 def parseNumberOrFraction(s):
   tokens = s.split('/')
   return float(tokens[0])/float(tokens[1]) if len(tokens)==2 else float(s)
 
-schlafli = []
 
-parser = argparse.ArgumentParser()
-parser.add_argument('numbers', type=str, nargs='+')
-parser.add_argument('-vlimit', type=int, default=-1)
-args = parser.parse_args()
+def main():
+  schlafli = []
 
-#print(args.numbers)
-#print(args.vlimit)
-if(args.vlimit != -1):
-  vertexlimit = args.vlimit
-for q in args.numbers:
+  parser = argparse.ArgumentParser()
+  parser.add_argument('numbers', type=str, nargs='+')
+  parser.add_argument('-vlimit', type=int, default=-1)
+  args = parser.parse_args()
+
+  #print(args.numbers)
+  #print(args.vlimit)
+  if args.vlimit != -1:  # TODO: Get rid of this?
+    vertexlimit = args.vlimit
+
+  for q in args.numbers:
     schlafli = schlafli + [parseNumberOrFraction(q)]
-verts,edgesEtc = regular_polytope(schlafli)
 
-# Hacky polishing of any integers or half-integers give or take rounding error.
-def fudge(x): return round(2*x)/2 if abs(2*x-round(2*x))<1e-9 else x
+  verts, edgesEtc = regular_polytope(schlafli)
 
-print(repr(len(verts))+' Vertices:')
-for v in verts: print(' '.join([repr(fudge(x)) for x in v]))
-for eltDim in range(1,len(edgesEtc)+1):
-    
-  print("")
-  elts = edgesEtc[eltDim-1]
-  print(repr(len(elts))+' '+('Edges' if eltDim==1
-                        else 'Faces' if eltDim==2
-                        else repr(eltDim)+'-cells')+" ("+repr(len(elts[0]))+" vertices each):")
-  for elt in elts: print(' '.join([repr(i) for i in elt]))
+  # Hacky polishing of any integers or half-integers give or take rounding
+  # error.
+  def fudge(x):
+    return round(2*x)/2 if abs(2*x-round(2*x))<1e-9 else x
 
-# Assert the generalization of Euler's formula: N0-N1+N2-... = 1+(-1)**(dim-1).
-N = [len(elts) for elts in [verts]+edgesEtc]
-eulerCharacteristic = sum((-1)**i * N[i] for i in range(len(N)))
-print("Euler characteristic: "+repr(eulerCharacteristic))
-if 2.5 not in schlafli: assert eulerCharacteristic == 1 + (-1)**len(schlafli)
+  print(repr(len(verts))+' Vertices:')
+  for v in verts:
+    print(' '.join([repr(fudge(x)) for x in v]))
+
+  for eltDim in range(1, len(edgesEtc)+1):
+    print("")
+    elts = edgesEtc[eltDim-1]
+    print(repr(len(elts))+' '+('Edges' if eltDim==1
+                          else 'Faces' if eltDim==2
+                          else repr(eltDim)+'-cells')+" ("+repr(len(elts[0]))+" vertices each):")
+    for elt in elts:
+      print(' '.join([repr(i) for i in elt]))
+
+  # Assert the generalization of Euler's formula: N0-N1+N2-... = #
+  # 1+(-1)**(dim-1).
+  N = [len(elts) for elts in [verts]+edgesEtc]
+  eulerCharacteristic = sum((-1)**i * N[i] for i in range(len(N)))
+  print("Euler characteristic: "+repr(eulerCharacteristic))
+  if 2.5 not in schlafli:
+    assert eulerCharacteristic == 1 + (-1)**len(schlafli)
+
+main()

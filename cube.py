@@ -71,10 +71,6 @@ print(EDGES)
 #   - allow user to rotate the plane?
 # - could make the intersection nicer?  Use a polygon to plot?
 
-def LinePlaneIntersect():
-  pass
-
-
 def main(argv):
   print('Hello from cube.py')
   p0 = np.array([0.5, 0.5, 0.5])  # center of the cube
@@ -84,8 +80,8 @@ def main(argv):
   # Does mplot3d have a plane primitive?  Or can we make a polygon/square from
   # a plane?
 
-  p1 = np.array([1, 2, 2])
-  p2 = np.array([2, 1, 2])
+  p1 = np.array([1, 1, 2])
+  p2 = np.array([3, 2, 3])
   p01 = p1 - p0
   p02 = p2 - p0
   normal = np.cross(p01, p02)
