@@ -55,40 +55,36 @@ illuminated_surface = light.shade_rgb(red, Z)
 
 # Create a subplot with 3d plotting capabilities.
 # This command will fail if Axes3D was not imported.
-ax = fig.add_subplot(2,2,1, projection='3d')
-ax.view_init(altitude, azimuth)
-ax.plot_surface(X, Y, Z, rstride=1, cstride=1, linewidth=0,
-                antialiased=False, facecolors=illuminated_surface)
+if 0:
+  ax = fig.add_subplot(2,2,1, projection='3d')
+  ax.view_init(altitude, azimuth)
+  ax.plot_surface(X, Y, Z, rstride=1, cstride=1, linewidth=0,
+		  antialiased=False, facecolors=illuminated_surface)
 
-# -------------------------------------------------------------------------
-# Repeat the commands above for the other three subplots, but use different
-# illumination angles and colors.
-# ------------------------------------------------------------------------- 
-light = LightSource(90, 0)
-illuminated_surface = light.shade_rgb(green, Z)
+  light = LightSource(90, 0)
+  illuminated_surface = light.shade_rgb(green, Z)
 
-ax = fig.add_subplot(2,2,2, projection='3d')
-ax.view_init(altitude, azimuth)
-ax.plot_surface(X, Y, Z, rstride=1, cstride=1, linewidth=0,
-                antialiased=False, facecolors=illuminated_surface)
+  ax = fig.add_subplot(2,2,2, projection='3d')
+  ax.view_init(altitude, azimuth)
+  ax.plot_surface(X, Y, Z, rstride=1, cstride=1, linewidth=0,
+		  antialiased=False, facecolors=illuminated_surface)
 
-# ------------------------------------------------------------------------- 
-light = LightSource(90, 45)
-illuminated_surface = light.shade_rgb(blue, Z)
+  light = LightSource(90, 45)
+  illuminated_surface = light.shade_rgb(blue, Z)
 
-ax = fig.add_subplot(2,2,3, projection='3d')
-ax.view_init(altitude, azimuth)
-ax.plot_surface(X, Y, Z, rstride=1, cstride=1, linewidth=0,
-                antialiased=False, facecolors=illuminated_surface)
+  ax = fig.add_subplot(2,2,3, projection='3d')
+  ax.view_init(altitude, azimuth)
+  ax.plot_surface(X, Y, Z, rstride=1, cstride=1, linewidth=0,
+		  antialiased=False, facecolors=illuminated_surface)
 
-# ------------------------------------------------------------------------- 
-light = LightSource(180, 45)
-illuminated_surface = light.shade(Z, cmap=cm.coolwarm)
+if 1:
+  light = LightSource(180, 45)
+  illuminated_surface = light.shade(Z, cmap=cm.coolwarm)
 
-ax = fig.add_subplot(2,2,4, projection='3d')
-ax.view_init(altitude, azimuth)
-ax.plot_surface(X, Y, Z, rstride=1, cstride=1, linewidth=0,
-                antialiased=False, facecolors=illuminated_surface)
+  ax = fig.gca(projection='3d')
+  ax.view_init(altitude, azimuth)
+  ax.plot_surface(X, Y, Z, rstride=1, cstride=1, linewidth=0,
+		  antialiased=False, facecolors=illuminated_surface)
 
 # ------------------------------------------------------------------------- 
 plt.tight_layout()
