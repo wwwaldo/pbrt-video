@@ -74,12 +74,13 @@ def main(argv):
   p01 = p1 - p0
   p02 = p2 - p0
 
+  intersections = []
   for la, lb in EDGES:
     cr = np.cross(p01, p02)  # isn't this just the normal vector?
     numerator = np.dot(cr, la - p0)
     print('n=%f' % numerator)
 
-    lab = la - lb
+    lab = lb - la
     denominator = np.dot(-lab, cr)
     print('d=%f' % denominator)
     if denominator == 0.0:
@@ -88,6 +89,12 @@ def main(argv):
     t = numerator / denominator
     print('t=%f' % t)
     print()
+
+    inter = la + lab*t
+    if 0.0 <= t <= 1.0:
+      intersections.append(inter)
+    else:
+      print('does not intersect')
 
   #print(np.dot([1,2,3], [4,5,6]))
   #print(np.cross([1,2,3], [4,5,6]))
@@ -115,6 +122,13 @@ def main(argv):
     z = np.array([p0[2], v[2]])
 
     ax.plot(x, y, z)
+
+  for inter in intersections:
+    print(inter)
+    x = np.array([inter[0]])
+    y = np.array([inter[1]])
+    z = np.array([inter[2]])
+    ax.scatter(x, y, z)  # scatter plot of a single point
 
   plt.show()
 
