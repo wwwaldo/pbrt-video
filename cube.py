@@ -6,6 +6,9 @@ cube.py
 
 import sys
 
+from schlafli import schlafli_interpreter
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -145,14 +148,24 @@ def main(argv):
   # Does mplot3d have a plane primitive?  Or can we make a polygon/square from
   # a plane?
 
-  p1 = np.array([1, 1, 2])
-  p2 = np.array([2, 1, 2])
+  p1 = np.array([1, 1, 0.5])
+  p2 = np.array([1, 0.5, 1])
 
   plane = (p0, p1, p2)
 
-  intersections = Intersect(EDGES, plane)
+  CUBE = [4, 3]
+  vertices, edges_etc = schlafli_interpreter.regular_polytope(CUBE)
 
-  Draw(EDGES, plane, intersections)
+  edge_numbers = edges_etc[0]
+  vertices = [np.array(v) for v in vertices]
+
+  edges = []
+  for a, b in edge_numbers:
+    edges.append((vertices[a], vertices[b]))
+
+  intersections = Intersect(edges, plane)
+
+  Draw(edges, plane, intersections)
 
   #print(np.dot([1,2,3], [4,5,6]))
   #print(np.cross([1,2,3], [4,5,6]))
