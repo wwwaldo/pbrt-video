@@ -71,23 +71,15 @@ print(EDGES)
 #   - allow user to rotate the plane?
 # - could make the intersection nicer?  Use a polygon to plot?
 
-def main(argv):
-  print('Hello from cube.py')
-  p0 = np.array([0.5, 0.5, 0.5])  # center of the cube
+def Intersect(edges, plane):
+  p0, p1, p2 = plane
 
-  # These are useful for plotting, but we don't quite need them (just use the
-  # normal vector).
-  # Does mplot3d have a plane primitive?  Or can we make a polygon/square from
-  # a plane?
-
-  p1 = np.array([1, 1, 2])
-  p2 = np.array([3, 2, 3])
   p01 = p1 - p0
   p02 = p2 - p0
   normal = np.cross(p01, p02)
 
   intersections = []
-  for la, lb in EDGES:
+  for la, lb in edges:
     numerator = np.dot(normal, la - p0)
     print('n=%f' % numerator)
 
@@ -106,11 +98,11 @@ def main(argv):
       intersections.append(inter)
     else:
       print('does not intersect')
+  return intersections
 
-  #print(np.dot([1,2,3], [4,5,6]))
-  #print(np.cross([1,2,3], [4,5,6]))
 
-  # OK now plot the plane, the edges, and the intersection points
+def Draw(edges, plane, intersections):
+  p0, p1, p2 = plane
 
   fig = plt.figure()
   ax = fig.gca(projection='3d')  # create 3d axes?
@@ -120,7 +112,7 @@ def main(argv):
   #z = np.array([0, 1])
   #ax.plot(x, y, z)
 
-  for la, lb in EDGES:
+  for la, lb in edges:
     x = np.array([la[0], lb[0]])
     y = np.array([la[1], lb[1]])
     z = np.array([la[2], lb[2]])
@@ -142,6 +134,30 @@ def main(argv):
     ax.scatter(x, y, z)  # scatter plot of a single point
 
   plt.show()
+
+
+def main(argv):
+  #poly = (VERTICES, EDGES)
+
+  p0 = np.array([0.5, 0.5, 0.5])  # center of the cube
+  # These are useful for plotting, but we don't quite need them (just use the
+  # normal vector).
+  # Does mplot3d have a plane primitive?  Or can we make a polygon/square from
+  # a plane?
+
+  p1 = np.array([1, 1, 2])
+  p2 = np.array([2, 1, 2])
+
+  plane = (p0, p1, p2)
+
+  intersections = Intersect(EDGES, plane)
+
+  Draw(EDGES, plane, intersections)
+
+  #print(np.dot([1,2,3], [4,5,6]))
+  #print(np.cross([1,2,3], [4,5,6]))
+
+  # OK now plot the plane, the edges, and the intersection points
 
 
 if __name__ == '__main__':
