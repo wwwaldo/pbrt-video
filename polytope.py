@@ -80,6 +80,20 @@ def Draw(ax, edges, plane, intersections):
     ax.scatter(x, y, z, c='r')  # scatter plot of a single point
 
 
+def Draw4dSlice(ax, intersections):
+  """
+  Args:
+    intersections: a list of 4D points
+  """
+  for inter in intersections:
+    print(inter)
+    x = np.array([inter[0]])
+    y = np.array([inter[1]])
+    z = np.array([inter[2]])
+    # TODO: How to project it?  SVD?  Or just change the axes?
+    ax.scatter(x, y, z, c='r')  # scatter plot of a single point
+
+
 def main(argv):
   p0 = np.array([0.5, 0.5, 0.5])  # center of the cube
   # These are useful for plotting, but we don't quite need them (just use the
@@ -99,21 +113,40 @@ def main(argv):
 
   edge_numbers = edges_etc[0]
   vertices = [np.array(v) for v in vertices]
+  print('Vertices:')
+  for v in vertices:
+    print(v)
+  print('')
 
   edges = []
   for a, b in edge_numbers:
     edges.append((vertices[a], vertices[b]))
 
-  p01 = p1 - p0
-  p02 = p2 - p0
-  plane_normal = np.cross(p01, p02)
+  if len(schlafli) == 2:
+    p01 = p1 - p0
+    p02 = p2 - p0
+    plane_normal = np.cross(p01, p02)
 
-  intersections = Intersect(edges, plane_normal, p0)
+    intersections = Intersect(edges, plane_normal, p0)
 
-  fig = plt.figure()
-  ax = fig.gca(projection='3d')  # create 3d axes?
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')  # create 3d axes?
 
-  Draw(ax, edges, plane, intersections)
+    Draw(ax, edges, plane, intersections)
+
+  elif len(schlafli) == 3:
+    p0 = np.array([0.5, 0.5, 0.5, 0.5])
+
+    plane_normal = np.array([1, 2, 2, 1])
+    intersections = Intersect(edges, plane_normal, p0)
+
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')  # create 3d axes?
+
+    Draw4dSlice(ax, intersections)
+
+  else:
+    raise AssertionError
 
   plt.show()
 
