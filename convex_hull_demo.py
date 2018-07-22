@@ -15,15 +15,30 @@ from scipy.spatial import ConvexHull
 
 
 def main(argv):
-  print('Hello from convex_hull_demo.py')
-  points = np.random.rand(30, 2)   # 30 random points in 2-D
-  hull = ConvexHull(points)
+  action = argv[1]
 
-  plt.plot(points[:,0], points[:,1], 'o')
-  for simplex in hull.simplices:
-    plt.plot(points[simplex, 0], points[simplex, 1], 'k-')
+  if action == '2d':  # 2d
+    points = np.random.rand(30, 2)   # 30 random points in 2-D
+    hull = ConvexHull(points)
+
+    plt.plot(points[:,0], points[:,1], 'o')
+    for simplex in hull.simplices:
+      plt.plot(points[simplex, 0], points[simplex, 1], 'k-')
+
+  elif action == '3d':
+    points = np.random.rand(30, 3)   # 30 random points in 2-D
+    hull = ConvexHull(points)
+
+    plt.plot(points[:,0], points[:,1], 'o')
+    for simplex in hull.simplices:
+      plt.plot(points[simplex, 0], points[simplex, 1], 'k-')
+
+  else:
+    raise AssertionError(action)
+
 
   plt.show()
+
 
 
 if __name__ == '__main__':
