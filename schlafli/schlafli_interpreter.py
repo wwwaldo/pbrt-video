@@ -95,7 +95,7 @@ def calcSymmetryGenerators(schlafli):
 # (except for very large {p}, no doubt).
 
 def vert2key(vert):
-  return ' '.join(['%.9g' % (x+.123) for x in vert])
+  return ' '.join('%.9g' % (x+.123) for x in vert)
 
 
 # Returns a pair verts,edgesEtc where edgesEtc is [edges,faces,...]
@@ -161,6 +161,12 @@ def parseNumberOrFraction(s):
   return float(tokens[0])/float(tokens[1]) if len(tokens)==2 else float(s)
 
 
+# Hacky polishing of any integers or half-integers give or take rounding
+# error.
+def fudge(x):
+  return round(2*x)/2 if abs(2*x-round(2*x))<1e-9 else x
+
+
 vertexlimit = 1e100
 
 def main():
@@ -181,14 +187,9 @@ def main():
 
   verts, edgesEtc = regular_polytope(schlafli)
 
-  # Hacky polishing of any integers or half-integers give or take rounding
-  # error.
-  def fudge(x):
-    return round(2*x)/2 if abs(2*x-round(2*x))<1e-9 else x
-
-  print(repr(len(verts))+' Vertices:')
+  print('%d Vertices:' % len(verts))
   for v in verts:
-    print(' '.join([repr(fudge(x)) for x in v]))
+    print(' '.join(repr(fudge(x)) for x in v))
 
   for eltDim in range(1, len(edgesEtc)+1):
     print('')
@@ -211,6 +212,7 @@ def main():
   print('Euler characteristic: %s' % eulerCharacteristic)
   if 2.5 not in schlafli:
     assert eulerCharacteristic == 1 + (-1)**len(schlafli)
+
 
 if __name__ == '__main__':
   main()
