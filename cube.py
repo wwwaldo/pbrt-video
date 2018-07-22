@@ -78,12 +78,17 @@ def LinePlaneIntersect():
 def main(argv):
   print('Hello from cube.py')
   p0 = np.array([0.5, 0.5, 0.5])  # center of the cube
+
+  # These are useful for plotting, but we don't quite need them (just use the
+  # normal vector).
+  # Does mplot3d have a plane primitive?  Or can we make a polygon/square from
+  # a plane?
+
   p1 = np.array([1, 2, 2])
   p2 = np.array([2, 1, 2])
   p01 = p1 - p0
   p02 = p2 - p0
-
-  normal = np.cross(p01, p02)  # isn't this just the normal vector?
+  normal = np.cross(p01, p02)
 
   intersections = []
   for la, lb in EDGES:
