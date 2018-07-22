@@ -62,6 +62,15 @@ print(EDGES)
 #   Then take any two vectors in the plane that the normal vector defines0
 
 
+# mplot3d examples
+# https://matplotlib.org/examples/mplot3d/
+
+# TODO:
+# - change representation of plane: normal and d
+# - animate the plane in matplotlib?  Just change d.
+#   - allow user to rotate the plane?
+# - could make the intersection nicer?  Use a polygon to plot?
+
 def LinePlaneIntersect():
   pass
 
@@ -74,14 +83,15 @@ def main(argv):
   p01 = p1 - p0
   p02 = p2 - p0
 
+  normal = np.cross(p01, p02)  # isn't this just the normal vector?
+
   intersections = []
   for la, lb in EDGES:
-    cr = np.cross(p01, p02)  # isn't this just the normal vector?
-    numerator = np.dot(cr, la - p0)
+    numerator = np.dot(normal, la - p0)
     print('n=%f' % numerator)
 
     lab = lb - la
-    denominator = np.dot(-lab, cr)
+    denominator = np.dot(-lab, normal)
     print('d=%f' % denominator)
     if denominator == 0.0:
       continue
