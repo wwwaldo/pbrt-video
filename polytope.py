@@ -131,6 +131,14 @@ def main(argv):
   schlafli = [int(a) for a in sys.argv[1:]]  # e.g. 4 3 for cube
   if len(schlafli) not in (2, 3):
     raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
+
+  # NOTE: There always seems to be a vertex at (0,0,0), but for dodecahedron
+  # and others this means there are negative coordinates.  On the other hand,
+  # the cube is confined to one quadrant / octant.
+  #
+  # I think this is because the base case in 1D is (0,), and then it gets
+  # extended to (0,0), then (0,0,0), etc.
+
   vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
 
   edge_numbers = edges_etc[0]
