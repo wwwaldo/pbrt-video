@@ -7,6 +7,10 @@ set -o nounset
 set -o pipefail
 set -o errexit
 
+deps() {
+  pip3 install numpy matplotlib
+}
+
 render() {
   ../other/pbrt-v3-build/pbrt scenes/killeroo-simple.pbrt
 }

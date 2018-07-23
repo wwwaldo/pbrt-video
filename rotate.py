@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from math import sqrt, pi, sin, cos
 import numpy as np
 import matplotlib.pyplot as plt

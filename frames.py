@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 from __future__ import print_function
 """
 frames.py
@@ -15,7 +15,7 @@ def main(argv):
   with open('killeroo-frame.template') as f:
     t = f.read()
 
-  for i in xrange(num_frames):
+  for i in range(num_frames):
     with open(os.path.join(out_dir, '%d.pbrt' % i), 'w') as f:
       print(t % {
         'eye_x': i * 0.1,
