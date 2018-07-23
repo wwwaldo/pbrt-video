@@ -5,9 +5,9 @@ import matplotlib.pyplot as plt
     
 
 def distance(p1, p2):
-    return sqrt( pow(abs(p1[0] - p2[0])) + 
-          pow(abs(p1[1] - p2[1])) + 
-          pow(abs(p1[2] - p2[2])) )
+    return sqrt( pow(abs(p1[0] - p2[0]), 2) + 
+          pow(abs(p1[1] - p2[1]), 2) + 
+          pow(abs(p1[2] - p2[2]), 2) )
 
 def circle(center, radius, npoints):
     points = np.linspace(0, 2 * pi, npoints)
@@ -22,10 +22,12 @@ def circle(center, radius, npoints):
 if __name__ == "__main__":
     import numpy as np
 
-    points = circle([0,0,0], 1, 100)
+    points = circle([1,0,0], 3, 100)
     # slice points
     flatpoints = points[:, :2]
     xlinspace = np.linspace(0, 2 * pi, 100)
+
+    print(distance([0,0,0], [1,0,0]))
 
     plt.plot(flatpoints[:,0], flatpoints[:,1])
     plt.show()
