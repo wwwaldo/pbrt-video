@@ -1,0 +1,7 @@
+LookAt 400 20 30   # eye
+
+Translate 100 200 -140
+
+Translate -200 0 0
+
+-50   100   -70

@@ -1,5 +1,7 @@
 
-LookAt 400 20 30   0 63 -110   0 0 1
+LookAt 400 20 30   # eye
+       0 63 -110   # look at point
+       0 0 1       # up vector
 Rotate -5 0 0 1
 Camera "perspective" "float fov" [39]
 Film "image"  
