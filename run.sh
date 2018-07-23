@@ -12,13 +12,26 @@ deps() {
 }
 
 render() {
-  ../other/pbrt-v3-build/pbrt scenes/killeroo-simple.pbrt
+  local src=${1:-scenes/killeroo-simple.pbrt}
+  ../other/pbrt-v3-build/pbrt $src
 }
+
+readonly NUM_FRAMES=10
 
 frames() {
   mkdir -p _out
-  ./frames.py 6 _out
-  ls -l _out
+  local out_dir=scenes  # has to be in out dir
+  ./frames.py $NUM_FRAMES $out_dir
+  ls -l $out_dir/*.pbrt
 }
+
+# Oops has to be in original dir
+render-all() {
+  # TODO: xargs
+  for input in scenes/*.pbrt; do
+    render $input
+  done
+}
+
 
 "$@"

@@ -17,11 +17,12 @@ def main(argv):
   with open('killeroo-frame.template') as f:
     t = f.read()
 
-  center = [0, 63, -110]   # look at point from template
+  look_at = [0, 63, -110]   # look at point from template
   orig_eye = [400, 20, 30]
-  radius = rotate.distance(center, orig_eye)
+  #midpoint = [-50, 100, 70]  # midpoint of 2 models
+  radius = rotate.distance(look_at, orig_eye)
 
-  points = rotate.circle(center, radius, num_frames)
+  points = rotate.circle(look_at, radius, num_frames)
 
   for i in range(num_frames):
     p = {
@@ -34,6 +35,7 @@ def main(argv):
       'eye_x': point[0],
       'eye_y': point[1],
       'eye_z': point[2],
+      'filename': '%d.exr' % i,
     }
     with open(os.path.join(out_dir, '%d.pbrt' % i), 'w') as f:
       print(t % p, file=f)
