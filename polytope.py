@@ -147,12 +147,6 @@ def ShowBounds():
     # Transpose.  TODO: Should schlafli return np.array, and then we do this
     # with numpy?
     dimensions = list(zip(*vertices))
-    #print(dimensions)
-    #print(len(dimensions))
-
-    x = [v[0] for v in vertices]
-    y = [v[1] for v in vertices]
-    z = [v[2] for v in vertices]
 
     print(schlafli)
     for i, d in enumerate(dimensions):  # d is a vector
