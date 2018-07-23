@@ -116,7 +116,37 @@ def Draw4dSlice(ax, intersections):
     ax.plot(points[simplex, 0], points[simplex, 1], points[simplex, 2], 'k-')
 
 
+3D_SHAPES = [
+    (3, 3),  # tetrahedron
+    (4, 3),  # cube
+    (3, 4),  # octahedron
+    (5, 3),  # dodecahedron
+    (3, 5),  # icosahedron
+]
+
+# NOTE: The Z coordinate always appears to be positive.  But does that matter
+# if we're rotating?
+def ShowBounds():
+
+  for schlafli in 3D_SHAPES:
+    vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
+    x = [v[0] for v in vertices]
+    y = [v[1] for v in vertices]
+    z = [v[2] for v in vertices]
+
+    #print(x, y, z)
+
+    print(schlafli)
+    print('x: from %f to %f' % (min(x), max(x)))
+    print('y: from %f to %f' % (min(y), max(y)))
+    print('z: from %f to %f' % (min(z), max(z)))
+    print()
+
+
 def main(argv):
+  ShowBounds()
+  return
+
   p0 = np.array([0.5, 0.5, 0.5])  # center of the cube
   # These are useful for plotting, but we don't quite need them (just use the
   # normal vector).
