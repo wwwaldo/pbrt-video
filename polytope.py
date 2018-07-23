@@ -116,7 +116,7 @@ def Draw4dSlice(ax, intersections):
     ax.plot(points[simplex, 0], points[simplex, 1], points[simplex, 2], 'k-')
 
 
-3D_SHAPES = [
+SHAPES_3D = [
     (3, 3),  # tetrahedron
     (4, 3),  # cube
     (3, 4),  # octahedron
@@ -124,28 +124,51 @@ def Draw4dSlice(ax, intersections):
     (3, 5),  # icosahedron
 ]
 
-# NOTE: The Z coordinate always appears to be positive.  But does that matter
-# if we're rotating?
-def ShowBounds():
+SHAPES_4D = [
+    (3, 3, 3),  # 4-simplex, like tetrahedron
+    (4, 3, 3),  # 4-cube, like cube
+    (3, 3, 4),  # 4-orthoplex, 16-cell, like octahedron.  dual of cube.
+    (3, 4, 3),  # 24-cell, the one that is new in 4D!
+    (5, 3, 3),  # 120-cell, like dodecahedron
+    (3, 3, 5),  # 600-cell, like icosahedron
+]
 
-  for schlafli in 3D_SHAPES:
+DIM_NAME = ['x', 'y', 'z', 'w']
+
+
+# NOTE: The Z coordinate always appears to be positive in 3D.  But does that
+# matter if we're rotating?
+#
+# In 4D, the w coordinate always appears to be positive.
+
+def ShowBounds():
+  for schlafli in SHAPES_3D + SHAPES_4D:
     vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
+    # Transpose.  TODO: Should schlafli return np.array, and then we do this
+    # with numpy?
+    dimensions = list(zip(*vertices))
+    #print(dimensions)
+    #print(len(dimensions))
+
     x = [v[0] for v in vertices]
     y = [v[1] for v in vertices]
     z = [v[2] for v in vertices]
 
-    #print(x, y, z)
-
     print(schlafli)
-    print('x: from %f to %f' % (min(x), max(x)))
-    print('y: from %f to %f' % (min(y), max(y)))
-    print('z: from %f to %f' % (min(z), max(z)))
+    for i, d in enumerate(dimensions):  # d is a vector
+      print('%s: from %f to %f' % (DIM_NAME[i], min(d), max(d)))
     print()
 
 
 def main(argv):
-  ShowBounds()
-  return
+  try:
+    action = argv[1]
+  except IndexError:
+    action = None
+
+  if action == 'bounds':
+    ShowBounds()
+    return
 
   p0 = np.array([0.5, 0.5, 0.5])  # center of the cube
   # These are useful for plotting, but we don't quite need them (just use the
