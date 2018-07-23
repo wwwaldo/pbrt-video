@@ -17,12 +17,12 @@ def main(argv):
   with open('killeroo-frame.template') as f:
     t = f.read()
 
-  look_at = [0, 63, -110]   # look at point from template
+  #look_at = [0, 63, -110]   # look at point from template
   orig_eye = [400, 20, 30]
-  #midpoint = [-50, 100, 70]  # midpoint of 2 models
-  radius = rotate.distance(look_at, orig_eye)
+  midpoint = [-50, 100, 70]  # midpoint of 2 models
+  radius = rotate.distance(midpoint, orig_eye)
 
-  points = rotate.circle(look_at, radius, num_frames)
+  points = rotate.circle(midpoint, radius, num_frames)
 
   for i in range(num_frames):
     p = {
