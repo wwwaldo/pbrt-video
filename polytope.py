@@ -5,6 +5,7 @@ polytope.py
 """
 
 import math
+from math import sin, cos
 
 import sys
 
@@ -177,16 +178,16 @@ def Tilt3D(vertices):
   theta_z = math.pi / 8 # 30 degrees about Z axis
 
   rotation_z = np.array([
-      [math.cos(theta_z), -math.sin(theta_z), 0.0],
-      [math.sin(theta_z),  math.cos(theta_z), 0.0],
-      [0.0,                          0.0, 1.0],
+      [cos(theta_z), -sin(theta_z), 0.0],
+      [sin(theta_z),  cos(theta_z), 0.0],
+      [0.0,                    0.0, 1.0],
   ])
 
   theta_x = math.pi / 16
   rotation_x = np.array([
-      [1.0,               0.0,                0.0],
-      [0.0, math.cos(theta_x), -math.sin(theta_x)],
-      [0.0, math.sin(theta_x),  math.cos(theta_x)],
+      [1.0,          0.0,           0.0],
+      [0.0, cos(theta_x), -sin(theta_x)],
+      [0.0, sin(theta_x),  cos(theta_x)],
   ])
 
   rotation = np.matmul(rotation_x, rotation_z)
@@ -199,20 +200,27 @@ def Tilt4D(vertices):
   """
   theta_xy = math.pi / 8
 
-  # What kind of rotation is this?
   rotation_xy = np.array([
-      [math.cos(theta_xy), -math.sin(theta_xy), 0, 0],
-      [math.sin(theta_xy),  math.cos(theta_xy), 0, 0],
-      [0,                                  0, 1, 0],
-      [0,                                  0, 0, 1],
+      [ cos(theta_xy), sin(theta_xy), 0, 0],
+      [-sin(theta_xy), cos(theta_xy), 0, 0],
+      [             0,             0, 1, 0],
+      [             0,             0, 0, 1],
+  ])
+
+  theta_xz = math.pi / 20
+  rotation_xz = np.array([
+      [ cos(theta_xz), 0, sin(theta_xz), 0],
+      [0,              1,             0, 0],
+      [-sin(theta_xz), 0, cos(theta_xz), 0],
+      [0,              0,             0, 1],
   ])
 
   theta_zw = math.pi / 16
   rotation_zw = np.array([
-      [1.0, 0.0,               0.0,                0.0 ],
-      [0.0, 1.0,               0.0,                0.0 ],
-      [0.0, 0.0, math.cos(theta_zw), -math.sin(theta_zw) ],
-      [0.0, 0.0, math.sin(theta_zw),  math.cos(theta_zw) ],
+      [1, 0,             0,              0 ],
+      [0, 1,             0,              0 ],
+      [0, 0, cos(theta_zw), -sin(theta_zw) ],
+      [0, 0, sin(theta_zw),  cos(theta_zw) ],
   ])
 
   # TODO: I think I should tilt it in 3 directions, every one except Z axis?
@@ -220,7 +228,7 @@ def Tilt4D(vertices):
   # except 1?
   # http://hollasch.github.io/ray4/Four-Space_Visualization_of_4D_Objects.html#s2.2
 
-  rotation = np.matmul(rotation_xy, rotation_zw)
+  rotation = np.matmul(rotation_xy, rotation_xz, rotation_zw)
   return [np.matmul(rotation, v) for v in vertices]
 
 
