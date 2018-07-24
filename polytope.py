@@ -61,6 +61,17 @@ def Intersect(edges, plane_normal, p0):
       intersections.append(inter)
     else:
       print('does not intersect')
+
+  print('Intersections:')
+  for p in intersections:
+    print('  %s' % p)
+
+  # We know we made the Z axis zero
+  print('2D:')
+  for p in intersections:
+    p2 = np.array(p[0:2])
+    print('  %s' % p2)
+
   return intersections
 
 
@@ -82,7 +93,6 @@ def Draw(ax, edges, plane, intersections):
     ax.plot(x, y, z, c='g')
 
   for inter in intersections:
-    print(inter)
     x = np.array([inter[0]])
     y = np.array([inter[1]])
     z = np.array([inter[2]])
@@ -183,15 +193,27 @@ def Tilt(vertices):
   return [np.matmul(rotation, v) for v in vertices]
 
 
+def Translate(vertices):
+  # Move everything down a bit
+  z_delta = -0.1
+  offset = np.array([0, 0, z_delta])
+  return [v + offset for v in vertices]
+
+
 def Plot(schlafli):
-  p0 = np.array([0.5, 0.5, 0.5])  # center of the cube
+  #p0 = np.array([0.5, 0.5, 0.5])  # center of the cube
+
+  p0 = np.array([0, 0, 0])
   # These are useful for plotting, but we don't quite need them (just use the
   # normal vector).
   # Does mplot3d have a plane primitive?  Or can we make a polygon/square from
   # a plane?
 
-  p1 = np.array([1, 1, 0.5])
-  p2 = np.array([1, 0.5, 1])
+  #p1 = np.array([1, 1, 0.5])
+  #p2 = np.array([1, 0.5, 1])
+
+  p1 = np.array([1.0, 0.0, 0.0])
+  p2 = np.array([0.0, 1.0, 0.0])
 
   plane = (p0, p1, p2)
 
@@ -213,6 +235,7 @@ def Plot(schlafli):
   print('')
 
   vertices = Tilt(vertices)
+  vertices = Translate(vertices)
 
   edges = []
   for a, b in edge_numbers:
