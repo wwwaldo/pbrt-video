@@ -157,6 +157,32 @@ def ShowBounds():
     print()
 
 
+def Tilt(vertices):
+  """
+  Tilt the vertices so we get a more interesting intersection
+
+  https://www.learnopencv.com/rotation-matrix-to-euler-angles/
+  NOTE: do NOT use np.matrix ?
+  """
+  theta_z = math.pi / 8 # 30 degrees about Z axis
+
+  rotation_z = np.array([
+      [math.cos(theta_z), -math.sin(theta_z), 0.0],
+      [math.sin(theta_z),  math.cos(theta_z), 0.0],
+      [0.0,                          0.0, 1.0],
+  ])
+
+  theta_x = math.pi / 16
+  rotation_x = np.array([
+      [1.0,               0.0,                0.0],
+      [0.0, math.cos(theta_x), -math.sin(theta_x)],
+      [0.0, math.sin(theta_x),  math.cos(theta_x)],
+  ])
+
+  rotation = np.matmul(rotation_x, rotation_z)
+  return [np.matmul(rotation, v) for v in vertices]
+
+
 def Plot(schlafli):
   p0 = np.array([0.5, 0.5, 0.5])  # center of the cube
   # These are useful for plotting, but we don't quite need them (just use the
@@ -186,40 +212,7 @@ def Plot(schlafli):
     print(v.shape)
   print('')
 
-  # https://www.learnopencv.com/rotation-matrix-to-euler-angles/
-  # NOTE: do NOT use np.matrix ?
-
-  theta_z = math.pi / 8 # 30 degrees about Z axis
-
-  rotation_z = np.array([
-      [math.cos(theta_z), -math.sin(theta_z), 0.0],
-      [math.sin(theta_z),  math.cos(theta_z), 0.0],
-      [0.0,                          0.0, 1.0],
-  ])
-
-  theta_x = math.pi / 16
-  rotation_x = np.array([
-      [1.0,               0.0,                0.0],
-      [0.0, math.cos(theta_x), -math.sin(theta_x)],
-      [0.0, math.sin(theta_x),  math.cos(theta_x)],
-  ])
-
-  #rotation = np.matmul(rotation_z, np.eye(3))
-  rotation = np.matmul(rotation_x, rotation_z)
-  if 1:
-    vertices = [np.matmul(rotation, v) for v in vertices]
-  else:
-    for v in vertices:
-      print('V %s' % v)
-      r = np.matmul(rotation, v)
-
-  print('After rotation:')
-  for v in vertices:
-    print(v)
-    print(v.shape)
-  print('')
-
-  # TODO: Apply rotation matrix here
+  vertices = Tilt(vertices)
 
   edges = []
   for a, b in edge_numbers:
@@ -279,26 +272,7 @@ def main(argv):
     vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
     vertices = [np.array(v) for v in vertices]
 
-    # Rotate it a bit
-    # TODO: Put these in a function.
-
-    theta_z = math.pi / 8 # 30 degrees about Z axis
-
-    rotation_z = np.array([
-        [math.cos(theta_z), -math.sin(theta_z), 0.0],
-        [math.sin(theta_z),  math.cos(theta_z), 0.0],
-        [0.0,                          0.0, 1.0],
-    ])
-
-    theta_x = math.pi / 16
-    rotation_x = np.array([
-        [1.0,               0.0,                0.0],
-        [0.0, math.cos(theta_x), -math.sin(theta_x)],
-        [0.0, math.sin(theta_x),  math.cos(theta_x)],
-    ])
-
-    rotation = np.matmul(rotation_x, rotation_z)
-    vertices = [np.matmul(rotation, v) for v in vertices]
+    vertices = Tilt(vertices)
 
     with open(out_path, 'w') as f:
       generate_ply.generate_ply(f, vertices,
