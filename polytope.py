@@ -321,6 +321,9 @@ def Plot(schlafli):
 
     intersections = Intersect(edges, plane_normal, p0)
 
+    # Remove w-axis to project onto hyperplane (not strictly necessary)
+    intersections = [np.array(v[:3]) for v in intersections]
+
     fig = plt.figure()
     ax = fig.gca(projection='3d')  # create 3d axes?
 
