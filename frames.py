@@ -18,8 +18,8 @@ def main(argv):
     t = f.read()
 
   #look_at = [0, 63, -110]   # look at point from template
-  orig_eye = [400, 20, 30]
-  midpoint = [-50, 100, 70]  # midpoint of 2 models
+  orig_eye = [600, -20, 30]
+  midpoint = [0, 200, -140]  # midpoint of 2 models
   radius = rotate.distance(midpoint, orig_eye)
 
   points = rotate.circle(midpoint, radius, num_frames)
