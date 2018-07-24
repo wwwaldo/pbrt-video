@@ -1,25 +1,17 @@
-LookAt 400 20 30   # eye
-
-Translate 100 200 -140
-
-Translate -200 0 0
-
--50   100   -70
-
 TODO
 ----
-
-- Do shading of convex hull example
-  - Does this let you see the shape better?  Not sure.
-
-- Change 3d / plane intersection to be a translation/rotation and then
-  projection along the x-y axis.  This is so the convex hull algorithm will
-  have 2d points to work with.
-- Test out 4d / hyperplane intersection, do 3d convex hull
 
 - find an animation example with matplotlib
 - Do a video with frames generated in matplotlib?
   - Just translate and rotate the polytope through the x-y axis
+
+- Do shading of convex hull example
+  - Does this let you see the shape better?  Not sure.
+
+- DONE Change 3d / plane intersection to be a translation/rotation and then
+  projection along the x-y axis.  This is so the convex hull algorithm will
+  have 2d points to work with.
+- Test out 4d / hyperplane intersection, do 3d convex hull
 
 - Then render a .pbrt file
   - with some kind of material:
