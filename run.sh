@@ -32,19 +32,19 @@ render() {
   #../other/pbrt-v3-build/pbrt $src
 }
 
-readonly NUM_FRAMES=10
+readonly NUM_FRAMES=50
 
 frames() {
   mkdir -p _out
   local out_dir=scenes  # has to be in out dir
   ./frames.py $NUM_FRAMES $out_dir
-  ls -l $out_dir/*.pbrt
+  ls -l $out_dir/k-*.pbrt
 }
 
 # Oops has to be in original dir
 render-all() {
   # TODO: xargs
-  for input in scenes/*.pbrt; do
+  for input in scenes/k-*.pbrt; do
     render $input
   done
 }
