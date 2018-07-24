@@ -105,7 +105,7 @@ make-video() {
 ply-demo() {
   #local ply=_out/demo.ply
   local ply=render/temp.ply
-  ./polytope.py ply $ply
+  ./polytope.py pbrt $ply 5 3
   #pbrt $ply
   pbrt render/convex_render.pbrt
 }

@@ -157,50 +157,7 @@ def ShowBounds():
     print()
 
 
-def main(argv):
-  try:
-    action = argv[1]
-  except IndexError:
-    action = None
-
-  if action == 'bounds':
-    ShowBounds()
-    return
-
-  if action == 'ply':
-    out_path = argv[2]
-    points = np.random.rand(100, 3)
-    vertices, edges_etc = schlafli_interpreter.regular_polytope([5, 3])
-    vertices = [np.array(v) for v in vertices]
-
-    # Rotate it a bit
-    # TODO: Put these in a function.
-
-    theta_z = math.pi / 8 # 30 degrees about Z axis
-
-    rotation_z = np.array([
-        [math.cos(theta_z), -math.sin(theta_z), 0.0],
-        [math.sin(theta_z),  math.cos(theta_z), 0.0],
-        [0.0,                          0.0, 1.0],
-    ])
-
-    theta_x = math.pi / 16
-    rotation_x = np.array([
-        [1.0,               0.0,                0.0],
-        [0.0, math.cos(theta_x), -math.sin(theta_x)],
-        [0.0, math.sin(theta_x),  math.cos(theta_x)],
-    ])
-
-    rotation = np.matmul(rotation_x, rotation_z)
-    vertices = [np.matmul(rotation, v) for v in vertices]
-
-    with open(out_path, 'w') as f:
-      generate_ply.generate_ply(f, vertices,
-                                template_path='render/ply-header.template')
-
-    print('Wrote %s' % out_path)
-    return
-
+def Plot(schlafli):
   p0 = np.array([0.5, 0.5, 0.5])  # center of the cube
   # These are useful for plotting, but we don't quite need them (just use the
   # normal vector).
@@ -211,10 +168,6 @@ def main(argv):
   p2 = np.array([1, 0.5, 1])
 
   plane = (p0, p1, p2)
-
-  schlafli = [int(a) for a in sys.argv[1:]]  # e.g. 4 3 for cube
-  if len(schlafli) not in (2, 3):
-    raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
 
   # NOTE: There always seems to be a vertex at (0,0,0), but for dodecahedron
   # and others this means there are negative coordinates.  On the other hand,
@@ -304,6 +257,64 @@ def main(argv):
 
   plt.show()
 
+
+def main(argv):
+  try:
+    action = argv[1]
+  except IndexError:
+    raise RuntimeError('Action required: bounds, plot, or pbrt')
+
+  if action == 'bounds':
+    ShowBounds()
+
+  elif action == 'pbrt':
+    # Example: ./polytope.py pbrt foo.ply 4 3
+
+    out_path = argv[2]
+    schlafli = [int(a) for a in sys.argv[3:]]  # e.g. 4 3 for cube
+    if len(schlafli) not in (2, 3):
+      raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
+
+    points = np.random.rand(100, 3)
+    vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
+    vertices = [np.array(v) for v in vertices]
+
+    # Rotate it a bit
+    # TODO: Put these in a function.
+
+    theta_z = math.pi / 8 # 30 degrees about Z axis
+
+    rotation_z = np.array([
+        [math.cos(theta_z), -math.sin(theta_z), 0.0],
+        [math.sin(theta_z),  math.cos(theta_z), 0.0],
+        [0.0,                          0.0, 1.0],
+    ])
+
+    theta_x = math.pi / 16
+    rotation_x = np.array([
+        [1.0,               0.0,                0.0],
+        [0.0, math.cos(theta_x), -math.sin(theta_x)],
+        [0.0, math.sin(theta_x),  math.cos(theta_x)],
+    ])
+
+    rotation = np.matmul(rotation_x, rotation_z)
+    vertices = [np.matmul(rotation, v) for v in vertices]
+
+    with open(out_path, 'w') as f:
+      generate_ply.generate_ply(f, vertices,
+                                template_path='render/ply-header.template')
+
+    print('Wrote %s' % out_path)
+
+  elif action == 'plot':
+    schlafli = [int(a) for a in argv[2:]]  # e.g. 4 3 for cube
+    if len(schlafli) not in (2, 3):
+      raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
+
+    Plot(schlafli)
+
+  else:
+    raise RuntimeError('Invalid action %r' % action)
 
 if __name__ == '__main__':
   try:
