@@ -193,10 +193,43 @@ def Tilt3D(vertices):
   return [np.matmul(rotation, v) for v in vertices]
 
 
+def Tilt4D(vertices):
+  """
+  4D version of above:
+  """
+  theta_z = math.pi / 8
+
+  # What kind of rotation is this?
+  rotation_z = np.array([
+      [math.cos(theta_z), -math.sin(theta_z), 0, 0],
+      [math.sin(theta_z),  math.cos(theta_z), 0, 0],
+      [0,                                  0, 1, 0],
+      [0,                                  0, 0, 1],
+  ])
+
+  theta_x = math.pi / 16
+  rotation_x = np.array([
+      [1.0, 0.0,               0.0,                0.0 ],
+      [0.0, 1.0,               0.0,                0.0 ],
+      [0.0, 0.0, math.cos(theta_x), -math.sin(theta_x) ],
+      [0.0, 0.0, math.sin(theta_x),  math.cos(theta_x) ],
+  ])
+
+  rotation = np.matmul(rotation_x, rotation_z)
+  return [np.matmul(rotation, v) for v in vertices]
+
+
 def Translate3D(vertices):
   # Move everything down a bit
   z_delta = -0.1
   offset = np.array([0, 0, z_delta])
+  return [v + offset for v in vertices]
+
+
+def Translate4D(vertices):
+  # Move everything down a bit
+  w_delta = -0.1
+  offset = np.array([0, 0, 0, w_delta])
   return [v + offset for v in vertices]
 
 
@@ -239,9 +272,8 @@ def Plot(schlafli):
     vertices = Tilt3D(vertices)
     vertices = Translate3D(vertices)
   elif len(schlafli) == 3:
-    #vertices = Tilt4D(vertices)
-    #vertices = Translate4D(vertices)
-    pass
+    vertices = Tilt4D(vertices)
+    vertices = Translate4D(vertices)
   else:
     raise AssertionError
 
