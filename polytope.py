@@ -167,7 +167,7 @@ def ShowBounds():
     print()
 
 
-def Tilt(vertices):
+def Tilt3D(vertices):
   """
   Tilt the vertices so we get a more interesting intersection
 
@@ -193,7 +193,7 @@ def Tilt(vertices):
   return [np.matmul(rotation, v) for v in vertices]
 
 
-def Translate(vertices):
+def Translate3D(vertices):
   # Move everything down a bit
   z_delta = -0.1
   offset = np.array([0, 0, z_delta])
@@ -234,14 +234,23 @@ def Plot(schlafli):
     print(v.shape)
   print('')
 
-  vertices = Tilt(vertices)
-  vertices = Translate(vertices)
+  # TODO: We could probably generalize this.
+  if len(schlafli) == 2:
+    vertices = Tilt3D(vertices)
+    vertices = Translate3D(vertices)
+  elif len(schlafli) == 3:
+    #vertices = Tilt4D(vertices)
+    #vertices = Translate4D(vertices)
+    pass
+  else:
+    raise AssertionError
 
   edges = []
   for a, b in edge_numbers:
     edges.append((vertices[a], vertices[b]))
 
   if len(schlafli) == 2:
+
     p01 = p1 - p0
     p02 = p2 - p0
     plane_normal = np.cross(p01, p02)
@@ -258,8 +267,12 @@ def Plot(schlafli):
     # 3 3 3 - has no intersections
     # 4 3 3 - QHull gives verbose error!  Less than 4 dimensional!
 
-    p0 = np.array([0.5, 0.5, 0.5, 0.5])
-    plane_normal = np.array([1, 2, 2, 1])
+    #p0 = np.array([0.5, 0.5, 0.5, 0.5])
+    #plane_normal = np.array([1, 2, 2, 1])
+
+    # Set W axis
+    p0 = np.array([0, 0, 0, 0])
+    plane_normal = np.array([0, 0, 0, 1])
 
     intersections = Intersect(edges, plane_normal, p0)
 
@@ -295,7 +308,7 @@ def main(argv):
     vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
     vertices = [np.array(v) for v in vertices]
 
-    vertices = Tilt(vertices)
+    vertices = Tilt3D(vertices)
 
     with open(out_path, 'w') as f:
       generate_ply.generate_ply(f, vertices,
