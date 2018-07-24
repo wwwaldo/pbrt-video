@@ -20,7 +20,8 @@ deps() {
 
 render() {
   local src=${1:-scenes/killeroo-simple.pbrt}
-  ../other/pbrt-v3-build/pbrt $src
+  ~andy/git/other/pbrt-v3-build/pbrt $src
+  #../other/pbrt-v3-build/pbrt $src
 }
 
 readonly NUM_FRAMES=10
