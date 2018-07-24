@@ -98,6 +98,8 @@ def Draw4dSlice(ax, intersections):
     x = np.array([inter[0]])
     y = np.array([inter[1]])
     z = np.array([inter[2]])
+    #w = np.array([inter[3]])
+
     # TODO: How to project it?  SVD?  Or just change the axes?
     ax.scatter(x, y, z, c='r')  # scatter plot of a single point
 
@@ -193,7 +195,40 @@ def main(argv):
   print('Vertices:')
   for v in vertices:
     print(v)
+    print(v.shape)
   print('')
+
+  rotation = np.matrix([
+      [1.0, 0.0, 0.0],
+      [0.0, 1.0, 0.0],
+      [0.0, 0.0, 1.0],
+  ])
+  print(rotation)
+
+  # https://www.learnopencv.com/rotation-matrix-to-euler-angles/
+  # NOT np.matrix ?
+
+  theta = math.pi / 8 # 30 degrees about Z axis
+  rotation = np.array([
+      [math.cos(theta), -math.sin(theta), 0.0],
+      [math.sin(theta),  math.cos(theta), 0.0],
+      [0.0,                          0.0, 1.0],
+  ])
+
+  if 1:
+    vertices = [np.matmul(rotation, v) for v in vertices]
+  else:
+    for v in vertices:
+      print('V %s' % v)
+      r = np.matmul(rotation, v)
+
+  print('After rotation:')
+  for v in vertices:
+    print(v)
+    print(v.shape)
+  print('')
+
+  # TODO: Apply rotation matrix here
 
   edges = []
   for a, b in edge_numbers:
