@@ -73,7 +73,7 @@ make-video() {
   time convert -delay 6 -quality 95 k-*.jpg movie.mp4
   return
 
-  time ffmpeg -f image2 -r 1/5 -i %01d.jpg -c:v libx264 -pix_fmt yuv420p out.mp4
+  time ffmpeg -f image2 -r 1/5 -i %04d.jpg -c:v libx264 -pix_fmt yuv420p out.mp4
 }
 
 "$@"
