@@ -323,10 +323,6 @@ def Plot(schlafli):
       print(mpl_points)
 
   elif len(schlafli) == 3:
-    # NOTES:
-    # 3 3 3 - has no intersections
-    # 4 3 3 - QHull gives verbose error!  Less than 4 dimensional!
-
     #p0 = np.array([0.5, 0.5, 0.5, 0.5])
     #plane_normal = np.array([1, 2, 2, 1])
 
@@ -340,7 +336,7 @@ def Plot(schlafli):
     intersections = [np.array(v[:3]) for v in intersections]
 
     fig = plt.figure()
-    ax = fig.gca(projection='3d')  # create 3d axes?
+    ax = fig.gca(projection='3d')
 
     Draw4dSlice(ax, intersections)
 
