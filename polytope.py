@@ -120,8 +120,11 @@ def Draw4dSlice(ax, intersections):
   Args:
     intersections: a list of 4D points
   """
+  # TODO: Draw this all at once?
+  # Yes because I want to remove
+
   for inter in intersections:
-    print(inter)
+    #print(inter)
     x = np.array([inter[0]])
     y = np.array([inter[1]])
     z = np.array([inter[2]])
@@ -328,7 +331,7 @@ def Plot(schlafli):
     plt.show()
 
   elif len(schlafli) == 3:
-    num_frames = 20
+    num_frames = 40
 
     # Calculate W range AFTER ROTATION.
     w = [v[3] for v in vertices]
@@ -348,7 +351,11 @@ def Plot(schlafli):
 
     # TODO: Set Z limit
     if 1:
-      w_offsets = (-0.1, -0.2, -0.3)  # hack
+      #w_offsets = (-0.1, -0.2, -0.3)  # hack
+      #w_offsets = np.linspace(-0.1, -0.6, num=6)
+      # It only goes up to -1 for some reason?
+      w_offsets = np.linspace(-0.1, -6.0, num=60)
+      print('NEW w_offsets %s' % w_offsets)
       for i, w_offset in enumerate(w_offsets):
         print('--- OFFSET %d = %f' % (i, w_offset))
 
