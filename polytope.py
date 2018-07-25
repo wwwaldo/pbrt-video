@@ -198,7 +198,7 @@ def Tilt3D(vertices):
       [0.0,                    0.0, 1.0],
   ])
 
-  theta_x = math.pi / 16
+  theta_x = math.pi / 6
   rotation_x = np.array([
       [1.0,          0.0,           0.0],
       [0.0, cos(theta_x), -sin(theta_x)],
