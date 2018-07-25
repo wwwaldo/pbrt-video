@@ -44,11 +44,12 @@ class Animation(object):
       num: from 0 to len(data)
     """
     for data, line in zip(self.data, self.lines):
-      # NOTE: there is no .set_data() for 3 dim data...
+      # NOTE: Weird API.  there is no .set_data() for 3 dim data...
+      xy = data[0:2, num:num+2]
+      z = data[2, num:num+2]
 
-      # Hm it draws every line from the beginning.  It's a prefix.
-      line.set_data(data[0:2, :num])
-      line.set_3d_properties(data[2, :num])
+      line.set_data(xy)
+      line.set_3d_properties(z)
 
 
 NUM_LINES = 10
