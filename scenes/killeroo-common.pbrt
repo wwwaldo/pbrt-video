@@ -1,0 +1,51 @@
+Camera "perspective" "float fov" [39]
+
+# zoom in by feet
+# "integer xresolution" [1500] "integer yresolution" [1500]
+#	"float cropwindow" [ .34 .49  .67 .8 ]
+
+Sampler "halton" "integer pixelsamples" [8]
+
+Integrator "path"
+
+# Add objects to the world here
+WorldBegin
+
+# Add a sphere for debugging
+AttributeBegin
+  Translate 0 200 -140
+  Material "plastic" "color Kd" [.4 .2 .2] "color Ks" [.5 .5 .5]
+  Shape "sphere" "float radius" [50]
+AttributeEnd
+
+# Point light with radius 3
+AttributeBegin
+Material "matte" "color Kd" [0 0 0]
+Translate 150 0  20
+Translate 0 120 0
+AreaLightSource "area"  "color L" [2000 2000 2000] "integer nsamples" [8]
+Shape "sphere" "float radius" [3]
+AttributeEnd
+
+# The floor
+AttributeBegin
+  Material "matte" "color Kd" [.5 .5 .8]
+  Translate 0 0 -210
+Shape "trianglemesh" "point P" [ -1000 -1000 0 1000 -1000 0 1000 1000 0 -1000 1000 0 ]
+      "float uv" [ 0 0 5 0 5 5 0 5 ]
+	"integer indices" [ 0 1 2 2 3 0]
+AttributeEnd
+
+# Two kangaroos
+AttributeBegin
+    Material "plastic" "color Kd" [.4 .2 .2] "color Ks" [.5 .5 .5]
+        "float roughness" [.025]
+Translate 50 100 -70 # translate the drag-n-drop-kangaroo
+    Include "../../scenes/geometry/killeroo.pbrt"
+    Material "plastic" "color Ks" [.3 .3 .3] "color Kd" [.4 .5 .4]
+        "float roughness" [.15] 
+Translate -100 0 0 # specified relative to the current translation
+    Include "../../scenes/geometry/killeroo.pbrt"
+
+AttributeEnd
+WorldEnd
