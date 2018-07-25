@@ -77,28 +77,39 @@ def Intersect(edges, plane_normal, p0):
 
 
 def Draw(ax, edges, plane, intersections):
-  p0, p1, p2 = plane
+  """Returns matplotlib objects that can be mutated for animation.
 
+  Returns:
+    mpl_lines: list of Line3D
+    mpl_points: a single Path3DCollection
+  """
+  #p0, p1, p2 = plane
+
+  mpl_lines = []
   for la, lb in edges:
     x = np.array([la[0], lb[0]])
     y = np.array([la[1], lb[1]])
     z = np.array([la[2], lb[2]])
 
-    ax.plot(x, y, z, c='b')
+    p = ax.plot(x, y, z, c='b')
+    mpl_lines.append(p)
 
-  for v in (p1, p2):
-    x = np.array([p0[0], v[0]])
-    y = np.array([p0[1], v[1]])
-    z = np.array([p0[2], v[2]])
+  if 0:
+    for v in (p1, p2):
+      x = np.array([p0[0], v[0]])
+      y = np.array([p0[1], v[1]])
+      z = np.array([p0[2], v[2]])
 
-    ax.plot(x, y, z, c='g')
+      ax.plot(x, y, z, c='g')
 
   # Plot intersections all at once
   intersections = np.array(intersections)
   x = intersections[:, 0]  # all rows, first column
   y = intersections[:, 1]
   z = intersections[:, 2]
-  ax.scatter(x, y, z, c='r')
+  mpl_points = ax.scatter(x, y, z, c='r')
+
+  return mpl_lines, mpl_points
 
 
 def Draw4dSlice(ax, intersections):
@@ -306,7 +317,12 @@ def Plot(schlafli):
     fig = plt.figure()
     ax = fig.gca(projection='3d')  # create 3d axes?
 
-    Draw(ax, edges, plane, intersections)
+    mpl_lines, mpl_points = Draw(ax, edges, plane, intersections)
+    print('Lines')
+    for li in mpl_lines:
+      print(li)
+    print('points')
+    print(mpl_points)
 
   elif len(schlafli) == 3:
     # NOTES:
