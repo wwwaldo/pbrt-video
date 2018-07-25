@@ -261,6 +261,19 @@ def Translate4D(vertices, w_delta):
   return [v + offset for v in vertices]
 
 
+def PrintBounds(vertices):
+  """For debugging."""
+  x = [v[0] for v in vertices]
+  y = [v[1] for v in vertices]
+  z = [v[2] for v in vertices]
+  w = [v[3] for v in vertices]
+  print('x: %f - %f' % (min(x), max(x)))
+  print('y: %f - %f' % (min(y), max(y)))
+  print('z: %f - %f' % (min(z), max(z)))
+  print('w: %f - %f' % (min(w), max(w)))
+  #print('w: %s' % sorted(w))
+
+
 # NOTE: It might be better to separate this into Plot3D and Plot4D.
 def Plot(schlafli):
   #p0 = np.array([0.5, 0.5, 0.5])  # center of the cube
@@ -337,15 +350,7 @@ def Plot(schlafli):
     num_frames = 40
 
     if 1:
-      x = [v[0] for v in vertices]
-      y = [v[1] for v in vertices]
-      z = [v[2] for v in vertices]
-      w = [v[3] for v in vertices]
-      print('x: %f - %f' % (min(x), max(x)))
-      print('y: %f - %f' % (min(y), max(y)))
-      print('z: %f - %f' % (min(z), max(z)))
-      print('w: %f - %f' % (min(w), max(w)))
-      print('w: %s' % sorted(w))
+      PrintBounds(vertices)
 
     # Calculate W range AFTER ROTATION.
     w = [v[3] for v in vertices]
@@ -374,10 +379,12 @@ def Plot(schlafli):
       for i, w_offset in enumerate(w_offsets):
         print('--- OFFSET %d = %f' % (i, w_offset))
 
-        vertices = Translate4D(vertices, w_offset)
+        translated = Translate4D(vertices, w_offset)
+        PrintBounds(translated)
+
         edges = []
         for a, b in edge_numbers:
-          edges.append((vertices[a], vertices[b]))
+          edges.append((translated[a], translated[b]))
 
         intersections = Intersect(edges, plane_normal, p0)
         print('%d intersections' % len(intersections))
