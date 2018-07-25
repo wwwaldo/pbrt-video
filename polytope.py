@@ -125,24 +125,23 @@ def Draw4dSlice(ax, intersections):
     x = np.array([inter[0]])
     y = np.array([inter[1]])
     z = np.array([inter[2]])
-    #w = np.array([inter[3]])
 
-    # TODO: How to project it?  SVD?  Or just change the axes?
     ax.scatter(x, y, z, c='r')  # scatter plot of a single point
-
-  return
 
   # Change intersections to ndarray of shape (N, 3)
   print('number of intersections: %d' % len(intersections))
-  inter_array = np.array(intersections)
+  inter = np.array(intersections)
   # No intersections?
-  print(inter_array)
+  print(inter)
 
-  hull = ConvexHull(inter_array)
+  hull = ConvexHull(inter)
 
   #ax.plot(intersections[:,0], intersections[:,1], intersections[:,2], 'o')
   for simplex in hull.simplices:
-    ax.plot(points[simplex, 0], points[simplex, 1], points[simplex, 2], 'k-')
+    # Make it a closed loop!
+    to_plot = np.append(simplex, simplex[0])
+    ax.plot(inter[to_plot, 0], inter[to_plot, 1], inter[to_plot, 2],
+            c='b')
 
 
 SHAPES_3D = [
@@ -257,6 +256,7 @@ def Translate4D(vertices, w_delta):
   return [v + offset for v in vertices]
 
 
+# NOTE: It might be better to separate this into Plot3D and Plot4D.
 def Plot(schlafli):
   #p0 = np.array([0.5, 0.5, 0.5])  # center of the cube
 
@@ -413,17 +413,38 @@ class Animation3D(object):
       line.set_3d_properties(z)
 
 
-def Animate(schlafli, num_frames):
+def Animate4D(schlafli, num_frames):
   vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
   vertices = [np.array(v) for v in vertices]
 
-  if len(schlafli) == 2:
-    # Tilt everything a bit
-    vertices = Tilt3D(vertices)
-  elif len(schlafli) == 3:
-    vertices = Tilt4D(vertices)
-  else:
-    raise AssertionError
+  # Tilt everything a bit
+  vertices = Tilt4D(vertices)
+
+  # Calculate Z range AFTER ROTATION.
+  w = [v[3] for v in vertices]
+  w_offsets = np.linspace(-max(w), -min(w), num=num_frames)
+  print('w_offsets:')
+  print(w_offsets)
+
+  edge_numbers = edges_etc[0]
+  edges = []
+  for a, b in edge_numbers:
+    edges.append((vertices[a], vertices[b]))
+
+  p0 = np.array([0, 0, 0, 0])
+  plane_normal = np.array([0, 0, 0, 1])
+
+  # TODO: Do we need initial intersections?  We could just make
+  # dummy Line3D instances?  Just create a fake data set.
+  intersections = Intersect(edges, plane_normal, p0)
+
+
+def Animate3D(schlafli, num_frames):
+  vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
+  vertices = [np.array(v) for v in vertices]
+
+  # Tilt everything a bit
+  vertices = Tilt3D(vertices)
 
   # Calculate Z range AFTER ROTATION.
   z = [v[2] for v in vertices]
@@ -436,15 +457,11 @@ def Animate(schlafli, num_frames):
   for a, b in edge_numbers:
     edges.append((vertices[a], vertices[b]))
 
-  if len(schlafli) == 2:
-    p0 = np.array([0, 0, 0])
-    plane_normal = np.array([0, 0, 1])
-    intersections = Intersect(edges, plane_normal, p0)
-  elif len(schlafli) == 3:
-    p0 = np.array([0, 0, 0, 0])
-    plane_normal = np.array([0, 0, 0, 1])
-  else:
-    raise AssertionError
+  # TODO: Do we need initial intersections?  We could just make
+  # dummy Line3D instances?  Just create a fake data set.
+  p0 = np.array([0, 0, 0])
+  plane_normal = np.array([0, 0, 1])
+  intersections = Intersect(edges, plane_normal, p0)
 
   fig = plt.figure()
   ax = fig.gca(projection='3d')  # create 3d axes?
@@ -505,7 +522,12 @@ def main(argv):
       raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
 
     num_frames = 20
-    Animate(schlafli, num_frames)
+    if len(schlafli) == 2:
+      Animate3D(schlafli, num_frames)
+    elif len(schlafli) == 3:
+      Animate4D(schlafli, num_frames)
+    else:
+      raise AssertionError
 
   else:
     raise RuntimeError('Invalid action %r' % action)
