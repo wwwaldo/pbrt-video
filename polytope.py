@@ -475,9 +475,15 @@ def Animate3D(schlafli, num_frames):
                           mpl_points)
 
   # Just creating this object seems to mutate global state.
-  _ = animation.FuncAnimation(fig, anim_func, num_frames, interval=300)
+  anim = animation.FuncAnimation(fig, anim_func, num_frames, interval=300)
 
-  plt.show()
+  if 1:
+  # https://jakevdp.github.io/blog/2013/02/16/animating-the-lorentz-system-in-3d
+    out_path = '%d-%d.mp4' % tuple(schlafli)
+    anim.save(out_path, fps=15, extra_args=['-vcodec', 'libx264'])
+    print('Wrote %s' % out_path)
+  else:
+    plt.show()
 
 
 def main(argv):
