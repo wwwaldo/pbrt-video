@@ -14,6 +14,7 @@ from render import generate_ply
 
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 from mpl_toolkits.mplot3d import Axes3D
 from scipy.spatial import ConvexHull
 
@@ -280,7 +281,6 @@ def Plot(schlafli):
 
   vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
 
-  edge_numbers = edges_etc[0]
   vertices = [np.array(v) for v in vertices]
   print('Vertices:')
   for v in vertices:
@@ -299,6 +299,7 @@ def Plot(schlafli):
   else:
     raise AssertionError
 
+  edge_numbers = edges_etc[0]
   edges = []
   for a, b in edge_numbers:
     edges.append((vertices[a], vertices[b]))
@@ -348,9 +349,11 @@ def Plot(schlafli):
 
 class Animation(object):
 
-  def __init__(self, data, lines):
-    self.data = data  # frames of raw data
-    self.lines = lines  # raw line objects
+  def __init__(self, vertices, z_offsets, mpl_lines, mpl_points):
+    self.vertices = vertices  # list of nparray
+    self.z_offsets = z_offsets  # nparray of z offsets
+    self.mpl_lines = mpl_lines  # drawn edges to mutate
+    self.mpl_points = mpl_points  # drawn intersection points to mutate
 
   def __call__(self, frame_index):
     """Mutate line objects to create a new frame.
@@ -358,6 +361,12 @@ class Animation(object):
     Args:
       num: from 0 to len(data)
     """
+    print('FRAME %d' % frame_index)
+    return
+    # TODO:
+    # - Do translation here!
+    # - Do intersection here!
+    # Set mpl_lines
     for data, line in zip(self.data, self.lines):
       # NOTE: Weird API.  there is no .set_data() for 3 dim data...
       xy = data[0:2, num:num+2]
@@ -368,11 +377,48 @@ class Animation(object):
 
 
 def Animate(schlafli, num_frames):
-  anim_func = Animation(data, lines)
+  vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
+  vertices = [np.array(v) for v in vertices]
+
+  if len(schlafli) == 2:
+    # Tilt everything a bit
+    vertices = Tilt3D(vertices)
+  elif len(schlafli) == 3:
+    vertices = Tilt4D(vertices)
+  else:
+    raise AssertionError
+
+  z = [v[2] for v in vertices]
+  z_offsets = np.linspace(min(z), max(z), num=num_frames)
+  print('z_offsets:')
+  print(z_offsets)
+
+  edge_numbers = edges_etc[0]
+  edges = []
+  for a, b in edge_numbers:
+    edges.append((vertices[a], vertices[b]))
+
+  if len(schlafli) == 2:
+    p0 = np.array([0, 0, 0])
+    plane_normal = np.array([0, 0, 1])
+    intersections = Intersect(edges, plane_normal, p0)
+  elif len(schlafli) == 3:
+    p0 = np.array([0, 0, 0, 0])
+    plane_normal = np.array([0, 0, 0, 1])
+  else:
+    raise AssertionError
+
+  fig = plt.figure()
+  ax = fig.gca(projection='3d')  # create 3d axes?
+
+  plane = None
+  mpl_lines, mpl_points = Draw(ax, edges, plane, intersections)
+
+  anim_func = Animation(vertices, z_offsets, mpl_lines, mpl_points)
 
   # Just creating this object seems to mutate global state
   # 20 ms interval
-  _ = animation.FuncAnimation(fig, anim_func, NUM_FRAMES, interval=20)
+  _ = animation.FuncAnimation(fig, anim_func, num_frames, interval=20)
 
   plt.show()
 
