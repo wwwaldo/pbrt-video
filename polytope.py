@@ -115,7 +115,7 @@ def Draw(ax, edges, plane, intersections):
   return mpl_lines, mpl_points
 
 
-def Draw4dSlice(ax, intersections):
+def Draw4dSlice(ax, intersections, draw_hull=True):
   """
   Args:
     intersections: a list of 4D points
@@ -126,14 +126,17 @@ def Draw4dSlice(ax, intersections):
   z = inter[:, 2]
   mpl_points = ax.scatter(x, y, z, c='r')
 
-  hull = ConvexHull(inter)
+  if draw_hull:
+    hull = ConvexHull(inter)
 
-  # Plot each triangle
-  for simplex in hull.simplices:
-    # Make it a closed loop!
-    to_plot = np.append(simplex, simplex[0])
-    ax.plot(inter[to_plot, 0], inter[to_plot, 1], inter[to_plot, 2],
-            c='b')
+    # Plot each triangle
+    for simplex in hull.simplices:
+      # Make it a closed loop!
+      to_plot = np.append(simplex, simplex[0])
+      ax.plot(inter[to_plot, 0], inter[to_plot, 1], inter[to_plot, 2],
+              c='b')
+
+  return mpl_points
 
 
 SHAPES_3D = [
@@ -364,6 +367,7 @@ def Plot(schlafli):
     ax.set_ylim(min(y), max(y))
     ax.set_zlim(min(z), max(z))
 
+    mpl_points = None
     if 1:
       print('NEW w_offsets %s' % w_offsets)
       for i, w_offset in enumerate(w_offsets):
@@ -382,11 +386,16 @@ def Plot(schlafli):
         # Remove w-axis to project onto hyperplane (not strictly necessary)
         intersections = [np.array(v[:3]) for v in intersections]
 
-        Draw4dSlice(ax, intersections)
+        mpl_points = Draw4dSlice(ax, intersections, draw_hull=True)
         plt.pause(0.001)
 
-        # Remove previous plots
-        del ax.collections[:]
+        ax.cla()  # clear
+        ax.set_xlim(min(x), max(x))
+        ax.set_ylim(min(y), max(y))
+        ax.set_zlim(min(z), max(z))
+
+        #if mpl_points:
+        #  ax.collections.remove(mpl_points)
 
     else:
      # A single plot
