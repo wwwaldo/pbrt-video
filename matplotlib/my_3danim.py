@@ -60,8 +60,8 @@ def main():
   fig = plt.figure()
   ax = p3.Axes3D(fig)
 
-  # 25 frames of random 3-D lines
-  data = [Gen_RandLine(NUM_FRAMES, 3) for index in range(NUM_LINES)]
+  # 3 dimensions
+  data = [Gen_RandLine(NUM_FRAMES, 3) for _ in range(NUM_LINES)]
 
   print('DATA:')
   for d in data:
@@ -73,13 +73,16 @@ def main():
   # NOTE: Can't pass empty arrays into 3d version of plot()
   lines = []
   for dat in data:
+    # Not sure why we take a slice and then [0]
     p = ax.plot(dat[0, 0:1], dat[1, 0:1], dat[2, 0:1])
+    print(p)
     lines.append(p[0])
 
-  print('LINES:')
-  for line in lines:
-    print(line)
-  print('')
+  if 0:
+    print('LINES:')
+    for line in lines:
+      print(line)
+    print('')
 
   # Setting the axes properties
   ax.set_xlim3d([0.0, 1.0])
