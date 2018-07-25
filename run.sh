@@ -74,8 +74,10 @@ exr-to-jpg() {
   convert $exr _out/jpg/${name}.jpg
 }
 
+readonly NPROC=$(( $(nproc) - 1 ))
+
 all-jpg() {
-  echo _out/exr/k-*.exr | xargs --verbose -n 1 -P 2 -- $0 exr-to-jpg
+  echo _out/exr/k-*.exr | xargs --verbose -n 1 -P $NPROC -- $0 exr-to-jpg
 }
 
 
