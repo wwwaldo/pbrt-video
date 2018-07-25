@@ -129,11 +129,13 @@ def Draw4dSlice(ax, intersections):
     ax.scatter(x, y, z, c='r')  # scatter plot of a single point
 
   # Change intersections to ndarray of shape (N, 3)
-  print('number of intersections: %d' % len(intersections))
+  #print('number of intersections: %d' % len(intersections))
+
   inter = np.array(intersections)
   # No intersections?
-  print(inter)
+  #print(inter)
 
+  return
   hull = ConvexHull(inter)
 
   #ax.plot(intersections[:,0], intersections[:,1], intersections[:,2], 'o')
@@ -297,7 +299,6 @@ def Plot(schlafli):
     vertices = Translate3D(vertices, -0.1)
   elif len(schlafli) == 3:
     vertices = Tilt4D(vertices)
-    vertices = Translate4D(vertices, -0.1)
   else:
     raise AssertionError
 
@@ -324,8 +325,17 @@ def Plot(schlafli):
         print(li)
       print('points')
       print(mpl_points)
+    plt.show()
 
   elif len(schlafli) == 3:
+    num_frames = 20
+
+    # Calculate W range AFTER ROTATION.
+    w = [v[3] for v in vertices]
+    w_offsets = np.linspace(-max(w), -min(w), num=num_frames)
+    print('w_offsets:')
+    print(w_offsets)
+
     #p0 = np.array([0.5, 0.5, 0.5, 0.5])
     #plane_normal = np.array([1, 2, 2, 1])
 
@@ -333,20 +343,46 @@ def Plot(schlafli):
     p0 = np.array([0, 0, 0, 0])
     plane_normal = np.array([0, 0, 0, 1])
 
-    intersections = Intersect(edges, plane_normal, p0)
-
-    # Remove w-axis to project onto hyperplane (not strictly necessary)
-    intersections = [np.array(v[:3]) for v in intersections]
-
     fig = plt.figure()
     ax = fig.gca(projection='3d')
 
-    Draw4dSlice(ax, intersections)
+    # TODO: Set Z limit
+    if 1:
+      w_offsets = (-0.1, -0.2, -0.3)  # hack
+      for i, w_offset in enumerate(w_offsets):
+        print('--- OFFSET %d = %f' % (i, w_offset))
+
+        vertices = Translate4D(vertices, w_offset)
+        edges = []
+        for a, b in edge_numbers:
+          edges.append((vertices[a], vertices[b]))
+
+        intersections = Intersect(edges, plane_normal, p0)
+        print('%d intersections' % len(intersections))
+
+        # Remove w-axis to project onto hyperplane (not strictly necessary)
+        intersections = [np.array(v[:3]) for v in intersections]
+
+        Draw4dSlice(ax, intersections)
+        plt.pause(0.001)
+    else:
+     # A single plot
+      vertices = Translate4D(vertices, -0.1)
+      edges = []
+      for a, b in edge_numbers:
+        edges.append((vertices[a], vertices[b]))
+
+      intersections = Intersect(edges, plane_normal, p0)
+      print('%d intersections' % len(intersections))
+
+      # Remove w-axis to project onto hyperplane (not strictly necessary)
+      intersections = [np.array(v[:3]) for v in intersections]
+
+      Draw4dSlice(ax, intersections)
+      plt.show()
 
   else:
     raise AssertionError
-
-  plt.show()
 
 
 class Animation3D(object):
@@ -420,7 +456,7 @@ def Animate4D(schlafli, num_frames):
   # Tilt everything a bit
   vertices = Tilt4D(vertices)
 
-  # Calculate Z range AFTER ROTATION.
+  # Calculate W range AFTER ROTATION.
   w = [v[3] for v in vertices]
   w_offsets = np.linspace(-max(w), -min(w), num=num_frames)
   print('w_offsets:')
