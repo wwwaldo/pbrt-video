@@ -93,7 +93,7 @@ def Draw(ax, edges, plane, intersections):
     z = np.array([la[2], lb[2]])
 
     p = ax.plot(x, y, z, c='b')
-    mpl_lines.append(p)
+    mpl_lines.append(p[0])  # Not sure why it's p[0]
 
   if 0:
     for v in (p1, p2):
@@ -375,6 +375,18 @@ class Animation3D(object):
     intersections = Intersect(edges, plane_normal, p0)
     print('FRAME %d' % frame_index)
     print('# intersections: %d' % len(intersections))
+
+    for edge, mpl_line in zip(edges, self.mpl_lines):
+      # NOTE: Weird API.  there is no .set_data() for 3 dim data...
+      a, b = edge
+      xy = np.array([
+        [a[0], b[0]],
+        [a[1], b[1]]
+      ])
+      z = np.array([a[2], b[2]])
+
+      mpl_line.set_data(xy)
+      mpl_line.set_3d_properties(z)
 
     # TODO: plot edges and intersections
     return
