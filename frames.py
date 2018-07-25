@@ -35,7 +35,7 @@ def main(argv):
       'eye_x': point[0],
       'eye_y': point[1],
       'eye_z': point[2],
-      'filename': 'k-%04d.exr' % i,
+      'filename': '_out/exr/k-%04d.exr' % i,
     }
     with open(os.path.join(out_dir, 'k-%04d.pbrt' % i), 'w') as f:
       print(t % p, file=f)

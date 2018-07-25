@@ -32,11 +32,17 @@ render() {
   #../other/pbrt-v3-build/pbrt $src
 }
 
-readonly NUM_FRAMES=50
+readonly NUM_FRAMES=10
+
+clean() {
+  rm -v scenes/k-*.pbrt
+}
 
 frames() {
-  mkdir -p _out
-  local out_dir=scenes  # has to be in out dir
+  mkdir -p _out/{exr,jpg}
+
+  # has to be in scenes to include the geometry file
+  local out_dir=scenes
   ./frames.py $NUM_FRAMES $out_dir
   ls -l $out_dir/k-*.pbrt
 }
@@ -44,6 +50,7 @@ frames() {
 # Oops has to be in original dir
 render-all() {
   # TODO: xargs
+  # Or just use a single command to share?
   for input in scenes/k-*.pbrt; do
     render $input
   done
@@ -51,15 +58,14 @@ render-all() {
 
 # On local machine
 
-readonly EXR_DIR=~/broome/git/pbrt-video
-
 exr-to-jpg() {
   local exr=$1
-  convert $exr $(basename $exr .exr).jpg
+  local name=$(basename $exr .exr)
+  convert $exr _out/jpg/${name}.jpg
 }
 
 all-jpg() {
-  echo $EXR_DIR/k-*.exr | xargs --verbose -n 1 -P 2 -- $0 exr-to-jpg
+  echo _out/exr/k-*.exr | xargs --verbose -n 1 -P 2 -- $0 exr-to-jpg
 }
 
 
@@ -70,7 +76,9 @@ all-jpg() {
 make-video() {
   # with imagemagick
   # http://jupiter.ethz.ch/~pjt/makingMovies.html 
-  time convert -delay 6 -quality 95 k-*.jpg movie.mp4
+  time convert -delay 6 -quality 95 _out/jpg/k-*.jpg _out/movie.mp4
+
+  echo "Wrote $PWD/_out/movie.mp4"
   return
 
   time ffmpeg -f image2 -r 1/5 -i %04d.jpg -c:v libx264 -pix_fmt yuv420p out.mp4
