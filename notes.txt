@@ -1,8 +1,23 @@
 TODO
 ----
 
-- find an animation example with matplotlib
-- Do a video with frames generated in matplotlib?
+- generate .ply files/.pbrt files from the 4D animation
+- write a shell function to render them to a video
+
+- combine this with the contemporary bathroom scene
+  - place the polyhedron
+  - size of polyhedron
+  - place the camera
+  - render low quality version
+
+- render high quality version
+
+------
+
+
+
+- DONE find an animation example with matplotlib
+- DONE Do a video with frames generated in matplotlib?
   - Just translate and rotate the polytope through the x-y axis
 
 - Do shading of convex hull example
@@ -11,9 +26,9 @@ TODO
 - DONE Change 3d / plane intersection to be a translation/rotation and then
   projection along the x-y axis.  This is so the convex hull algorithm will
   have 2d points to work with.
-- Test out 4d / hyperplane intersection, do 3d convex hull
 
-- Then render a .pbrt file
+- DONE Test out 4d / hyperplane intersection, do 3d convex hull
+- DONE Then render a .pbrt file
   - with some kind of material:
     - metal
     - translucent glass
