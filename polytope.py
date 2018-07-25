@@ -16,7 +16,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from mpl_toolkits.mplot3d import Axes3D
-from scipy.spatial import ConvexHull
+from scipy import spatial
 
 
 # https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
@@ -127,14 +127,19 @@ def Draw4dSlice(ax, intersections, draw_hull=True):
   mpl_points = ax.scatter(x, y, z, c='r')
 
   if draw_hull:
-    hull = ConvexHull(inter)
-
-    # Plot each triangle
-    for simplex in hull.simplices:
-      # Make it a closed loop!
-      to_plot = np.append(simplex, simplex[0])
-      ax.plot(inter[to_plot, 0], inter[to_plot, 1], inter[to_plot, 2],
-              c='b')
+    try:
+      hull = spatial.ConvexHull(inter)
+    except RuntimeError as e:
+      # This only seems to happen with the tetrahedron.   Input is less than 3
+      # dimensional.
+      print('QHull error: %s' % e)
+    else:
+      # Plot each triangle
+      for simplex in hull.simplices:
+        # Make it a closed loop!
+        to_plot = np.append(simplex, simplex[0])
+        ax.plot(inter[to_plot, 0], inter[to_plot, 1], inter[to_plot, 2],
+                c='b')
 
   return mpl_points
 
@@ -363,9 +368,14 @@ def Plot(schlafli):
     x = [v[0] for v in vertices]
     y = [v[1] for v in vertices]
     z = [v[2] for v in vertices]
-    ax.set_xlim(min(x), max(x))
-    ax.set_ylim(min(y), max(y))
-    ax.set_zlim(min(z), max(z))
+
+    x_min, x_max = min(x), max(x)
+    y_min, y_max = min(y), max(y)
+    z_min, z_max = min(z), max(z)
+
+    ax.set_xlim(x_min, x_max)
+    ax.set_ylim(y_min, y_max)
+    ax.set_zlim(z_min, z_max)
 
     mpl_points = None
     if 1:
@@ -386,16 +396,16 @@ def Plot(schlafli):
         # Remove w-axis to project onto hyperplane (not strictly necessary)
         intersections = [np.array(v[:3]) for v in intersections]
 
-        mpl_points = Draw4dSlice(ax, intersections, draw_hull=True)
+        Draw4dSlice(ax, intersections, draw_hull=True)
         plt.pause(0.001)
 
+        # Hm this is the only way I can figure out to draw a new Convex hull
+        # on each frame.  There is a ax.collections.remove() hack for the
+        # scatter plot that doesn't seem to work for the triangles
         ax.cla()  # clear
-        ax.set_xlim(min(x), max(x))
-        ax.set_ylim(min(y), max(y))
-        ax.set_zlim(min(z), max(z))
-
-        #if mpl_points:
-        #  ax.collections.remove(mpl_points)
+        ax.set_xlim(x_min, x_max)
+        ax.set_ylim(y_min, y_max)
+        ax.set_zlim(z_min, z_max)
 
     else:
      # A single plot
