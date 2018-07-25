@@ -41,11 +41,11 @@ AttributeBegin
     Material "plastic" "color Kd" [.4 .2 .2] "color Ks" [.5 .5 .5]
         "float roughness" [.025]
 Translate 50 100 -70 # translate the drag-n-drop-kangaroo
-    Include "geometry/killeroo.pbrt"
+    Include "../../scenes/geometry/killeroo.pbrt"
     Material "plastic" "color Ks" [.3 .3 .3] "color Kd" [.4 .5 .4]
         "float roughness" [.15] 
 Translate -100 0 0 # specified relative to the current translation
-    Include "geometry/killeroo.pbrt"
+    Include "../../scenes/geometry/killeroo.pbrt"
 
 AttributeEnd
 WorldEnd

@@ -39,16 +39,16 @@ render-simple() {
 readonly NUM_FRAMES=10
 
 clean() {
-  rm -v scenes/k-*.pbrt _out/exr/* _out/jpg/*
+  rm -v _out/pbrt/* _out/exr/* _out/jpg/*
 }
 
 frames() {
-  mkdir -p _out/{exr,jpg}
+  mkdir -p _out/{pbrt,exr,jpg}
 
   # has to be in scenes to include the geometry file
-  local out_dir=scenes
+  local out_dir=_out
   ./frames.py $NUM_FRAMES $out_dir
-  ls -l $out_dir/k-*.pbrt
+  ls -l $out_dir/pbrt
 }
 
 # Oops has to be in original dir
@@ -61,7 +61,7 @@ render-all() {
   #pbrt scenes/k-*.pbrt
   #return
 
-  for input in scenes/k-*.pbrt; do
+  for input in _out/pbrt/k-*.pbrt; do
     pbrt $input
   done
 }

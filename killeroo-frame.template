@@ -9,4 +9,5 @@ Film "image"
 "integer xresolution" [700] "integer yresolution" [700]
     "string filename" "%(filename)s"
 
-Include "../scenes/killeroo-common.pbrt"
+# Frames are in _out/pbrt/X.pbrt
+Include "../../scenes/killeroo-common.pbrt"
