@@ -5,3 +5,10 @@ Translate 100 200 -140
 Translate -200 0 0
 
 -50   100   -70
+
+TODO
+----
+
+- DONE Make the template shorter; use Include instead
+
+- Make the .pbrt files in _out

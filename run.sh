@@ -36,10 +36,10 @@ render-simple() {
   #../other/pbrt-v3-build/pbrt $src
 }
 
-readonly NUM_FRAMES=50
+readonly NUM_FRAMES=10
 
 clean() {
-  rm -v scenes/k-*.pbrt
+  rm -v scenes/k-*.pbrt _out/exr/* _out/jpg/*
 }
 
 frames() {
