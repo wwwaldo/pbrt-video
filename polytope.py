@@ -46,33 +46,35 @@ def Intersect(edges, plane_normal, p0):
   intersections = []
   for la, lb in edges:
     numerator = np.dot(plane_normal, la - p0)
-    print('n=%f' % numerator)
+    #print('n=%f' % numerator)
 
     lab = lb - la
     denominator = np.dot(-lab, plane_normal)
-    print('d=%f' % denominator)
+    #print('d=%f' % denominator)
     if denominator == 0.0:
       continue
 
     t = numerator / denominator
-    print('t=%f' % t)
-    print()
+    #print('t=%f' % t)
+    #print()
 
     inter = la + lab*t
     if 0.0 <= t <= 1.0:
       intersections.append(inter)
     else:
-      print('does not intersect')
+      #print('does not intersect')
+      pass
 
-  print('Intersections:')
-  for p in intersections:
-    print('  %s' % p)
+  if 0:
+    print('Intersections:')
+    for p in intersections:
+      print('  %s' % p)
 
-  # We know we made the Z axis zero
-  print('2D:')
-  for p in intersections:
-    p2 = np.array(p[0:2])
-    print('  %s' % p2)
+    # We know we made the Z axis zero
+    print('2D:')
+    for p in intersections:
+      p2 = np.array(p[0:2])
+      print('  %s' % p2)
 
   return intersections
 
@@ -388,6 +390,14 @@ class Animation3D(object):
       mpl_line.set_data(xy)
       mpl_line.set_3d_properties(z)
 
+    # This is horrible!  You have to mutate a private variable
+    # https://stackoverflow.com/questions/41602588/matplotlib-3d-scatter-animations
+    # Maybe I should use ax.plot(marker='o') instead of ax.scatter ?
+    x = [i[0] for i in intersections]
+    y = [i[1] for i in intersections]
+    z = [i[2] for i in intersections]
+    self.mpl_points._offsets3d = (x, y, z)
+
     # TODO: plot edges and intersections
     return
     # TODO:
@@ -448,7 +458,7 @@ def Animate(schlafli, num_frames):
                           mpl_points)
 
   # Just creating this object seems to mutate global state.
-  _ = animation.FuncAnimation(fig, anim_func, num_frames, interval=100)
+  _ = animation.FuncAnimation(fig, anim_func, num_frames, interval=300)
 
   plt.show()
 
