@@ -26,13 +26,17 @@ deps() {
   pip3 install numpy matplotlib
 }
 
-render() {
+pbrt() {
+  ~andy/git/other/pbrt-v3-build/pbrt "$@"
+}
+
+render-simple() {
   local src=${1:-scenes/killeroo-simple.pbrt}
-  ~andy/git/other/pbrt-v3-build/pbrt $src
+  pbrt $src
   #../other/pbrt-v3-build/pbrt $src
 }
 
-readonly NUM_FRAMES=10
+readonly NUM_FRAMES=50
 
 clean() {
   rm -v scenes/k-*.pbrt
@@ -50,9 +54,15 @@ frames() {
 # Oops has to be in original dir
 render-all() {
   # TODO: xargs
+
   # Or just use a single command to share?
+  # Why does this segfault?
+  # pbrt does seem to accept multiple args.
+  #pbrt scenes/k-*.pbrt
+  #return
+
   for input in scenes/k-*.pbrt; do
-    render $input
+    pbrt $input
   done
 }
 
