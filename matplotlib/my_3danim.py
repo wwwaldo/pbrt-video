@@ -45,7 +45,7 @@ fig = plt.figure()
 ax = p3.Axes3D(fig)
 
 # Fifty lines of random 3-D lines
-data = [Gen_RandLine(25, 3) for index in range(50)]
+data = [Gen_RandLine(25, 3) for index in range(10)]
 
 # Creating fifty line objects.
 # NOTE: Can't pass empty arrays into 3d version of plot()
@@ -65,6 +65,6 @@ ax.set_title('3D Test')
 
 # Creating the Animation object
 line_ani = animation.FuncAnimation(fig, update_lines, 25, fargs=(data, lines),
-                                   interval=50, blit=False)
+                                   interval=20, blit=False)
 
 plt.show()
