@@ -120,16 +120,15 @@ def Draw4dSlice(ax, intersections):
   Args:
     intersections: a list of 4D points
   """
-  intersections = np.array(intersections)
-  x = intersections[:, 0]  # all rows, first column
-  y = intersections[:, 1]
-  z = intersections[:, 2]
+  inter  = np.array(intersections)
+  x = inter[:, 0]  # all rows, first column
+  y = inter[:, 1]
+  z = inter[:, 2]
   mpl_points = ax.scatter(x, y, z, c='r')
 
-  return
   hull = ConvexHull(inter)
 
-  #ax.plot(intersections[:,0], intersections[:,1], intersections[:,2], 'o')
+  # Plot each triangle
   for simplex in hull.simplices:
     # Make it a closed loop!
     to_plot = np.append(simplex, simplex[0])
@@ -357,6 +356,14 @@ def Plot(schlafli):
     fig = plt.figure()
     ax = fig.gca(projection='3d')
 
+    # Set axes so they don't move between frames
+    x = [v[0] for v in vertices]
+    y = [v[1] for v in vertices]
+    z = [v[2] for v in vertices]
+    ax.set_xlim(min(x), max(x))
+    ax.set_ylim(min(y), max(y))
+    ax.set_zlim(min(z), max(z))
+
     if 1:
       print('NEW w_offsets %s' % w_offsets)
       for i, w_offset in enumerate(w_offsets):
@@ -377,6 +384,10 @@ def Plot(schlafli):
 
         Draw4dSlice(ax, intersections)
         plt.pause(0.001)
+
+        # Remove previous plots
+        del ax.collections[:]
+
     else:
      # A single plot
       vertices = Translate4D(vertices, -0.1)
