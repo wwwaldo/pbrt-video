@@ -347,10 +347,12 @@ def Plot(schlafli):
   plt.show()
 
 
-class Animation(object):
+class Animation3D(object):
 
-  def __init__(self, vertices, z_offsets, mpl_lines, mpl_points):
+  def __init__(self, vertices, edge_numbers, z_offsets, mpl_lines,
+               mpl_points):
     self.vertices = vertices  # list of nparray
+    self.edge_numbers = edge_numbers
     self.z_offsets = z_offsets  # nparray of z offsets
     self.mpl_lines = mpl_lines  # drawn edges to mutate
     self.mpl_points = mpl_points  # drawn intersection points to mutate
@@ -361,7 +363,20 @@ class Animation(object):
     Args:
       num: from 0 to len(data)
     """
+    z_offset = self.z_offsets[frame_index]
+    vertices = Translate3D(self.vertices, z_offset)
+
+    edges = []
+    for a, b in self.edge_numbers:
+      edges.append((vertices[a], vertices[b]))
+
+    p0 = np.array([0, 0, 0])
+    plane_normal = np.array([0, 0, 1])
+    intersections = Intersect(edges, plane_normal, p0)
     print('FRAME %d' % frame_index)
+    print('# intersections: %d' % len(intersections))
+
+    # TODO: plot edges and intersections
     return
     # TODO:
     # - Do translation here!
@@ -388,8 +403,9 @@ def Animate(schlafli, num_frames):
   else:
     raise AssertionError
 
+  # Calculate Z range AFTER ROTATION.
   z = [v[2] for v in vertices]
-  z_offsets = np.linspace(min(z), max(z), num=num_frames)
+  z_offsets = np.linspace(-max(z), -min(z), num=num_frames)
   print('z_offsets:')
   print(z_offsets)
 
@@ -411,18 +427,18 @@ def Animate(schlafli, num_frames):
   fig = plt.figure()
   ax = fig.gca(projection='3d')  # create 3d axes?
 
+  # Draw the initial frame -- calls ax.plot()0
   plane = None
   mpl_lines, mpl_points = Draw(ax, edges, plane, intersections)
 
-  anim_func = Animation(vertices, z_offsets, mpl_lines, mpl_points)
+  # Now mutate these objects to animate.
+  anim_func = Animation3D(vertices, edge_numbers, z_offsets, mpl_lines,
+                          mpl_points)
 
-  # Just creating this object seems to mutate global state
-  # 20 ms interval
-  _ = animation.FuncAnimation(fig, anim_func, num_frames, interval=20)
+  # Just creating this object seems to mutate global state.
+  _ = animation.FuncAnimation(fig, anim_func, num_frames, interval=100)
 
   plt.show()
-
-
 
 
 def main(argv):
@@ -466,7 +482,7 @@ def main(argv):
     if len(schlafli) not in (2, 3):
       raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
 
-    num_frames = 50
+    num_frames = 20
     Animate(schlafli, num_frames)
 
   else:
