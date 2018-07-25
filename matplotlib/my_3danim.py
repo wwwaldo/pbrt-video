@@ -36,7 +36,7 @@ def Gen_RandLine(length, dims):
 class Animation(object):
   def __init__(self, data, lines):
     self.data = data  # frames of raw data
-    self.lines = lines  # frames of line
+    self.lines = lines  # raw line objects
 
   def __call__(self, num):
     """
@@ -45,9 +45,10 @@ class Animation(object):
     """
     for data, line in zip(self.data, self.lines):
       # NOTE: there is no .set_data() for 3 dim data...
+
+      # Hm it draws every line from the beginning.  It's a prefix.
       line.set_data(data[0:2, :num])
       line.set_3d_properties(data[2, :num])
-    return self.lines
 
 
 NUM_LINES = 10
