@@ -13,7 +13,7 @@ import mpl_toolkits.mplot3d.axes3d as p3
 import matplotlib.animation as animation
 
 
-def Gen_RandLine(length, dims=2):
+def Gen_RandLine(length, dims):
     """
     Create a line using a random walk algorithm
 
@@ -33,38 +33,72 @@ def Gen_RandLine(length, dims=2):
     return lineData
 
 
-def update_lines(num, dataLines, lines):
-    for line, data in zip(lines, dataLines):
-        # NOTE: there is no .set_data() for 3 dim data...
-        line.set_data(data[0:2, :num])
-        line.set_3d_properties(data[2, :num])
-    return lines
+class Animation(object):
+  def __init__(self, data, lines):
+    self.data = data  # frames of raw data
+    self.lines = lines  # frames of line
 
-# Attaching 3D axis to the figure
-fig = plt.figure()
-ax = p3.Axes3D(fig)
+  def __call__(self, num):
+    """
+    Args:
+      num: from 0 to len(data)
+    """
+    for data, line in zip(self.data, self.lines):
+      # NOTE: there is no .set_data() for 3 dim data...
+      line.set_data(data[0:2, :num])
+      line.set_3d_properties(data[2, :num])
+    return self.lines
 
-# Fifty lines of random 3-D lines
-data = [Gen_RandLine(25, 3) for index in range(10)]
 
-# Creating fifty line objects.
-# NOTE: Can't pass empty arrays into 3d version of plot()
-lines = [ax.plot(dat[0, 0:1], dat[1, 0:1], dat[2, 0:1])[0] for dat in data]
+NUM_LINES = 10
+NUM_FRAMES = 50
 
-# Setting the axes properties
-ax.set_xlim3d([0.0, 1.0])
-ax.set_xlabel('X')
 
-ax.set_ylim3d([0.0, 1.0])
-ax.set_ylabel('Y')
+def main():
+  # Attaching 3D axis to the figure
+  fig = plt.figure()
+  ax = p3.Axes3D(fig)
 
-ax.set_zlim3d([0.0, 1.0])
-ax.set_zlabel('Z')
+  # 25 frames of random 3-D lines
+  data = [Gen_RandLine(NUM_FRAMES, 3) for index in range(NUM_LINES)]
 
-ax.set_title('3D Test')
+  print('DATA:')
+  for d in data:
+    print(d)
+  print(len(data))
+  print('')
 
-# Creating the Animation object
-line_ani = animation.FuncAnimation(fig, update_lines, 25, fargs=(data, lines),
-                                   interval=20, blit=False)
+  # Create NUM_LINES line 2D objects.
+  # NOTE: Can't pass empty arrays into 3d version of plot()
+  lines = []
+  for dat in data:
+    p = ax.plot(dat[0, 0:1], dat[1, 0:1], dat[2, 0:1])
+    lines.append(p[0])
 
-plt.show()
+  print('LINES:')
+  for line in lines:
+    print(line)
+  print('')
+
+  # Setting the axes properties
+  ax.set_xlim3d([0.0, 1.0])
+  ax.set_xlabel('X')
+
+  ax.set_ylim3d([0.0, 1.0])
+  ax.set_ylabel('Y')
+
+  ax.set_zlim3d([0.0, 1.0])
+  ax.set_zlabel('Z')
+
+  ax.set_title('3D Test')
+
+  anim_func = Animation(data, lines)
+
+  # Just creating this object seems to mutate global state
+  _ = animation.FuncAnimation(fig, anim_func, NUM_FRAMES, interval=20,
+      blit=False)
+
+  plt.show()
+
+
+main()
