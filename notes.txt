@@ -12,6 +12,11 @@ TODO
 
 - render high quality version
 
+- optional:
+  - rotate the 3d slice as its growing
+  - pan the camera
+  - more than one shape in the scene
+
 ------
 
 
