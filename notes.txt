@@ -11,4 +11,26 @@ TODO
 
 - DONE Make the template shorter; use Include instead
 
-- Make the .pbrt files in _out
+- DONE Make the .pbrt files in _out
+
+
+4D Visualization
+----------------
+
+- DONE line + plane intersection
+
+- add line segments
+
+- generate line segments for a cube
+  1. enumerate vertices
+  2a. test all pairs of vertices for length 1
+  2b. if it's aligned to origin, cheaper test
+
+- intersect all edges of cube with plane
+  => set of points
+
+- iterate over d  (multiple planes)
+  - generate .pbrt file for each d
+  - each point of intersection becomes a sphere
+
+- fill in the intersection points to make a solid triangle
