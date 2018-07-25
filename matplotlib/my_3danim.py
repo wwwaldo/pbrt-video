@@ -27,13 +27,14 @@ def Gen_RandLine(length, dims):
         # movement is small compared to position.
         # subtraction by 0.5 is to change the range to [-0.5, 0.5]
         # to allow a line to move backwards.
-        step = ((np.random.rand(dims) - 0.5) * 0.1)
+        step = (np.random.rand(dims) - 0.5) * 0.1
         lineData[:, index] = lineData[:, index - 1] + step
 
     return lineData
 
 
 class Animation(object):
+
   def __init__(self, data, lines):
     self.data = data  # frames of raw data
     self.lines = lines  # raw line objects
@@ -100,8 +101,8 @@ def main():
   anim_func = Animation(data, lines)
 
   # Just creating this object seems to mutate global state
-  _ = animation.FuncAnimation(fig, anim_func, NUM_FRAMES, interval=20,
-      blit=False)
+  # 20 ms interval
+  _ = animation.FuncAnimation(fig, anim_func, NUM_FRAMES, interval=20)
 
   plt.show()
 
