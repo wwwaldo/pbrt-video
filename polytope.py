@@ -244,16 +244,12 @@ def Tilt4D(vertices):
   return [np.matmul(rotation, v) for v in vertices]
 
 
-def Translate3D(vertices):
-  # Move everything down a bit
-  z_delta = -0.1
+def Translate3D(vertices, z_delta):
   offset = np.array([0, 0, z_delta])
   return [v + offset for v in vertices]
 
 
-def Translate4D(vertices):
-  # Move everything down a bit
-  w_delta = -0.1
+def Translate4D(vertices, w_delta):
   offset = np.array([0, 0, 0, w_delta])
   return [v + offset for v in vertices]
 
@@ -295,10 +291,11 @@ def Plot(schlafli):
   # TODO: We could probably generalize this.
   if len(schlafli) == 2:
     vertices = Tilt3D(vertices)
-    vertices = Translate3D(vertices)
+    # Move everything down a bit
+    vertices = Translate3D(vertices, -0.1)
   elif len(schlafli) == 3:
     vertices = Tilt4D(vertices)
-    vertices = Translate4D(vertices)
+    vertices = Translate4D(vertices, -0.1)
   else:
     raise AssertionError
 
@@ -318,11 +315,12 @@ def Plot(schlafli):
     ax = fig.gca(projection='3d')  # create 3d axes?
 
     mpl_lines, mpl_points = Draw(ax, edges, plane, intersections)
-    print('Lines')
-    for li in mpl_lines:
-      print(li)
-    print('points')
-    print(mpl_points)
+    if 0:
+      print('Lines')
+      for li in mpl_lines:
+        print(li)
+      print('points')
+      print(mpl_points)
 
   elif len(schlafli) == 3:
     # NOTES:
