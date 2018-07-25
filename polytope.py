@@ -93,11 +93,12 @@ def Draw(ax, edges, plane, intersections):
 
     ax.plot(x, y, z, c='g')
 
-  for inter in intersections:
-    x = np.array([inter[0]])
-    y = np.array([inter[1]])
-    z = np.array([inter[2]])
-    ax.scatter(x, y, z, c='r')  # scatter plot of a single point
+  # Plot intersections all at once
+  intersections = np.array(intersections)
+  x = intersections[:, 0]  # all rows, first column
+  y = intersections[:, 1]
+  z = intersections[:, 2]
+  ax.scatter(x, y, z, c='r')
 
 
 def Draw4dSlice(ax, intersections):
@@ -335,6 +336,39 @@ def Plot(schlafli):
   plt.show()
 
 
+class Animation(object):
+
+  def __init__(self, data, lines):
+    self.data = data  # frames of raw data
+    self.lines = lines  # raw line objects
+
+  def __call__(self, frame_index):
+    """Mutate line objects to create a new frame.
+
+    Args:
+      num: from 0 to len(data)
+    """
+    for data, line in zip(self.data, self.lines):
+      # NOTE: Weird API.  there is no .set_data() for 3 dim data...
+      xy = data[0:2, num:num+2]
+      z = data[2, num:num+2]
+
+      line.set_data(xy)
+      line.set_3d_properties(z)
+
+
+def Animate(schlafli, num_frames):
+  anim_func = Animation(data, lines)
+
+  # Just creating this object seems to mutate global state
+  # 20 ms interval
+  _ = animation.FuncAnimation(fig, anim_func, NUM_FRAMES, interval=20)
+
+  plt.show()
+
+
+
+
 def main(argv):
   try:
     action = argv[1]
@@ -370,6 +404,14 @@ def main(argv):
       raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
 
     Plot(schlafli)
+
+  elif action == 'anim':  # animate
+    schlafli = [int(a) for a in argv[2:]]  # e.g. 4 3 for cube
+    if len(schlafli) not in (2, 3):
+      raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
+
+    num_frames = 50
+    Animate(schlafli, num_frames)
 
   else:
     raise RuntimeError('Invalid action %r' % action)
