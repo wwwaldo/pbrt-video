@@ -289,19 +289,22 @@ def Plot(schlafli):
   vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
 
   vertices = [np.array(v) for v in vertices]
-  print('Vertices:')
-  for v in vertices:
-    print(v)
-    print(v.shape)
-  print('')
+  if 0:
+    print('Vertices:')
+    for v in vertices:
+      print(v)
+      print(v.shape)
+    print('')
 
   # TODO: We could probably generalize this.
   if len(schlafli) == 2:
     vertices = Tilt3D(vertices)
     # Move everything down a bit
     vertices = Translate3D(vertices, -0.1)
+
   elif len(schlafli) == 3:
     vertices = Tilt4D(vertices)
+
   else:
     raise AssertionError
 
@@ -333,9 +336,21 @@ def Plot(schlafli):
   elif len(schlafli) == 3:
     num_frames = 40
 
+    if 1:
+      x = [v[0] for v in vertices]
+      y = [v[1] for v in vertices]
+      z = [v[2] for v in vertices]
+      w = [v[3] for v in vertices]
+      print('x: %f - %f' % (min(x), max(x)))
+      print('y: %f - %f' % (min(y), max(y)))
+      print('z: %f - %f' % (min(z), max(z)))
+      print('w: %f - %f' % (min(w), max(w)))
+      print('w: %s' % sorted(w))
+
     # Calculate W range AFTER ROTATION.
     w = [v[3] for v in vertices]
     w_offsets = np.linspace(-max(w), -min(w), num=num_frames)
+
     print('w_offsets:')
     print(w_offsets)
 
@@ -354,7 +369,7 @@ def Plot(schlafli):
       #w_offsets = (-0.1, -0.2, -0.3)  # hack
       #w_offsets = np.linspace(-0.1, -0.6, num=6)
       # It only goes up to -1 for some reason?
-      w_offsets = np.linspace(-0.1, -6.0, num=60)
+      #w_offsets = np.linspace(-0.1, -6.0, num=60)
       print('NEW w_offsets %s' % w_offsets)
       for i, w_offset in enumerate(w_offsets):
         print('--- OFFSET %d = %f' % (i, w_offset))
@@ -520,7 +535,7 @@ def Animate3D(schlafli, num_frames):
   # Just creating this object seems to mutate global state.
   anim = animation.FuncAnimation(fig, anim_func, num_frames, interval=300)
 
-  if 1:
+  if 0:
   # https://jakevdp.github.io/blog/2013/02/16/animating-the-lorentz-system-in-3d
     out_path = '%d-%d.mp4' % tuple(schlafli)
     anim.save(out_path, fps=15, extra_args=['-vcodec', 'libx264'])
