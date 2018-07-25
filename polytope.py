@@ -120,23 +120,11 @@ def Draw4dSlice(ax, intersections):
   Args:
     intersections: a list of 4D points
   """
-  # TODO: Draw this all at once?
-  # Yes because I want to remove
-
-  for inter in intersections:
-    #print(inter)
-    x = np.array([inter[0]])
-    y = np.array([inter[1]])
-    z = np.array([inter[2]])
-
-    ax.scatter(x, y, z, c='r')  # scatter plot of a single point
-
-  # Change intersections to ndarray of shape (N, 3)
-  #print('number of intersections: %d' % len(intersections))
-
-  inter = np.array(intersections)
-  # No intersections?
-  #print(inter)
+  intersections = np.array(intersections)
+  x = intersections[:, 0]  # all rows, first column
+  y = intersections[:, 1]
+  z = intersections[:, 2]
+  mpl_points = ax.scatter(x, y, z, c='r')
 
   return
   hull = ConvexHull(inter)
@@ -369,12 +357,7 @@ def Plot(schlafli):
     fig = plt.figure()
     ax = fig.gca(projection='3d')
 
-    # TODO: Set Z limit
     if 1:
-      #w_offsets = (-0.1, -0.2, -0.3)  # hack
-      #w_offsets = np.linspace(-0.1, -0.6, num=6)
-      # It only goes up to -1 for some reason?
-      #w_offsets = np.linspace(-0.1, -6.0, num=60)
       print('NEW w_offsets %s' % w_offsets)
       for i, w_offset in enumerate(w_offsets):
         print('--- OFFSET %d = %f' % (i, w_offset))
