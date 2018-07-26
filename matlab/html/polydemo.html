@@ -1,0 +1,489 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <!--
+This HTML is auto-generated from an M-file.
+To make changes, update the M-file and republish this document.
+      -->
+      <title>N-D Geometrical Figures</title>
+      <meta name="generator" content="MATLAB 7.7">
+      <meta name="date" content="2009-06-17">
+      <meta name="m-file" content="polydemo"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head>
+   <body>
+      <div class="content">
+         <h1>N-D Geometrical Figures</h1>
+         <!--introduction-->
+         <p>by Bill McKeeman</p>
+         <p>Using MATLAB to generate and display 3 and 4 dimensional geometric figures.</p>
+         <p>Polyhedra and Polytopes <b>Coxeter</b>'s <i>Regular Polytopes</i> describes the analog of <i>Polyhedron</i> for all dimensions of Euclidian N-Space.  The generic names as N increases from 0 to 4 are
+         </p>
+         <div>
+            <ul>
+               <li>point</li>
+               <li>segment</li>
+               <li>polygon</li>
+               <li>polyhedron</li>
+               <li>polytope (or polychoron)</li>
+            </ul>
+         </div>
+         <p>There are only three trivial cases for each N&gt;4, so there is neither much interest nor terminology.  The three are called
+            the n-simplex, the n-cross and the n-measure.
+         </p>
+         <p>The main trick in computing the figures is using permutations to generate the vertex sets and then post-analysis of the vertex
+            sets to extract other features.
+         </p>
+         <p>I looked up some formulae.  Let <i>C</i> stand for all Circular shifts of a vector, <i>P</i> for all permutations of a vector and <i>E</i> for all even permutations. The "names" {p,q} are the Schlafli symbols for the five regular figures in 3-D and {p,q,r} are
+            the same for the six regular figures in 4-D.
+         </p>
+         <p>Vertex Sets</p>
+         <p><img src="polydemo_eq91452.png" alt="$$ \tau = \frac{1+\sqrt 5}{2} $$"></p>
+         <p><img src="polydemo_eq94108.png" alt="$$ \begin{array}{rcl} \{3,3\} &amp;:\ &amp; C(\frac{\sqrt 2}{2}, 0, 0, 0)      \\ \{3,4\} &amp;:\ &amp; C(\pm \frac{\sqrt 2}{2}, 0, 0)     \\ \{4,3\} &amp;:\ &amp; \pm\frac{1}{2}, \pm\frac{1}{2}, \pm\frac{1}{2} \\ \{3,5\} &amp;:\ &amp; C(0, \pm\frac{1}{2}, \pm\frac{\tau}{2}) \\ \{5,3\} &amp;:\ &amp; C(0, \pm\frac{1}{2}, \pm\frac{\tau^2}{2})        \cup \pm\frac{\tau}{2}, \pm\frac{\tau}{2}, \pm\frac{\tau}{2} \end{array} $$"></p>
+         <p><img src="polydemo_eq70307.png" alt="$$ \begin{array}{rcl} \{3,3,3\} \ &amp;:\ &amp; C(\frac{\sqrt 2}{2}, 0, 0, 0, 0) \\ \{3,3,4\} \ &amp;:\ &amp; C(\pm\frac{\sqrt 2}{2}, 0, 0, 0) \\ \{3,4,3\} \ &amp;:\ &amp; P(\pm\frac{\sqrt 2}{2}, \pm\frac{\sqrt 2}{2}, 0, 0) \\ \{4,3,3\} \ &amp;:\ &amp; \pm\frac{1}{2},\pm\frac{1}{2},\pm\frac{1}{2},               \pm\frac{1}{2} \end{array} $$"></p>
+         <p><img src="polydemo_eq92281.png" alt="$$ \begin{array}{rcl} \{3,3,5\} &amp;:&amp; C(\pm\tau,0,0,0) \\  &amp;\cup\ &amp;    C(\pm\frac{\tau}{2},\pm\frac{\tau}{2},\pm\frac{\tau}{2},      \pm\frac{\tau}{2})\\  &amp;\cup\ &amp;    E(\pm\frac{\tau^2}{2},\pm\frac{\tau}{2},\pm\frac{1}{2}, 0) \end{array} $$"></p>
+         <p><img src="polydemo_eq15535.png" alt="$$ \begin{array}{rcl} \{5,3,3\} &amp;:&amp;    P(0,0,\pm\tau^2,\pm\tau^2) \\  &amp;\cup\ &amp;    P(\pm\frac{\tau^2}{2},\pm\frac{\tau^2}{2},\pm\frac{\tau^2}{2},     \pm\sqrt 5\frac{\tau^2}{2})\\  &amp;\cup\ &amp;    P(\pm\frac{\tau^3}{2},\pm\frac{\tau^3}{2},\pm\frac{\tau^3}{2},    \pm\frac{1}{2})    \\  &amp;\cup\ &amp;    P(\pm\frac{\tau}{2},\pm\frac{\tau}{2},      \pm\frac{\tau}{2},\pm\frac{\tau^{-2}}{2}) \\  &amp;\cup\ &amp;    E(\pm\frac{1}{2},\pm\frac{1}{2},\pm\frac{\tau^2}{2},0)\\  &amp;\cup\ &amp;    E(\pm\sqrt 5\frac{\tau^2}{2},\pm\frac{\tau}{2},      \pm\frac{\tau^3}{2},0)  \\  &amp;\cup\ &amp;    E(\pm\tau^2,\pm\frac{\tau^2}{2},      \pm\frac{\tau^3}{2},\pm\frac{\tau}{2}) \end{array} $$"></p>
+         <!--/introduction-->
+         <h2>Contents</h2>
+         <div>
+            <ul>
+               <li><a href="#2">Computing Vertices</a></li>
+               <li><a href="#3">Feature Count for 3-D Regular Polyhedra</a></li>
+               <li><a href="#4">Draw the Tetrahedron, Octahedron, Cube, Icosahedron, Dodecahedron</a></li>
+               <li><a href="#5">Bucky Ball</a></li>
+               <li><a href="#6">4-D Polytopes</a></li>
+               <li><a href="#7">Feature Count for 4-D Regular Polyhedra</a></li>
+               <li><a href="#8">Edge Plot of 4-D Cross Polytope (analog of octahedron)</a></li>
+               <li><a href="#9">Edge Plot of Hypercube (tesseract)</a></li>
+               <li><a href="#10">Edge Plot of 4-D 24-cell (unique to 4-D)</a></li>
+               <li><a href="#11">Edge Plot of 4-D 600 Cell (analog of icosahedron)</a></li>
+               <li><a href="#12">Edge Plot of 4-D 120 Cell (analog of dodecahedron)</a></li>
+               <li><a href="#13">N-D for N&gt;4</a></li>
+            </ul>
+         </div>
+         <p>The WWW pages for Mathematica, a product of Wolfram Research, have many related kinds of figures (concave, expansions, prisms)
+            but those additonal figures are not treated here. You could also look at some of these other things in <i>The Derived Polytopes in Euclidian N-Space</i>, William Marshall McKeeman, Master of Science thesis, The Columbian College of The George Washington University, (June 7,
+            1961). Anyway, back to the main story:
+         </p>
+         <h2>Computing Vertices<a name="2"></a></h2>
+         <p>Using a permutation generator, we can generate the vertex sets for regular polyhedra with edge length 1. For instance, the
+            cube {4,3} with unit edge centered on the origin has 8 vertices and the analogous hypercube {4,3,3} has 16.  They could be
+            generated as follows
+         </p><pre>s43  = perms([1 1 1]/2, 'signs');             % cube
+s433 = perms([1 1 1 1]/2, 'signs');           % hyper cube</pre><p>The details are tucked away in my MATLAB function vertices. Here are the calls.</p><pre class="codeinput">s33 = vertices(<span class="string">'s33'</span>);                           <span class="comment">% tetrahedron</span>
+s34 = vertices(<span class="string">'s34'</span>);                           <span class="comment">% octahedron</span>
+s43 = vertices(<span class="string">'s43'</span>);                           <span class="comment">% cube</span>
+s35 = vertices(<span class="string">'s35'</span>);                           <span class="comment">% icosahedron</span>
+s53 = vertices(<span class="string">'s53'</span>);                           <span class="comment">% dodecahedron</span>
+</pre><h2>Feature Count for 3-D Regular Polyhedra<a name="3"></a></h2>
+         <p>The vertex sets can be examined to count the edges and faces.</p><pre class="codeinput">format <span class="string">compact</span>
+fprintf <span class="string">' tetra   octa   cube  icosa dodeca\n'</span>
+fprintf(<span class="string">'%6d %6d %6d %6d %6d   vertices\n'</span>, <span class="keyword">...</span>
+  size(s33,1),size(s34,1),size(s43,1),size(s35,1),size(s53,1));
+fprintf(<span class="string">'%6d %6d %6d %6d %6d   edges\n'</span>, <span class="keyword">...</span>
+  nedge(s33),nedge(s34),nedge(s43),nedge(s35),nedge(s53));
+fprintf(<span class="string">'%6d %6d %6d %6d %6d   faces\n'</span>, <span class="keyword">...</span>
+  nface(s33),nface(s34),nface(s43),nface(s35),nface(s53));
+</pre><pre class="codeoutput"> tetra   octa   cube  icosa dodeca
+     4      6      8     12     20   vertices
+     6     12     12     30     30   edges
+     4      8      6     20     12   faces
+</pre><h2>Draw the Tetrahedron, Octahedron, Cube, Icosahedron, Dodecahedron<a name="4"></a></h2>
+         <p>The regular polyhedra and polytopes can be displayed using MATLAB. The displays are "shadows of edges" (technically projections
+            onto the xy plane).  In the case of 3-D figures, the view is immediately intuitive to us 3-D people.  Taking the viewpoint
+            of a Flatlander (2-D person) living in the xy plane gives some flavor of the mental gyrations you will have to go through
+            to make sense of the 4-D figures.
+         </p>
+         <p>The edges are color-coded by distance from the viewer so that connected edges tend to have the same shade.  In the 3-D case
+            only black is used. In the 4-D case, blue <b>and</b> red are used to indicate the two missing dimensions.  The plots have to be offset from the origin to keep them from falling
+            on top of each other.  The z dimension is represented by intensity (imagine viewing the figures in fog).
+         </p><pre class="codeinput">rot3 = ndrotate([0 .2 .4; 1 0 .4]);    <span class="comment">% 3D rotation matrix</span>
+angles = [<span class="keyword">...</span>
+   0 .1 .2 .3;
+  .3  0 .4 .6;
+  .5 .6  0 .8;
+  .1 .1 .1  0];
+rot4 = ndrotate(angles);               <span class="comment">% 4D rotation matrix</span>
+offset = @(M,v) M+repmat(v, size(M,1),1);
+
+cla
+hold <span class="string">on</span>
+<span class="comment">%               vertices   offsets</span>
+plotpoly(offset(s33*rot4, [1.7 0.7 0 0]));
+plotpoly(offset(s34*rot3, [-.5 0 0]));
+plotpoly(offset(s43*rot3, [4 0 0]));
+plotpoly(offset(s35*rot3, [4 3 0]));
+plotpoly(offset(s53*rot3, [0 3 0]));
+hold <span class="string">off</span>
+</pre><img vspace="5" hspace="5" src="polydemo_01.png" alt=""> <h2>Bucky Ball<a name="5"></a></h2>
+         <p>The Buckminster Fuller ball is made of pentagons and hexagons.  It is constructed by truncating the 1/3 tip of the 20 vertices
+            of the icosahedron s35.  The vertices function (above) does not "know" bucky, so here is the vertex computation using the
+            permutation primitives.
+         </p><pre class="codeinput">d = @(a,b) a + b*(1+sqrt(5))/2;
+buckyball = perms(<span class="keyword">...</span>
+  [d(0,0), d(0,3), d(1,0)
+   d(1,0), d(0,2), d(2,1)
+   d(2,0), d(0,1), d(1,2)]/2, <span class="string">'cycles'</span>, <span class="string">'signs'</span>, <span class="string">'unique'</span>);
+
+fprintf(<span class="string">'v=%d e=%d f=%d\n'</span>, <span class="keyword">...</span>
+  size(buckyball,1), nedge(buckyball), nface(buckyball));
+close(gcf)
+figure
+plotpoly(buckyball*rot3);
+</pre><pre class="codeoutput">v=60 e=90 f=32
+</pre><img vspace="5" hspace="5" src="polydemo_02.png" alt=""> <h2>4-D Polytopes<a name="6"></a></h2>
+         <p>Using the Coxeter formulae for the six 4-D polytopes:</p><pre class="codeinput">s333 = vertices(<span class="string">'s333'</span>);                         <span class="comment">% 4d simplex</span>
+s334 = vertices(<span class="string">'s334'</span>);                         <span class="comment">% 4d cross</span>
+s343 = vertices(<span class="string">'s343'</span>);                         <span class="comment">% 24 cell</span>
+s433 = vertices(<span class="string">'s433'</span>);                         <span class="comment">% 4d measure</span>
+s335 = vertices(<span class="string">'s335'</span>);                         <span class="comment">% hyper icosahedron</span>
+s533 = vertices(<span class="string">'s533'</span>);                         <span class="comment">% hyper dodecahedron</span>
+</pre><h2>Feature Count for 4-D Regular Polyhedra<a name="7"></a></h2>
+         <p>The vertex sets can be examined to locate the edges.</p><pre class="codeinput">fprintf <span class="string">'  s333   s334   s433   s343   s335   s533\n'</span>
+fprintf(<span class="string">'%6d %6d %6d %6d %6d %6d   %s\n'</span>, <span class="keyword">...</span>
+  size(s333,1),  size(s334,1),  size(s433,1), <span class="keyword">...</span>
+  size(s343,1),  size(s335,1),  size(s533,1),<span class="keyword">...</span>
+  <span class="string">'vertices'</span>);
+fprintf(<span class="string">'%6d %6d %6d %6d %6d %6d   %s\n'</span>, <span class="keyword">...</span>
+  nedge(s333),   nedge(s334),   nedge(s433), <span class="keyword">...</span>
+  nedge(s343),   nedge(s335),   nedge(s533),<span class="keyword">...</span>
+  <span class="string">'edges'</span>);
+</pre><pre class="codeoutput">  s333   s334   s433   s343   s335   s533
+     5      8     16     24    120    600   vertices
+    10     24     32     96    720   1200   edges
+</pre><h2>Edge Plot of 4-D Cross Polytope (analog of octahedron)<a name="8"></a></h2><pre class="codeinput">close(gcf)
+figure
+set(gcf, <span class="string">'color'</span>, <span class="string">'white'</span>);
+plotpoly(s334*rot4);
+</pre><img vspace="5" hspace="5" src="polydemo_03.png" alt=""> <h2>Edge Plot of Hypercube (tesseract)<a name="9"></a></h2><pre class="codeinput">close(gcf)
+figure
+set(gcf, <span class="string">'color'</span>, <span class="string">'white'</span>);
+plotpoly(s433*rot4);
+</pre><img vspace="5" hspace="5" src="polydemo_04.png" alt=""> <h2>Edge Plot of 4-D 24-cell (unique to 4-D)<a name="10"></a></h2><pre class="codeinput">close(gcf)
+figure
+set(gcf, <span class="string">'color'</span>, <span class="string">'white'</span>);
+plotpoly(s343*rot4);
+</pre><img vspace="5" hspace="5" src="polydemo_05.png" alt=""> <h2>Edge Plot of 4-D 600 Cell (analog of icosahedron)<a name="11"></a></h2><pre class="codeinput">close(gcf)
+figure
+set(gcf, <span class="string">'color'</span>, <span class="string">'white'</span>);
+plotpoly(s335*rot4);
+</pre><img vspace="5" hspace="5" src="polydemo_06.png" alt=""> <h2>Edge Plot of 4-D 120 Cell (analog of dodecahedron)<a name="12"></a></h2><pre class="codeinput">close(gcf)
+figure
+set(gcf, <span class="string">'color'</span>, <span class="string">'white'</span>);
+angles = [<span class="keyword">...</span><span class="comment">                            very small angles</span>
+   0  .1  .1  .03;
+  .01  0  .04 .06;
+  .13 .06  0  .12;
+  .13 .1  .1   0];
+rot4 = ndrotate(angles);               <span class="comment">% a better viewpoint</span>
+plotpoly(s533*rot4);
+</pre><img vspace="5" hspace="5" src="polydemo_07.png" alt=""> <h2>N-D for N&gt;4<a name="13"></a></h2>
+         <p>As it turns out, there are only three regular figures from N=5 on up.  I could put some here, but they get really <i>busy</i>.  So I stop at 4.
+         </p><pre class="codeinput">close(gcf)
+</pre><p class="footer"><br>
+            Published with MATLAB&reg; 7.7<br></p>
+      </div>
+      <!--
+##### SOURCE BEGIN #####
+%% N-D Geometrical Figures
+% by Bill McKeeman
+%
+% Using MATLAB to generate and display 3 and 4 dimensional geometric figures.  
+%
+% Polyhedra and Polytopes
+% *Coxeter*'s _Regular Polytopes_ describes the analog of _Polyhedron_ for
+% all dimensions of Euclidian N-Space.  The generic names as N increases
+% from 0 to 4 are
+% 
+% * point
+% * segment
+% * polygon
+% * polyhedron
+% * polytope (or polychoron)
+%
+% There are only three trivial cases for each N>4, so there is neither much
+% interest nor terminology.  The three are called the n-simplex, the
+% n-cross and the n-measure.
+%
+% The main trick in computing the figures is using permutations to
+% generate the vertex sets and then post-analysis of the vertex sets to
+% extract other features.
+%
+% I looked up some formulae.  Let _C_ stand for all Circular shifts of a
+% vector, _P_ for all permutations of a vector and _E_ for all even
+% permutations. The "names" {p,q} are the Schlafli symbols for the five
+% regular figures in 3-D and {p,q,r} are the same for the six regular
+% figures in 4-D.
+%
+% Vertex Sets
+%
+% $$ \tau = \frac{1+\sqrt 5}{2} $$
+%
+% $$ \begin{array}{rcl} 
+% \{3,3\} &:\ & C(\frac{\sqrt 2}{2}, 0, 0, 0)      \\
+% \{3,4\} &:\ & C(\pm \frac{\sqrt 2}{2}, 0, 0)     \\
+% \{4,3\} &:\ & \pm\frac{1}{2}, \pm\frac{1}{2}, \pm\frac{1}{2} \\
+% \{3,5\} &:\ & C(0, \pm\frac{1}{2}, \pm\frac{\tau}{2}) \\
+% \{5,3\} &:\ & C(0, \pm\frac{1}{2}, \pm\frac{\tau^2}{2}) 
+%        \cup \pm\frac{\tau}{2}, \pm\frac{\tau}{2}, \pm\frac{\tau}{2}
+% \end{array} $$
+%
+% $$ \begin{array}{rcl}
+% \{3,3,3\} \ &:\ & C(\frac{\sqrt 2}{2}, 0, 0, 0, 0) \\
+% \{3,3,4\} \ &:\ & C(\pm\frac{\sqrt 2}{2}, 0, 0, 0) \\
+% \{3,4,3\} \ &:\ & P(\pm\frac{\sqrt 2}{2}, \pm\frac{\sqrt 2}{2}, 0, 0) \\
+% \{4,3,3\} \ &:\ & \pm\frac{1}{2},\pm\frac{1}{2},\pm\frac{1}{2},
+%               \pm\frac{1}{2}
+% \end{array} $$
+%
+%
+% $$ \begin{array}{rcl}
+% \{3,3,5\} &:& C(\pm\tau,0,0,0) \\
+%  &\cup\ &
+%    C(\pm\frac{\tau}{2},\pm\frac{\tau}{2},\pm\frac{\tau}{2},
+%      \pm\frac{\tau}{2})\\
+%  &\cup\ & 
+%    E(\pm\frac{\tau^2}{2},\pm\frac{\tau}{2},\pm\frac{1}{2}, 0)
+% \end{array} $$
+%
+%
+% $$ \begin{array}{rcl}
+% \{5,3,3\} &:& 
+%    P(0,0,\pm\tau^2,\pm\tau^2) \\
+%  &\cup\ &
+%    P(\pm\frac{\tau^2}{2},\pm\frac{\tau^2}{2},\pm\frac{\tau^2}{2},
+%     \pm\sqrt 5\frac{\tau^2}{2})\\
+%  &\cup\ &
+%    P(\pm\frac{\tau^3}{2},\pm\frac{\tau^3}{2},\pm\frac{\tau^3}{2},
+%    \pm\frac{1}{2})    \\
+%  &\cup\ & 
+%    P(\pm\frac{\tau}{2},\pm\frac{\tau}{2},
+%      \pm\frac{\tau}{2},\pm\frac{\tau^{-2}}{2}) \\
+%  &\cup\ &
+%    E(\pm\frac{1}{2},\pm\frac{1}{2},\pm\frac{\tau^2}{2},0)\\
+%  &\cup\ &
+%    E(\pm\sqrt 5\frac{\tau^2}{2},\pm\frac{\tau}{2},
+%      \pm\frac{\tau^3}{2},0)  \\
+%  &\cup\ &
+%    E(\pm\tau^2,\pm\frac{\tau^2}{2},
+%      \pm\frac{\tau^3}{2},\pm\frac{\tau}{2})
+% \end{array} $$
+
+%%
+% The WWW pages for Mathematica, a product of Wolfram Research, 
+% have many related kinds of figures (concave, expansions, prisms)
+% but those additonal figures are not treated here. 
+% You could also look at some of these other things in 
+% _The Derived Polytopes in Euclidian N-Space_, 
+% William Marshall McKeeman, Master of Science thesis,
+% The Columbian College of The George Washington University, (June 7, 1961).
+% Anyway, back to the main story:
+
+%% Computing Vertices
+% Using a permutation generator, we can generate the vertex sets for
+% regular polyhedra with edge length 1. For instance, the cube {4,3} with
+% unit edge centered on the origin has 8 vertices and the analogous
+% hypercube {4,3,3} has 16.  They could be generated as follows
+% 
+%  s43  = perms([1 1 1]/2, 'signs');             % cube
+%  s433 = perms([1 1 1 1]/2, 'signs');           % hyper cube
+%
+%
+% The details are tucked away in my MATLAB function vertices. Here are the
+% calls.
+
+s33 = vertices('s33');                           % tetrahedron
+s34 = vertices('s34');                           % octahedron
+s43 = vertices('s43');                           % cube
+s35 = vertices('s35');                           % icosahedron
+s53 = vertices('s53');                           % dodecahedron
+
+
+%% Feature Count for 3-D Regular Polyhedra
+% The vertex sets can be examined to count the edges and faces.
+format compact
+fprintf ' tetra   octa   cube  icosa dodeca\n'
+fprintf('%6d %6d %6d %6d %6d   vertices\n', ...
+  size(s33,1),size(s34,1),size(s43,1),size(s35,1),size(s53,1));
+fprintf('%6d %6d %6d %6d %6d   edges\n', ...
+  nedge(s33),nedge(s34),nedge(s43),nedge(s35),nedge(s53));
+fprintf('%6d %6d %6d %6d %6d   faces\n', ...
+  nface(s33),nface(s34),nface(s43),nface(s35),nface(s53));
+
+%% Draw the Tetrahedron, Octahedron, Cube, Icosahedron, Dodecahedron
+% The regular polyhedra and polytopes can be displayed using MATLAB. The
+% displays are "shadows of edges" (technically projections onto the xy
+% plane).  In the case of 3-D figures, the view is immediately intuitive to
+% us 3-D people.  Taking the viewpoint of a Flatlander (2-D person) living
+% in the xy plane gives some flavor of the mental gyrations you will have
+% to go through to make sense of the 4-D figures.
+%
+% The edges are color-coded by distance from the viewer so that connected
+% edges tend to have the same shade.  In the 3-D case only black is used.
+% In the 4-D case, blue *and* red are used to indicate the two missing
+% dimensions.  The plots have to be offset from the origin to keep them
+% from falling on top of each other.  The z dimension is represented by
+% intensity (imagine viewing the figures in fog).
+
+rot3 = ndrotate([0 .2 .4; 1 0 .4]);    % 3D rotation matrix
+angles = [...
+   0 .1 .2 .3; 
+  .3  0 .4 .6; 
+  .5 .6  0 .8; 
+  .1 .1 .1  0];
+rot4 = ndrotate(angles);               % 4D rotation matrix
+offset = @(M,v) M+repmat(v, size(M,1),1);
+
+cla
+hold on
+%               vertices   offsets
+plotpoly(offset(s33*rot4, [1.7 0.7 0 0]));
+plotpoly(offset(s34*rot3, [-.5 0 0])); 
+plotpoly(offset(s43*rot3, [4 0 0])); 
+plotpoly(offset(s35*rot3, [4 3 0]));
+plotpoly(offset(s53*rot3, [0 3 0]));
+hold off
+
+%% Bucky Ball
+% The Buckminster Fuller ball is made of pentagons and hexagons.  It is
+% constructed by truncating the 1/3 tip of the 20 vertices of the
+% icosahedron s35.  The vertices function (above) does not "know" bucky, so
+% here is the vertex computation using the permutation primitives.
+
+d = @(a,b) a + b*(1+sqrt(5))/2;
+buckyball = perms(...
+  [d(0,0), d(0,3), d(1,0)
+   d(1,0), d(0,2), d(2,1)
+   d(2,0), d(0,1), d(1,2)]/2, 'cycles', 'signs', 'unique');
+
+fprintf('v=%d e=%d f=%d\n', ...
+  size(buckyball,1), nedge(buckyball), nface(buckyball));
+close(gcf)
+figure
+plotpoly(buckyball*rot3);
+
+%% 4-D Polytopes
+% Using the Coxeter formulae for the six 4-D polytopes:
+s333 = vertices('s333');                         % 4d simplex
+s334 = vertices('s334');                         % 4d cross
+s343 = vertices('s343');                         % 24 cell
+s433 = vertices('s433');                         % 4d measure
+s335 = vertices('s335');                         % hyper icosahedron
+s533 = vertices('s533');                         % hyper dodecahedron
+
+%% Feature Count for 4-D Regular Polyhedra
+% The vertex sets can be examined to locate the edges.
+fprintf '  s333   s334   s433   s343   s335   s533\n'
+fprintf('%6d %6d %6d %6d %6d %6d   %s\n', ...
+  size(s333,1),  size(s334,1),  size(s433,1), ...
+  size(s343,1),  size(s335,1),  size(s533,1),...
+  'vertices');
+fprintf('%6d %6d %6d %6d %6d %6d   %s\n', ...
+  nedge(s333),   nedge(s334),   nedge(s433), ...
+  nedge(s343),   nedge(s335),   nedge(s533),...
+  'edges');
+
+%% Edge Plot of 4-D Cross Polytope (analog of octahedron)
+close(gcf)
+figure
+set(gcf, 'color', 'white');
+plotpoly(s334*rot4);
+
+%% Edge Plot of Hypercube (tesseract)
+close(gcf)
+figure
+set(gcf, 'color', 'white');
+plotpoly(s433*rot4);
+
+%% Edge Plot of 4-D 24-cell (unique to 4-D)
+close(gcf)
+figure
+set(gcf, 'color', 'white');
+plotpoly(s343*rot4);
+
+%% Edge Plot of 4-D 600 Cell (analog of icosahedron)
+close(gcf)
+figure
+set(gcf, 'color', 'white');
+plotpoly(s335*rot4);
+
+%% Edge Plot of 4-D 120 Cell (analog of dodecahedron)
+close(gcf)
+figure
+set(gcf, 'color', 'white');
+angles = [...                            very small angles
+   0  .1  .1  .03; 
+  .01  0  .04 .06; 
+  .13 .06  0  .12; 
+  .13 .1  .1   0];
+rot4 = ndrotate(angles);               % a better viewpoint
+plotpoly(s533*rot4);
+
+%% N-D for N>4
+% As it turns out, there are only three regular figures from N=5 on up.  I
+% could put some here, but they get really _busy_.  So I stop at 4.
+
+close(gcf)
+
+##### SOURCE END #####
+-->
+   </body>
+</html>
