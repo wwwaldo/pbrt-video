@@ -34,3 +34,114 @@ TODO
   - each point of intersection becomes a sphere
 
 - fill in the intersection points to make a solid triangle
+
+Math
+----
+
+Use the parametric form.  Represent a line as 2 points.  Represent a Plane
+with a normal and a point on the plane .
+
+Then there is a closed form solution for t.  If t in [0,1], then it's between
+the 2 points!  So the line segment works.
+
+https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
+
+Do we then need a plane / hyperplane intersection in 4D?
+
+Polyhedra, Regular Polyhedra, Regular Polytopes
+-----------------------------------------------
+
+FAQ in Polyhedral Computation
+
+http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.55.3786&rep=rep1&type=pdf
+
+Basic Properties of Convex Polytopes
+
+https://www.csun.edu/~ctoth/Handbook/chap15.pdf
+
+1. H-polytope is the intersection of half-spaces
+2. V-polytope is the convex hull of vertices
+
+On Regular Polytopes (14 page, math, Schafli)
+https://scholar.google.com/scholar?cluster=14390783356289027904&hl=en&as_sdt=0,33&sciodt=0,33
+
+
+Generating and Rendering Four Dimensional Polytopes
+
+http://torus.math.uiuc.edu/jms/Papers/dodecaplex/new.pdf
+
+
+3D Visualization Models of the Regular Polytopes in Four and Higher Dimensions
+
+
+https://www.semanticscholar.org/paper/D-Visualization-Models-of-the-Regular-Polytopes-in-S%C3%A9quin/1d6504e00fad7855e0258e8d321460cd9c6420d8
+
+https://people.eecs.berkeley.edu/~sequin/PAPERS/Bridges02_Polytopes.pdf
+
+
+Dodecahedron
+------------
+
+http://mathworld.wolfram.com/RegularDodecahedron.html
+
+How to generate 20 vertices:
+
+https://stackoverflow.com/questions/10460337/how-to-generate-calculate-vertices-of-dodecahedron
+
+How about generating edges?
+
+Platonic Solids and Graphs
+--------------------------
+
+http://mathworld.wolfram.com/PlatonicGraph.html
+Platonic Graph: https://en.wikipedia.org/wiki/Platonic_graph
+
+
+http://mathworld.wolfram.com/IcosahedralGraph.html
+
+Computer Construction of Platonic Solids (has a bunch of tables, but doesn't
+show how they were derived?)
+
+https://iconline.ipleiria.pt/bitstream/10400.8/1417/1/scriptaingenia-art2.pdf
+
+
+Source Code
+-----------
+
+Schläfli Convex Regular Polytope Interpreter --- Python and Ruby!
+
+https://codegolf.stackexchange.com/questions/114280/schl%C3%A4fli-convex-regular-polytope-interpreter
+
+Matlab code!  And visualization
+
+http://www.cs.dartmouth.edu/~mckeeman/references/polytopes/polydemo.html
+
+http://paulbourke.net/geometry/hyperspace/
+http://paulbourke.net/geometry/platonic/ -- POVRay!
+
+Hm POVRay has unions?  That makes it easy?  So you don't have to use a
+trianglemesh?
+
+http://paulbourke.net/geometry/platonic/dodecahedron.pov
+
+NOTE: killeroo model is "loopsubdiv"
+
+Would we use "trianglemesh"?  Then we need an algorithm for enumerating the
+vertices in order?
+
+
+Tutorials
+---------
+
+http://math.ucr.edu/home/baez/platonic.html
+
+
+Background
+----------
+
+http://homepages.math.uic.edu/~lukina/Site/About_me_files/F17-flyer-lukina.pdf
+
+"She was the first to discover the 45 semi-regular polytopes in the 4th
+dimension."
+
+
