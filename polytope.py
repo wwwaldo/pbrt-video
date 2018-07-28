@@ -4,6 +4,8 @@ from __future__ import print_function
 cube.py
 """
 
+import math
+
 import sys
 
 from schlafli import schlafli_interpreter
@@ -31,6 +33,76 @@ from scipy.spatial import ConvexHull
 # - animate the plane in matplotlib?  Just change d.
 #   - allow user to rotate the plane?
 # - could make the intersection nicer?  Use a polygon to plot?
+
+
+# From squares.py
+def solve_segment(line, plane):
+    # These can also be done with dot products.
+    a = np.matmul(plane.normal, line.direction)
+    b = plane.d - np.matmul(plane.normal, line.translation)
+    t = np.linalg.solve(a, b)
+
+    solve_point = line.direction * t + line.translation
+
+    if line.tstart > t and line.tend < t:
+      return solve_point
+    return None
+    
+class Plane:
+    # input as lists.
+    def __init__(self, normal, d):
+        self.normal = np.array([normal])
+        self.d = d
+        return
+
+class LineSegment:
+    # parametric form of a line segment.
+    def __init__(self, direction, translation, tstart=-math.inf, tend=math.inf):
+        self.direction = np.transpose(np.array([direction]))
+        self.translation = np.transpose(np.array([translation]))
+        self.tstart = tstart 
+        self.tend = tend
+        return
+
+    @classmethod
+    def fromPoints(cls, line_segment):
+      p1 = line_segment[0]
+      p2 = line_segment[1]
+
+      direction = p2 - p1 
+      translation = p1
+      return cls(direction, translation, 0, 1)
+
+def Intersect_memoize(edges, plane_normal, p0):
+  # edges are given as a tuple of np.arrays.
+
+  plane = Plane(plane_normal, p0)
+  temp = dict()
+
+  for edge in edges:
+    print(f"New edge: {edge}")
+
+    # want to get the line segment for this edge.
+    line_segment = LineSegment.fromPoints(edge)
+
+    intersection_point = solve_segment(line_segment, plane)
+    if intersection_point is None:
+      print(f"No intersection with edge {edge}")
+      continue
+    else:
+      return
+
+
+  
+  # two solve-points are neighbours if their edges are neighbours
+  # two edges are neighbours if they share a vertex.
+
+
+
+
+  return
+
+
 
 def Intersect(edges, plane_normal, p0):
   intersections = []
