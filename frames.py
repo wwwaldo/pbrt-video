@@ -25,11 +25,6 @@ def main(argv):
   points = rotate.circle(midpoint, radius, num_frames)
 
   for i in range(num_frames):
-    p = {
-      'eye_x': i * 0.1,
-      'eye_y': 0.2,
-      'eye_z': 0.3,
-    }
     point = points[i]
     p = {
       'eye_x': point[0],
