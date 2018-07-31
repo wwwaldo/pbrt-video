@@ -11,5 +11,5 @@ if test $USER = 'andy'; then
 else
   PBRT=/home/caroline/recurse/pbrt-v3/build_debug/pbrt
 fi
-python3 generate_ply.py temp.ply
+./generate_ply.py temp.ply
 $PBRT convex_render.pbrt
