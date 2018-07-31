@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from __future__ import print_function
 """
-cube.py
+polytope.py
 """
 
 import math
@@ -170,8 +170,10 @@ def main(argv):
   if action == 'ply':
     out_path = argv[2]
     points = np.random.rand(100, 3)
+    vertices, edges_etc = schlafli_interpreter.regular_polytope([5, 3])
+    vertices = [np.array(v) for v in vertices]
     with open(out_path, 'w') as f:
-      generate_ply.generate_ply(f, points,
+      generate_ply.generate_ply(f, vertices,
                                 template_path='render/ply-header.template')
 
     print('Wrote %s' % out_path)
