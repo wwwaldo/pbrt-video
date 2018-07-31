@@ -172,6 +172,28 @@ def main(argv):
     points = np.random.rand(100, 3)
     vertices, edges_etc = schlafli_interpreter.regular_polytope([5, 3])
     vertices = [np.array(v) for v in vertices]
+
+    # Rotate it a bit
+    # TODO: Put these in a function.
+
+    theta_z = math.pi / 8 # 30 degrees about Z axis
+
+    rotation_z = np.array([
+        [math.cos(theta_z), -math.sin(theta_z), 0.0],
+        [math.sin(theta_z),  math.cos(theta_z), 0.0],
+        [0.0,                          0.0, 1.0],
+    ])
+
+    theta_x = math.pi / 16
+    rotation_x = np.array([
+        [1.0,               0.0,                0.0],
+        [0.0, math.cos(theta_x), -math.sin(theta_x)],
+        [0.0, math.sin(theta_x),  math.cos(theta_x)],
+    ])
+
+    rotation = np.matmul(rotation_x, rotation_z)
+    vertices = [np.matmul(rotation, v) for v in vertices]
+
     with open(out_path, 'w') as f:
       generate_ply.generate_ply(f, vertices,
                                 template_path='render/ply-header.template')
