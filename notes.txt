@@ -155,6 +155,17 @@ NOTE: killeroo model is "loopsubdiv"
 Would we use "trianglemesh"?  Then we need an algorithm for enumerating the
 vertices in order?
 
+Animation in Python:
+
+https://www.reddit.com/r/maths/comments/7n6nyc/a_visual_explanation_of_platonic_solids_made_in/
+
+https://github.com/ryu577/base/blob/master/numerical/python/visualization/Animation/PlatonicSolids.py
+
+SymPy already has models, like Mathematica.  Maybe just use those, and later
+make our own.  Hm they only have 3 symmetry groups: tetrahedral, octahedral,
+and icosahedral
+
+http://docs.sympy.org/latest/modules/combinatorics/polyhedron.html
 
 Tutorials
 ---------
