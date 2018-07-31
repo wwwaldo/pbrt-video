@@ -9,6 +9,7 @@ import math
 import sys
 
 from schlafli import schlafli_interpreter
+from render import generate_ply
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -164,6 +165,16 @@ def main(argv):
 
   if action == 'bounds':
     ShowBounds()
+    return
+
+  if action == 'ply':
+    out_path = argv[2]
+    points = np.random.rand(100, 3)
+    with open(out_path, 'w') as f:
+      generate_ply.generate_ply(f, points,
+                                template_path='render/ply-header.template')
+
+    print('Wrote %s' % out_path)
     return
 
   p0 = np.array([0.5, 0.5, 0.5])  # center of the cube

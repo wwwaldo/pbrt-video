@@ -102,4 +102,11 @@ make-video() {
   time ffmpeg -f image2 -r 1/5 -i %04d.jpg -c:v libx264 -pix_fmt yuv420p out.mp4
 }
 
+ply-demo() {
+  local ply=_out/demo.ply
+  ./polytope.py ply $ply
+  #pbrt $ply
+  pbrt render/convex_render.pbrt
+}
+
 "$@"

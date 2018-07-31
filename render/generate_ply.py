@@ -19,12 +19,14 @@ def vertex_indices_to_subset(hull):
     return simplex_array
 
 # Generate a PLY file for the 3-D convex hull of the input points.
-def generate_ply(out, points):
+def generate_ply(out, points, template_path=None):
+    template_path = template_path or 'ply-header.template'
+
     hull = ConvexHull(points)
     num_vertices = len(hull.vertices) 
     num_faces = hull.nsimplex
     
-    with open('ply-header.template') as file:
+    with open(template_path) as file:
         header = file.read()
     macro_replacements = {
         'num_vertices' : num_vertices,
@@ -45,12 +47,16 @@ def generate_ply(out, points):
     print(vertex_data, file=out)
     print(face_data, file=out)
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
+
+def main(argv):
+    if len(argv) < 2:
         raise Exception("Please specify a filename!")
-    fname = sys.argv[1]
+    fname = argv[1]
 
     points = np.random.rand(100, 3)
     with open(fname, 'w') as out:
         generate_ply(out, points)
 
+
+if __name__ == "__main__":
+    main(sys.argv)
