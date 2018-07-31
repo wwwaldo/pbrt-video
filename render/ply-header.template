@@ -1,0 +1,13 @@
+ply
+format ascii 1.0
+comment template for a PLY header for a mesh with <256 faces
+
+element vertex %(num_vertices)d 
+property float32 x
+property float32 y
+property float32 z
+
+comment list has form list-length : elements
+element face %(num_faces)d 
+property list uint8 int32 vertex_indices
+end_header
