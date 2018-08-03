@@ -609,7 +609,9 @@ def main(argv):
     if len(schlafli) == 2:
       Animate3D(schlafli, num_frames)
     elif len(schlafli) == 3:
-      Animate4D(schlafli, num_frames)
+      # Inconsistency: In 4D, the Plot() functions animates 
+      # We used a different method to animate 4D than 3D.
+      Plot(schlafli)
     else:
       raise AssertionError
 

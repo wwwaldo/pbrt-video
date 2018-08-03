@@ -42,6 +42,12 @@ render-simple() {
   #../other/pbrt-v3-build/pbrt $src
 }
 
+render-hi() {
+  local src=${1:-../other/pbrt-v3-scenes/contemporary-bathroom/contemporary-bathroom.pbrt}
+  pbrt --quick $src
+  #../other/pbrt-v3-build/pbrt $src
+}
+
 readonly NUM_FRAMES=10
 
 clean() {
