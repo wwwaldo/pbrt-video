@@ -491,32 +491,6 @@ class Animation3D(object):
       line.set_3d_properties(z)
 
 
-def Animate4D(schlafli, num_frames):
-  vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
-  vertices = [np.array(v) for v in vertices]
-
-  # Tilt everything a bit
-  vertices = Tilt4D(vertices)
-
-  # Calculate W range AFTER ROTATION.
-  w = [v[3] for v in vertices]
-  w_offsets = np.linspace(-max(w), -min(w), num=num_frames)
-  print('w_offsets:')
-  print(w_offsets)
-
-  edge_numbers = edges_etc[0]
-  edges = []
-  for a, b in edge_numbers:
-    edges.append((vertices[a], vertices[b]))
-
-  p0 = np.array([0, 0, 0, 0])
-  plane_normal = np.array([0, 0, 0, 1])
-
-  # TODO: Do we need initial intersections?  We could just make
-  # dummy Line3D instances?  Just create a fake data set.
-  intersections = Intersect(edges, plane_normal, p0)
-
-
 def Animate3D(schlafli, num_frames):
   vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
   vertices = [np.array(v) for v in vertices]
@@ -581,7 +555,6 @@ def main(argv):
     if len(schlafli) not in (2, 3):
       raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
 
-    points = np.random.rand(100, 3)
     vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
     vertices = [np.array(v) for v in vertices]
 
