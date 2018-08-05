@@ -116,4 +116,8 @@ ply-demo() {
   pbrt render/convex_render.pbrt
 }
 
+pbrt-4d() {
+  ./polytope.py pbrt _out/5-3-3_frame%02d.pbrt 5 3 3
+}
+
 "$@"

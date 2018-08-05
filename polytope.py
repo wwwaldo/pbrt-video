@@ -550,6 +550,8 @@ def main(argv):
   elif action == 'pbrt':
     # Example: ./polytope.py pbrt foo.ply 4 3
 
+    # Example: ./polytope.py pbrt foo%02d.ply 4 3 3
+
     out_path = argv[2]
     schlafli = [int(a) for a in sys.argv[3:]]  # e.g. 4 3 for cube
     if len(schlafli) not in (2, 3):
@@ -558,13 +560,81 @@ def main(argv):
     vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
     vertices = [np.array(v) for v in vertices]
 
-    vertices = Tilt3D(vertices)
+    if len(schlafli) == 2:  # Just plot a polygon
 
-    with open(out_path, 'w') as f:
-      generate_ply.generate_ply(f, vertices,
-                                template_path='render/ply-header.template')
+      vertices = Tilt3D(vertices)
 
-    print('Wrote %s' % out_path)
+      with open(out_path, 'w') as f:
+        generate_ply.generate_ply(f, vertices,
+                                  template_path='render/ply-header.template')
+
+      print('Wrote %s' % out_path)
+
+    elif len(schlafli) == 3:  # Animate the 4D case
+      num_frames = 40  # TODO: Make this a flag
+
+      # Calculate W range AFTER ROTATION.
+      w = [v[3] for v in vertices]
+      w_offsets = np.linspace(-max(w), -min(w), num=num_frames)
+
+      print('w_offsets:')
+      print(w_offsets)
+
+      # Set W axis
+      p0 = np.array([0, 0, 0, 0])
+      plane_normal = np.array([0, 0, 0, 1])
+
+      fig = plt.figure()
+      ax = fig.gca(projection='3d')
+
+      # Set axes so they don't move between frames
+      x = [v[0] for v in vertices]
+      y = [v[1] for v in vertices]
+      z = [v[2] for v in vertices]
+
+      x_min, x_max = min(x), max(x)
+      y_min, y_max = min(y), max(y)
+      z_min, z_max = min(z), max(z)
+
+      ax.set_xlim(x_min, x_max)
+      ax.set_ylim(y_min, y_max)
+      ax.set_zlim(z_min, z_max)
+
+      mpl_points = None
+
+      print('NEW w_offsets %s' % w_offsets)
+      for i, w_offset in enumerate(w_offsets):
+        print('--- OFFSET %d = %f' % (i, w_offset))
+
+        translated = Translate4D(vertices, w_offset)
+        PrintBounds(translated)
+
+        edge_numbers = edges_etc[0]
+        edges = []
+        for a, b in edge_numbers:
+          edges.append((translated[a], translated[b]))
+
+        intersections = Intersect(edges, plane_normal, p0)
+        print('%d intersections' % len(intersections))
+
+        # Remove w-axis to project onto hyperplane (not strictly necessary)
+        intersections = [np.array(v[:3]) for v in intersections]
+
+        # TODO: intersections should get passed to generated_ply.
+
+        frame_out_path = out_path % i
+        print('Writing %s' % frame_out_path)
+
+        #Draw4dSlice(ax, intersections, draw_hull=True)
+        #plt.pause(0.001)
+
+        # Hm this is the only way I can figure out to draw a new Convex hull
+        # on each frame.  There is a ax.collections.remove() hack for the
+        # scatter plot that doesn't seem to work for the triangles
+        ax.cla()  # clear
+        ax.set_xlim(x_min, x_max)
+        ax.set_ylim(y_min, y_max)
+        ax.set_zlim(z_min, z_max)
 
   elif action == 'plot':
     schlafli = [int(a) for a in argv[2:]]  # e.g. 4 3 for cube
