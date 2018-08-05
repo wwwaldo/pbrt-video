@@ -117,7 +117,9 @@ ply-demo() {
 }
 
 pbrt-4d() {
-  ./polytope.py pbrt _out/5-3-3_frame%02d.pbrt 5 3 3
+  local out_dir=_out/4d
+  mkdir -p $out_dir
+  ./polytope.py pbrt $out_dir/5-3-3_frame%02d.ply 5 3 3
 }
 
 "$@"

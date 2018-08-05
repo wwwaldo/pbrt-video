@@ -584,9 +584,6 @@ def main(argv):
       p0 = np.array([0, 0, 0, 0])
       plane_normal = np.array([0, 0, 0, 1])
 
-      fig = plt.figure()
-      ax = fig.gca(projection='3d')
-
       # Set axes so they don't move between frames
       x = [v[0] for v in vertices]
       y = [v[1] for v in vertices]
@@ -596,10 +593,6 @@ def main(argv):
       y_min, y_max = min(y), max(y)
       z_min, z_max = min(z), max(z)
 
-      ax.set_xlim(x_min, x_max)
-      ax.set_ylim(y_min, y_max)
-      ax.set_zlim(z_min, z_max)
-
       mpl_points = None
 
       print('NEW w_offsets %s' % w_offsets)
@@ -607,7 +600,7 @@ def main(argv):
         print('--- OFFSET %d = %f' % (i, w_offset))
 
         translated = Translate4D(vertices, w_offset)
-        PrintBounds(translated)
+        #PrintBounds(translated)
 
         edge_numbers = edges_etc[0]
         edges = []
@@ -620,21 +613,15 @@ def main(argv):
         # Remove w-axis to project onto hyperplane (not strictly necessary)
         intersections = [np.array(v[:3]) for v in intersections]
 
-        # TODO: intersections should get passed to generated_ply.
+        # TODO: intersections should get passed to generate_ply.
 
         frame_out_path = out_path % i
-        print('Writing %s' % frame_out_path)
 
-        #Draw4dSlice(ax, intersections, draw_hull=True)
-        #plt.pause(0.001)
-
-        # Hm this is the only way I can figure out to draw a new Convex hull
-        # on each frame.  There is a ax.collections.remove() hack for the
-        # scatter plot that doesn't seem to work for the triangles
-        ax.cla()  # clear
-        ax.set_xlim(x_min, x_max)
-        ax.set_ylim(y_min, y_max)
-        ax.set_zlim(z_min, z_max)
+        with open(frame_out_path, 'w') as f:
+          # This does the ConvexHull!
+          generate_ply.generate_ply(f, intersections,
+                                    template_path='render/ply-header.template')
+        print('Wrote %s' % frame_out_path)
 
   elif action == 'plot':
     schlafli = [int(a) for a in argv[2:]]  # e.g. 4 3 for cube
