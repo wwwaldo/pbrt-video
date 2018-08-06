@@ -1,0 +1,55 @@
+
+Film "image"
+    "integer xresolution" 400 "integer yresolution" 400
+#    "integer xresolution" 500 "integer yresolution" 500
+    "integer xresolution" 800 "integer yresolution" 800
+    "string filename" "contemporary-bathroom.exr"
+    "float scale" 3
+"float maxsampleluminance" 50
+
+# imgtool convert -bloomlevel 3 -bloomscale .1 contemporary-bathroom.{exr,png}
+
+Scale -1 1 1
+LookAt 0 1.25 -.5   -10 0 -9  0 1 0
+Camera "perspective" "float fov" 65
+
+Sampler "sobol" "integer pixelsamples" 8192
+Integrator "bdpt" "integer maxdepth" 10
+
+WorldBegin
+
+###########################################################################
+# lights
+
+# window
+AttributeBegin
+    NamedMaterial "light"
+    AreaLightSource "diffuse" "blackbody L" [6500 10]
+    Shape "plymesh" "string filename" "geometry/mesh_00023.ply" 
+AttributeEnd
+
+AttributeBegin
+Rotate 125 0 1 0  # 125 -> ~100 is more straight through the window 
+Rotate -90 1 0 0
+# imgtool makesky -turbidity 5 -elevation 30 --outfile textures/sky.exr
+#LightSource "infinite" "string mapname" "textures/sky.exr"
+#   "rgb L" [270 270 270] 
+AttributeEnd
+
+# filaments in light bulbs
+AttributeBegin
+    NamedMaterial "low_light"
+    AreaLightSource "diffuse" "blackbody L" [ 4000 7000 ]
+    Shape "plymesh" "string filename" "geometry/mesh_00060.ply" 
+    Shape "plymesh" "string filename" "geometry/mesh_00061.ply" 
+    Shape "plymesh" "string filename" "geometry/mesh_00066.ply" 
+    Shape "plymesh" "string filename" "geometry/mesh_00881.ply" 
+AttributeEnd
+
+###########################################################################
+
+Include "materials.pbrt"
+
+Include "geometry.pbrt"
+
+WorldEnd

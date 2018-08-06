@@ -1,0 +1,321 @@
+# Converted from "contemporary_bathroom.obj" by obj2pbrt
+# Scene bounds: (-7.714911, -4.399745, -11.240966) - (3.559370, 3.157831, 2.465844)
+
+# battub (more shiny interior?)
+MakeNamedMaterial "bathtube" 
+   "string type" "fourier" "string bsdffile" "bsdfs/ceramic.bsdf"
+
+# porcelain bathtub (exterior?)
+MakeNamedMaterial "bathtube.001" 
+   "string type" "fourier" "string bsdffile" "bsdfs/ceramic.bsdf"
+
+# frothy bubbly water
+MakeNamedMaterial "bathtube.002" 
+        "string type" [ "mirror" ]
+
+# rug on floor
+Texture "rug-kd" "color" "imagemap"
+    "string filename" "textures/tapis.png"
+Texture "rug-bump-base" "float" "imagemap"
+    "string filename" "textures/tapis.png"
+Texture "rug-bump" "float" "scale"
+    "texture tex1" "rug-bump-base"
+    "float tex2" .05
+MakeNamedMaterial "carpet" 
+        "string type" [ "matte" ] 
+        "texture Kd" "rug-kd"
+        "texture bumpmap" "rug-bump"
+
+MakeNamedMaterial "ceilling_white" 
+        "string type" [ "matte" ] 
+        "rgb Kd" [ 0.800000012 0.800000012 0.800000012 ] 
+
+# Vanessa Pike-Russell https://www.flickr.com/photos/lilcrabbygal/
+Texture "drawing-kd" "color" "imagemap"
+    "string filename" "textures/smoke.png"
+MakeNamedMaterial "drawing" 
+        "string type" [ "matte" ] 
+        "texture Kd" "drawing-kd"
+
+# on wall by window
+# CC-BY NASA goddard space flight center https://www.flickr.com/photos/gsfc/
+Texture "drawing2-kd" "color" "imagemap"
+    "string filename" "textures/hurricane.png"
+MakeNamedMaterial "drawing2" 
+        "string type" [ "matte" ] 
+        "texture Kd" "drawing2-kd"
+
+# flower petals
+MakeNamedMaterial "feuilles" 
+        "string type" [ "matte" ] 
+        "rgb Kd" [ 0.639999986 0.2 0.1 ] 
+
+# branches of flowers in vase
+MakeNamedMaterial "feuilles.001" 
+        "string type" [ "matte" ] 
+        "rgb Kd" [ 0.2 0.2 0.05 ] 
+
+# strings part of shades?
+MakeNamedMaterial "ficelle" 
+        "float roughness" [ 0.0104080001 ] 
+        "float index" [ 1 ] 
+        "string type" [ "uber" ] 
+        "rgb Kd" [ 0.639999986 0.639999986 0.639999986 ] 
+        "rgb Ks" [ 0.5 0.5 0.5 ] 
+        "rgb Kt" [ 0 0 0 ] 
+        "rgb opacity" [ 1 1 1 ] 
+
+# black floor
+Texture "floor-kd" "color" "imagemap"
+    "string filename" "textures/97702high.png"
+Texture "floor-bump-base" "float" "imagemap"
+    "string filename" "textures/97702high.png"
+Texture "floor-bump" "float" "scale"
+    "texture tex1" "floor-bump-base"
+    "float tex2" -.05
+MakeNamedMaterial "floor" 
+        "float uroughness" [ 0.0104080001 ] 
+        "float vroughness" [ 0.0104080001 ] 
+        "string type" [ "substrate" ] 
+        "texture Kd" "floor-kd"
+        "rgb Ks" [ 0.1 0.1 0.1 ] 
+	"texture bumpmap" "floor-bump"
+
+MakeNamedMaterial "glass_ewt_window" 
+        "string type" [ "glass" ] 
+
+# around lights above sinks
+MakeNamedMaterial "glass_globe" 
+        "string type" [ "glass" ]
+        "float index" 1.5
+
+# in front of picture by window
+MakeNamedMaterial "glass_globe.001" 
+        "string type" [ "glass" ] 
+
+# metal faucets
+MakeNamedMaterial "inox" 
+        "float roughness" [ 0.001 ] 
+        "string type" [ "metal" ] 
+        "spectrum k" "spds/Ag.k.spd"
+        "spectrum eta" "spds/Ag.eta.spd"
+
+# ? foot metal?
+MakeNamedMaterial "inox_pied" 
+        "float roughness" [ 0.001 ] 
+        "string type" [ "metal" ] 
+        "spectrum k" "spds/Ag.k.spd"
+        "spectrum eta" "spds/Ag.eta.spd"
+
+# ??? exterior light source for window?
+MakeNamedMaterial "light" 
+        "float roughness" [ 0.0104080001 ] 
+        "float index" [ 1 ] 
+        "string type" [ "uber" ] 
+        "rgb Kd" [ 0.639999986 0.639999986 0.639999986 ] 
+        "rgb Ks" [ 0.5 0.5 0.5 ] 
+        "rgb Kt" [ 0 0 0 ] 
+        "rgb opacity" [ 1 1 1 ] 
+
+# the lights in the globes!!
+MakeNamedMaterial "low_light" 
+        "float roughness" [ 0.0104080001 ] 
+        "float index" [ 1 ] 
+        "string type" [ "uber" ] 
+        "rgb Kd" [ 0.639999986 0.181951001 0.0187090002 ] 
+        "rgb Ks" [ 0.5 0.5 0.5 ] 
+        "rgb Kt" [ 0 0 0 ] 
+        "rgb opacity" [ 1 1 1 ] 
+
+# part of the lights in the globes; not clear what/where?
+MakeNamedMaterial "low_light.001" 
+        "string type" [ "glass" ] 
+
+# part of the lights in the globes; not clear what/where?
+MakeNamedMaterial "low_light_plan" 
+        "string type" [ "glass" ] 
+
+# sinks
+MakeNamedMaterial "marble" 
+        "float roughness" [ 0.0104080001 ] 
+        "float index" [ 1 ] 
+        "string type" [ "uber" ] 
+        "rgb Kd" [ 0.639999986 0.639999986 0.639999986 ] 
+        "rgb Ks" [ 0.5 0.5 0.5 ] 
+        "rgb Kt" [ 0 0 0 ] 
+        "rgb opacity" [ 1 1 1 ] 
+
+# ?
+MakeNamedMaterial "metal_gold" 
+        "float roughness" [ 0.0104080001 ] 
+        "float index" [ 1 ] 
+        "string type" [ "uber" ] 
+        "rgb Kd" [ 0.0585879982 0.0287069995 0 ] 
+        "rgb Ks" [ 0.5 0.5 0.5 ] 
+        "rgb Kt" [ 0 0 0 ] 
+        "rgb opacity" [ 1 1 1 ] 
+
+# metal frame around window panes
+MakeNamedMaterial "metal_windows" 
+        "float roughness" [ 0.0104080001 ] 
+        "float index" [ 1 ] 
+        "string type" [ "uber" ] 
+        "rgb Kd" [ 0.0559829995 0.0559829995 0.0559829995 ] 
+        "rgb Ks" [ 0.5 0.5 0.5 ] 
+        "rgb Kt" [ 0 0 0 ] 
+        "rgb opacity" [ 1 1 1 ] 
+
+MakeNamedMaterial "metalic_plate" 
+        "float roughness" [ 0.0104080001 ] 
+        "float index" [ 1 ] 
+        "string type" [ "uber" ] 
+        "rgb Kd" [ 0.121858999 0.121858999 0.121858999 ] 
+        "rgb Ks" [ 0.5 0.5 0.5 ] 
+        "rgb Kt" [ 0 0 0 ] 
+        "rgb opacity" [ 1 1 1 ] 
+
+MakeNamedMaterial "miroir" 
+        "string type" [ "mirror" ] 
+
+# paper behind poster by window?
+MakeNamedMaterial "papier" 
+        "float roughness" [ 0.0104080001 ] 
+        "float index" [ 1 ] 
+        "string type" [ "uber" ] 
+        "rgb Kd" [ 0.639999986 0.639999986 0.639999986 ] 
+        "rgb Ks" [ 0.5 0.5 0.5 ] 
+        "rgb Kt" [ 0 0 0 ] 
+        "rgb opacity" [ 1 1 1 ] 
+
+# cords above up high lights
+MakeNamedMaterial "plastic_black" 
+        "float roughness" [ 0.0104080001 ] 
+        "string type" [ "uber" ] 
+        "rgb Kd" [ 0.0232790001 0.0232790001 0.0232790001 ] 
+        "rgb Ks" [ 0.5 0.5 0.5 ] 
+
+# black pots by sinks
+MakeNamedMaterial "pots" 
+        "float roughness" [ 0.4 ] 
+        "string type" [ "uber" ] 
+        "rgb Kd" [ 0.05 .05 .05 ] 
+        "rgb Ks" [ 0.2 0.2 0.2 ] 
+
+# ? part of window shades
+MakeNamedMaterial "store_knot" 
+        "float roughness" [ 0.0104080001 ] 
+        "float index" [ 1 ] 
+        "string type" [ "uber" ] 
+        "rgb Kd" [ 0.639999986 0.639999986 0.639999986 ] 
+        "rgb Ks" [ 0.5 0.5 0.5 ] 
+        "rgb Kt" [ 0 0 0 ] 
+        "rgb opacity" [ 1 1 1 ] 
+
+# window shade pull?
+MakeNamedMaterial "store_knot_plastic" 
+        "float roughness" [ 0.0104080001 ] 
+        "float index" [ 1 ] 
+        "string type" [ "uber" ] 
+        "rgb Kd" [ 0.639999986 0.639999986 0.639999986 ] 
+        "rgb Ks" [ 0.5 0.5 0.5 ] 
+        "rgb Kt" [ 0 0 0 ] 
+        "rgb opacity" [ 1 1 1 ] 
+
+# shades
+MakeNamedMaterial "stores" 
+        "float roughness" [ 0.0104080001 ] 
+        "float index" [ 1 ] 
+        "string type" [ "uber" ] 
+        "rgb Kd" [ 0.639999986 0.639999986 0.639999986 ] 
+        "rgb Ks" [ 0.5 0.5 0.5 ] 
+        "rgb Kt" [ 0 0 0 ] 
+        "rgb opacity" [ 1 1 1 ] 
+
+MakeNamedMaterial "tableau1" 
+        "float roughness" [ 0.0104080001 ] 
+        "float index" [ 1 ] 
+        "string type" [ "uber" ] 
+        "rgb Kd" [ 0.639999986 0.639999986 0.639999986 ] 
+        "rgb Ks" [ 0.5 0.5 0.5 ] 
+        "rgb Kt" [ 0 0 0 ] 
+        "rgb opacity" [ 1 1 1 ] 
+
+MakeNamedMaterial "tableau2" 
+        "float roughness" [ 0.0104080001 ] 
+        "float index" [ 1 ] 
+        "string type" [ "uber" ] 
+        "rgb Kd" [ 0.639999986 0.639999986 0.639999986 ] 
+        "rgb Ks" [ 0.5 0.5 0.5 ] 
+        "rgb Kt" [ 0 0 0 ] 
+        "rgb opacity" [ 1 1 1 ] 
+
+# vase by window holding flowers
+MakeNamedMaterial "vase_white" 
+        "float roughness" [ 0.0104080001 ] 
+        "float index" [ 1 ] 
+        "string type" [ "uber" ] 
+        "rgb Kd" [ 0.639999986 0.639999986 0.639999986 ] 
+        "rgb Ks" [ 0.5 0.5 0.5 ] 
+        "rgb Kt" [ 0 0 0 ] 
+        "rgb opacity" [ 1 1 1 ] 
+
+# wallpapered wall seen in mirror
+Texture "wallpaper-kd" "color" "imagemap"
+    "string filename" "textures/contemporary_china.png"
+    "float uscale" .2 "float vscale" .2
+MakeNamedMaterial "wall_blue" 
+        "string type" [ "matte" ] 
+        "texture Kd" "wallpaper-kd"
+
+# overall white walls
+MakeNamedMaterial "wall_grey" 
+        "float roughness" [ 0.0104080001 ] 
+        "float index" [ 1 ] 
+        "string type" [ "uber" ] 
+        "rgb Kd" [ 0.501329005 0.501329005 0.501329005 ] 
+        "rgb Ks" [ 0.5 0.5 0.5 ] 
+        "rgb Kt" [ 0 0 0 ] 
+        "rgb opacity" [ 1 1 1 ] 
+
+# ???
+MakeNamedMaterial "wall_grey.001" 
+        "float roughness" [ 0.0104080001 ] 
+        "float index" [ 1 ] 
+        "string type" [ "uber" ] 
+        "rgb Kd" [ 0.501329005 0.501329005 0.501329005 ] 
+        "rgb Ks" [ 0.5 0.5 0.5 ] 
+        "rgb Kt" [ 0 0 0 ] 
+        "rgb opacity" [ 1 1 1 ] 
+
+# all the wood
+Texture "wood-kd" "color" "imagemap"
+    "string filename" "textures/American_walnut_pxr128.png"
+MakeNamedMaterial "wood" 
+        "float uroughness" [ 0.0104080001 ] 
+        "float vroughness" [ 0.0104080001 ] 
+        "string type" [ "substrate" ] 
+        "texture Kd" "wood-kd"
+        "rgb Ks" [ 0.2 0.2 0.2 ] 
+
+# ? small wood strip on floor?
+MakeNamedMaterial "wood_baguette" 
+        "float uroughness" [ 0.0104080001 ] 
+        "float vroughness" [ 0.0104080001 ] 
+        "string type" [ "substrate" ] 
+        "texture Kd" "wood-kd"
+        "rgb Ks" [ 0.2 0.2 0.2 ] 
+
+# wood around poster by window
+MakeNamedMaterial "wood_cadre" 
+        "float uroughness" [ 0.0104080001 ] 
+        "float vroughness" [ 0.0104080001 ] 
+        "string type" [ "substrate" ] 
+        "texture Kd" "wood-kd"
+        "rgb Ks" [ 0.2 0.2 0.2 ] 
+
+# white painted wood molding around window
+MakeNamedMaterial "wood_white" 
+        "float roughness" [ 0.0104080001 ] 
+        "string type" [ "uber" ] 
+        "rgb Kd" [ 0.700000012 0.700000012 0.700000012 ] 
+        "rgb Ks" [ 0.3 0.3 0.3 ] 
