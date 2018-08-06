@@ -10,6 +10,7 @@ TODO
 - DONE parameterize over different polytopes
 
 - rotate the camera to show it off
+  - problem: if it doesn't rotate about the center, it looks like it's moving
 
 - experiment with different materials and bumps
   - try glass
