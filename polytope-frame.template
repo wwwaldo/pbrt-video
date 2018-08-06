@@ -44,6 +44,8 @@ AttributeEnd
 AttributeBegin
   Scale 0.5 0.5 0.5  # for dodecahdron: put it in the frame
   #Material "matte" "rgb Kd" [ .7 .2 .2 ]
+  # NOTE: glass seems to show triangle artifacts.  i.e a pentagonal face looks
+  # like it is composed of triangles, which is not nice.
   #Material "glass" "float uroughness" 0.1 "float vroughness" 0.1
   Material "metal" "float roughness" 0.1
   Shape "plymesh" "string filename" "%(ply_filename)s"

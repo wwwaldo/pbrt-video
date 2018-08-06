@@ -190,6 +190,10 @@ video-120-cell() {
   join-frames _out/4d/5-3-3.mp4 _out/4d/5-3-3/*.png 
 }
 
-
+all-120-cell() {
+  gen-120-cell
+  render-120-cell
+  video-120-cell
+}
 
 "$@"
