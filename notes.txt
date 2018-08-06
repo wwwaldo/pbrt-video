@@ -1,20 +1,28 @@
 TODO
 ----
 
-- generate .ply files/.pbrt files from the 4D animation
-- write a shell function to render them to a video
+- DONE generate .ply files/.pbrt files from the 4D animation
+- DONE write a shell function to render them to a video
+
+- adjust frame rate of video:
+  - 48 frames should be 2 seconds?
+  - right now you have a delay of 6 ms?
+
+- rotate the camera to show it off
+
+- parameterize over different polytopes
+- experiment with different materials and bumps
 
 - combine this with the contemporary bathroom scene
   - place the polyhedron
-  - size of polyhedron
-  - place the camera
+  - size of polyhedron -- scale it?
+  - place the camera -- same for every polytope?
   - render low quality version
 
 - render high quality version
 
 - optional:
   - rotate the 3d slice as its growing
-  - pan the camera
   - more than one shape in the scene
 
 ------
