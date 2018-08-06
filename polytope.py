@@ -623,9 +623,9 @@ def main(argv):
       look_at = np.array([0.5, 0.5, 0])
       radius = rotate.distance(look_at, orig_eye)
 
-      # Slight angle
+      # Rotate a quarter turn
       eye_points = rotate.circle(look_at, radius, num_frames,
-                                 max_angle=math.pi/8)
+                                 max_angle=math.pi/2)
 
       print('NEW w_offsets %s' % w_offsets)
       for i, w_offset in enumerate(w_offsets):
