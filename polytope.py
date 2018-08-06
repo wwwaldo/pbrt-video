@@ -246,7 +246,7 @@ def Tilt4D(vertices):
   # http://hollasch.github.io/ray4/Four-Space_Visualization_of_4D_Objects.html#s2.2
 
   # Matrix multiply is @ !
-  rotation = rotation_xy @ rotation_xz @ rotation_zw
+  rotation = rotation_xy @ rotation_xz #@ rotation_zw
   return [np.matmul(rotation, v) for v in vertices]
 
 
