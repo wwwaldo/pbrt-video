@@ -48,14 +48,14 @@ render-hi() {
   #../other/pbrt-v3-build/pbrt $src
 }
 
-readonly NUM_FRAMES=10
-
 clean() {
   rm -v _out/pbrt/* _out/exr/* _out/jpg/*
 }
 
 frames() {
   mkdir -p _out/{pbrt,exr,jpg}
+
+  local NUM_FRAMES=10
 
   # has to be in scenes to include the geometry file
   local out_dir=_out
@@ -101,11 +101,7 @@ make-video() {
   # with imagemagick
   # http://jupiter.ethz.ch/~pjt/makingMovies.html 
   time convert -delay 6 -quality 95 _out/jpg/k-*.jpg _out/movie.mp4
-
   echo "Wrote $PWD/_out/movie.mp4"
-  return
-
-  time ffmpeg -f image2 -r 1/5 -i %04d.jpg -c:v libx264 -pix_fmt yuv420p out.mp4
 }
 
 ply-demo() {
@@ -119,7 +115,7 @@ ply-demo() {
 gen-pbrt-4d() {
   local out_dir=_out/4d
   mkdir -p $out_dir
-  ./polytope.py pbrt $out_dir 5-3-3_frame%02d 5 3 3
+  NUM_FRAMES=20 ./polytope.py pbrt $out_dir 5-3-3_frame%02d 5 3 3
 
   ls -l $out_dir
 }
@@ -130,5 +126,11 @@ render-4d() {
     pbrt $input
   done
 }
+
+video-4d() {
+  time convert -delay 6 -quality 95 _out/4d/*.png _out/4d.mp4
+  echo "Wrote $PWD/_out/4d.mp4"
+}
+
 
 "$@"

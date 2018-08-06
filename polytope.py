@@ -580,7 +580,7 @@ def main(argv):
 
     elif len(schlafli) == 3:  # Animate the 4D case
       # Example: ./polytope.py pbrt _out/4d foo%02d.ply 4 3 3
-      num_frames = 10  # TODO: Make this a flag
+      num_frames = int(os.getenv('NUM_FRAMES', '10'))
 
       # Calculate W range AFTER ROTATION.
       w = [v[3] for v in vertices]
@@ -625,11 +625,11 @@ def main(argv):
 
         # TODO: intersections should get passed to generate_ply.
 
-        png_filename = filename_template % i + '.png'
         ply_filename = filename_template % i + '.ply'
 
         ply_out_path = os.path.join(out_dir, ply_filename)
         pbrt_out_path = os.path.join(out_dir, filename_template % i + '.pbrt')
+        png_out_path = os.path.join(out_dir, filename_template % i + '.png')
 
         with open(ply_out_path, 'w') as f:
           # This does the ConvexHull!
@@ -638,7 +638,7 @@ def main(argv):
         print('Wrote %s' % ply_out_path)
 
         d = {
-            'out_filename': png_filename,
+            'out_filename': png_out_path,
             'ply_filename': ply_filename,
         }
         with open(pbrt_out_path, 'w') as f:
