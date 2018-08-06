@@ -125,12 +125,16 @@ ply-demo() {
 # TODO: Parameterize over different polytopes!  Give them different names.
 gen-pbrt-4d() {
   local sch=${1:-'5-3-3'}  # schlafli number
+  local num_frames=${2:-48}
+
   local out_dir=_out/4d/$sch
   mkdir -p $out_dir
   rm -v -f $out_dir/*
+
   # split 5 3 3 into 5 3 3
   local -a sch_array=( ${sch//-/ } )
-  NUM_FRAMES=48 ./polytope.py pbrt $out_dir ${sch}_frame%02d "${sch_array[@]}"
+  NUM_FRAMES=$num_frames \
+    ./polytope.py pbrt $out_dir ${sch}_frame%02d "${sch_array[@]}"
 
   ls -l $out_dir
 }
@@ -167,11 +171,12 @@ video-4d() {
 # A particular one
 
 gen-120-cell() {
-  gen-pbrt-4d 5-3-3
+  gen-pbrt-4d 5-3-3 10
 }
 
 # 1:01 at low quality
 render-120-cell() {
+  rm -v _out/4d/5-3-3/*.png
   time for input in _out/4d/5-3-3/*.pbrt; do
     pbrt $input
   done
