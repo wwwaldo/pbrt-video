@@ -117,7 +117,7 @@ gen-pbrt-4d() {
   local out_dir=_out/4d
   mkdir -p $out_dir
   rm -v $out_dir/*
-  NUM_FRAMES=60 ./polytope.py pbrt $out_dir 5-3-3_frame%02d 5 3 3
+  NUM_FRAMES=48 ./polytope.py pbrt $out_dir 5-3-3_frame%02d 5 3 3
 
   ls -l $out_dir
 }
@@ -130,7 +130,9 @@ render-4d() {
 }
 
 video-4d() {
-  time convert -delay 6 -quality 95 _out/4d/*.png _out/4d.mp4
+  # 41.66 ms is 24 fps
+  # ticks are 10ms, so delay is 4.166
+  time convert -delay 4.1666 -quality 95 _out/4d/*.png _out/4d.mp4
   echo "Wrote $PWD/_out/4d.mp4"
 }
 
