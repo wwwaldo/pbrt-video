@@ -103,7 +103,11 @@ join-frames() {
 
   # 41.66 ms is 24 fps
   # ticks are 10ms, so delay is 4.166
-  time convert -delay 4.1666 -quality 95 "$@" out
+  #local delay=4.1666
+
+  local delay=50
+
+  time convert -delay $delay -quality 95 "$@" $out
   echo "Wrote $out"
 }
 
@@ -176,7 +180,7 @@ gen-120-cell() {
 
 # 1:01 at low quality
 render-120-cell() {
-  rm -v _out/4d/5-3-3/*.png
+  rm -v -f _out/4d/5-3-3/*.png
   time for input in _out/4d/5-3-3/*.pbrt; do
     pbrt $input
   done
