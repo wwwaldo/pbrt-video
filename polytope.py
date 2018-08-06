@@ -4,19 +4,19 @@ from __future__ import print_function
 polytope.py
 """
 
+import os
 import math
-from math import sin, cos
-
+from math import sin, cos  # shortcuts
 import sys
-
-from schlafli import schlafli_interpreter
-from render import generate_ply
 
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from mpl_toolkits.mplot3d import Axes3D
 from scipy import spatial
+
+from schlafli import schlafli_interpreter
+from render import generate_ply
 
 
 # https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
@@ -593,7 +593,8 @@ def main(argv):
       y_min, y_max = min(y), max(y)
       z_min, z_max = min(z), max(z)
 
-      mpl_points = None
+      with open('polytope-frame.template') as f:
+        pbrt_template = f.read()
 
       print('NEW w_offsets %s' % w_offsets)
       for i, w_offset in enumerate(w_offsets):
@@ -615,13 +616,24 @@ def main(argv):
 
         # TODO: intersections should get passed to generate_ply.
 
-        frame_out_path = out_path % i
+        filename_template = out_path  # rename
+        ply_out_path = filename_template % i + '.ply'
+        pbrt_out_path = filename_template % i + '.pbrt'
+        png_out_path = filename_template % i + '.png'
 
-        with open(frame_out_path, 'w') as f:
+        with open(ply_out_path, 'w') as f:
           # This does the ConvexHull!
           generate_ply.generate_ply(f, intersections,
                                     template_path='render/ply-header.template')
-        print('Wrote %s' % frame_out_path)
+        print('Wrote %s' % ply_out_path)
+
+        d = {
+            'out_filename': png_out_path,
+            'ply_filename': ply_out_path,
+        }
+        with open(pbrt_out_path, 'w') as f:
+          f.write(pbrt_template % d)
+        print('Wrote %s' % pbrt_out_path)
 
   elif action == 'plot':
     schlafli = [int(a) for a in argv[2:]]  # e.g. 4 3 for cube
