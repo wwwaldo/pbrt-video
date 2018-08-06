@@ -2,7 +2,7 @@
 # "temp.ply". Camera faces the origin. Only unit-size objs should be rendered.
 
 # Camera options.
-LookAt 3 3 2  # eye
+LookAt %(eye_x).5f %(eye_y).5f %(eye_z).5f  # eye
        .5 .5 0  # look at point
        0 0 1    # up vector
 Camera "perspective" "float fov" 45

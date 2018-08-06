@@ -175,7 +175,7 @@ video-4d() {
 # A particular one
 
 gen-120-cell() {
-  gen-pbrt-4d 5-3-3 10
+  gen-pbrt-4d 5-3-3 20
 }
 
 # 1:01 at low quality

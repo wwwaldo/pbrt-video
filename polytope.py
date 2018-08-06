@@ -15,6 +15,7 @@ import matplotlib.animation as animation
 from mpl_toolkits.mplot3d import Axes3D
 from scipy import spatial
 
+import rotate
 from schlafli import schlafli_interpreter
 from render import generate_ply
 
@@ -605,6 +606,15 @@ def main(argv):
       with open('polytope-frame.template') as f:
         pbrt_template = f.read()
 
+      # These two values from the original convex-render.pbrt file
+      orig_eye = np.array([3, 3, 2])
+      look_at = np.array([0.5, 0.5, 0])
+      radius = rotate.distance(look_at, orig_eye)
+
+      # Slight angle
+      eye_points = rotate.circle(look_at, radius, num_frames,
+                                 max_angle=math.pi/8)
+
       print('NEW w_offsets %s' % w_offsets)
       for i, w_offset in enumerate(w_offsets):
         print('--- OFFSET %d = %f' % (i, w_offset))
@@ -637,9 +647,13 @@ def main(argv):
                                     template_path='render/ply-header.template')
         print('Wrote %s' % ply_out_path)
 
+        eye = eye_points[i]
         d = {
             'out_filename': png_out_path,
             'ply_filename': ply_filename,
+            'eye_x': eye[0],
+            'eye_y': eye[1],
+            'eye_z': eye[2],
         }
         with open(pbrt_out_path, 'w') as f:
           f.write(pbrt_template % d)

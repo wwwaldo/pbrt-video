@@ -9,20 +9,17 @@ def distance(p1, p2):
           pow(abs(p1[1] - p2[1]), 2) + 
           pow(abs(p1[2] - p2[2]), 2) )
 
-def circle(center, radius, npoints):
-    points = np.linspace(0, 2 * pi, npoints)
+def circle(center, radius, npoints, max_angle=2*pi):
+    points = np.linspace(0, max_angle, npoints)
     
     # rotate in xy plane
     vals = np.array([ [radius * cos(x), radius * sin(x), 0] for x in points])
     vals += center
-    vals = np.round(vals, 4) # round to 4 decimals 
     
     return vals
 
 if __name__ == "__main__":
-    import numpy as np
-
-    points = circle([1,0,0], 3, 100)
+    points = circle([1,0,0], 3, 100, pi/6)
     # slice points
     flatpoints = points[:, :2]
     xlinspace = np.linspace(0, 2 * pi, 100)
