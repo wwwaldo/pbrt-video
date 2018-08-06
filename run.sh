@@ -114,17 +114,30 @@ ply-demo() {
 
 # TODO: Parameterize over different polytopes!  Give them different names.
 gen-pbrt-4d() {
-  local out_dir=_out/4d
+  local sch=${1:-'5-3-3'}  # schlafli number
+  local out_dir=_out/4d/$sch
   mkdir -p $out_dir
-  rm -v $out_dir/*
-  NUM_FRAMES=48 ./polytope.py pbrt $out_dir 5-3-3_frame%02d 5 3 3
+  rm -v -f $out_dir/*
+  # split 5 3 3 into 5 3 3
+  local -a sch_array=( ${sch//-/ } )
+  NUM_FRAMES=48 ./polytope.py pbrt $out_dir ${sch}_frame%02d "${sch_array[@]}"
 
   ls -l $out_dir
 }
 
-# Oops has to be in original dir
+gen-all-4d() {
+  # This one gives a Convex Hull error
+  #gen-pbrt-4d 3-3-3
+  gen-pbrt-4d 4-3-3
+  gen-pbrt-4d 3-4-3
+  gen-pbrt-4d 3-3-4
+  gen-pbrt-4d 5-3-3
+  gen-pbrt-4d 3-3-5
+}
+
 render-4d() {
-  time for input in _out/4d/*.pbrt; do
+  # 3:38 for 5 low quality videos
+  time for input in _out/4d/*/*.pbrt; do
     pbrt $input
   done
 }
@@ -132,8 +145,15 @@ render-4d() {
 video-4d() {
   # 41.66 ms is 24 fps
   # ticks are 10ms, so delay is 4.166
-  time convert -delay 4.1666 -quality 95 _out/4d/*.png _out/4d.mp4
-  echo "Wrote $PWD/_out/4d.mp4"
+  for dir in _out/4d/*; do
+    if ! test -d $dir; then
+      continue
+    fi
+    local name=$(basename $dir)
+    local out=_out/4d/$name.mp4
+    time convert -delay 4.1666 -quality 95 $dir/*.png $out
+    echo "Wrote $out"
+  done
 }
 
 
