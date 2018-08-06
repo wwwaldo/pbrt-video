@@ -4,14 +4,17 @@ TODO
 - DONE generate .ply files/.pbrt files from the 4D animation
 - DONE write a shell function to render them to a video
 
-- adjust frame rate of video:
+- DONE adjust frame rate of video:
   - 48 frames should be 2 seconds?
   - right now you have a delay of 6 ms?
+- DONE parameterize over different polytopes
 
 - rotate the camera to show it off
 
-- parameterize over different polytopes
 - experiment with different materials and bumps
+  - try glass
+
+- get a decent quality version of the contemporary bathroom scene running
 
 - combine this with the contemporary bathroom scene
   - place the polyhedron
@@ -24,6 +27,10 @@ TODO
 - optional:
   - rotate the 3d slice as its growing
   - more than one shape in the scene
+
+- loop the video: https://video.stackexchange.com/questions/16919/is-it-possible-to-create-a-continuously-looping-video
+  - using html5 <video> ?
+  - or just an mp4 tag?
 
 ------
 
