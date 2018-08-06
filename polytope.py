@@ -213,7 +213,10 @@ def Tilt4D(vertices):
   """
   4D version of above:
   """
-  theta_xy = math.pi / 8
+  # divide by a prime number to make sure it's not sligned
+  divisor = 11.0
+
+  theta_xy = math.pi / divisor
 
   rotation_xy = np.array([
       [ cos(theta_xy), sin(theta_xy), 0, 0],
@@ -222,7 +225,7 @@ def Tilt4D(vertices):
       [             0,             0, 0, 1],
   ])
 
-  theta_xz = math.pi / 20
+  theta_xz = 2 * math.pi / divisor
   rotation_xz = np.array([
       [ cos(theta_xz), 0, sin(theta_xz), 0],
       [0,              1,             0, 0],
@@ -230,7 +233,7 @@ def Tilt4D(vertices):
       [0,              0,             0, 1],
   ])
 
-  theta_zw = math.pi / 16
+  theta_zw = 3 * math.pi / divisor
   rotation_zw = np.array([
       [1, 0,             0,              0 ],
       [0, 1,             0,              0 ],
@@ -238,12 +241,12 @@ def Tilt4D(vertices):
       [0, 0, sin(theta_zw),  cos(theta_zw) ],
   ])
 
-  # TODO: I think I should tilt it in 3 directions, every one except Z axis?
-  # Actually there are 6 ways to rotate!  And we should rotate all of them
-  # except 1?
+  # TODO: Do 2 more axes?  There are 6 ways to rotate!  And we should rotate
+  # all of them except 1?
   # http://hollasch.github.io/ray4/Four-Space_Visualization_of_4D_Objects.html#s2.2
 
-  rotation = np.matmul(rotation_xy, rotation_xz, rotation_zw)
+  # Matrix multiply is @ !
+  rotation = rotation_xy @ rotation_xz @ rotation_zw
   return [np.matmul(rotation, v) for v in vertices]
 
 
