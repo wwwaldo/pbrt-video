@@ -112,17 +112,19 @@ ply-demo() {
   pbrt render/convex_render.pbrt
 }
 
+# TODO: Parameterize over different polytopes!  Give them different names.
 gen-pbrt-4d() {
   local out_dir=_out/4d
   mkdir -p $out_dir
-  NUM_FRAMES=20 ./polytope.py pbrt $out_dir 5-3-3_frame%02d 5 3 3
+  rm -v $out_dir/*
+  NUM_FRAMES=60 ./polytope.py pbrt $out_dir 5-3-3_frame%02d 5 3 3
 
   ls -l $out_dir
 }
 
 # Oops has to be in original dir
 render-4d() {
-  for input in _out/4d/*.pbrt; do
+  time for input in _out/4d/*.pbrt; do
     pbrt $input
   done
 }
