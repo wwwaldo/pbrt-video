@@ -233,7 +233,15 @@ def Tilt4D(vertices):
       [0,              0,             0, 1],
   ])
 
-  theta_zw = 3 * math.pi / divisor
+  theta_yz = 3 * math.pi / divisor
+  rotation_yz = np.array([
+      [ 1,              0,             0, 0],
+      [ 0,  cos(theta_yz), sin(theta_yz), 0],
+      [ 0, -sin(theta_yz), cos(theta_yz), 0],
+      [ 0,              0,             0, 1],
+  ])
+
+  theta_zw = 4 * math.pi / divisor
   rotation_zw = np.array([
       [1, 0,             0,              0 ],
       [0, 1,             0,              0 ],
@@ -246,7 +254,8 @@ def Tilt4D(vertices):
   # http://hollasch.github.io/ray4/Four-Space_Visualization_of_4D_Objects.html#s2.2
 
   # Matrix multiply is @ !
-  rotation = rotation_xy @ rotation_xz #@ rotation_zw
+  # Hm whenever I do rotation_zw, I get a ConvexHull error?
+  rotation = rotation_xy @ rotation_xz #@ rotation_yz
   return [np.matmul(rotation, v) for v in vertices]
 
 
