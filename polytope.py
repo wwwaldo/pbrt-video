@@ -548,12 +548,11 @@ def main(argv):
     ShowBounds()
 
   elif action == 'pbrt':
-    # Example: ./polytope.py pbrt foo.ply 4 3
 
-    # Example: ./polytope.py pbrt foo%02d.ply 4 3 3
+    out_dir = argv[2]
+    filename_template = argv[3]
 
-    out_path = argv[2]
-    schlafli = [int(a) for a in sys.argv[3:]]  # e.g. 4 3 for cube
+    schlafli = [int(a) for a in sys.argv[4:]]  # e.g. 4 3 3 for hypercube
     if len(schlafli) not in (2, 3):
       raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
 
@@ -561,9 +560,18 @@ def main(argv):
     vertices = [np.array(v) for v in vertices]
 
     if len(schlafli) == 2:  # Just plot a polygon
+      # Example: ./polytope.py pbrt foo.ply 4 3
+      schlafli = [int(a) for a in sys.argv[3:]]  # e.g. 4 3 for cube
+      if len(schlafli) not in (2, 3):
+        raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
+
+      vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
+      vertices = [np.array(v) for v in vertices]
 
       vertices = Tilt3D(vertices)
 
+      # Just treat this as a filename
+      out_path = os.path.join(out_dir, filename_template)
       with open(out_path, 'w') as f:
         generate_ply.generate_ply(f, vertices,
                                   template_path='render/ply-header.template')
@@ -571,7 +579,8 @@ def main(argv):
       print('Wrote %s' % out_path)
 
     elif len(schlafli) == 3:  # Animate the 4D case
-      num_frames = 40  # TODO: Make this a flag
+      # Example: ./polytope.py pbrt _out/4d foo%02d.ply 4 3 3
+      num_frames = 10  # TODO: Make this a flag
 
       # Calculate W range AFTER ROTATION.
       w = [v[3] for v in vertices]
@@ -616,10 +625,11 @@ def main(argv):
 
         # TODO: intersections should get passed to generate_ply.
 
-        filename_template = out_path  # rename
-        ply_out_path = filename_template % i + '.ply'
-        pbrt_out_path = filename_template % i + '.pbrt'
-        png_out_path = filename_template % i + '.png'
+        png_filename = filename_template % i + '.png'
+        ply_filename = filename_template % i + '.ply'
+
+        ply_out_path = os.path.join(out_dir, ply_filename)
+        pbrt_out_path = os.path.join(out_dir, filename_template % i + '.pbrt')
 
         with open(ply_out_path, 'w') as f:
           # This does the ConvexHull!
@@ -628,8 +638,8 @@ def main(argv):
         print('Wrote %s' % ply_out_path)
 
         d = {
-            'out_filename': png_out_path,
-            'ply_filename': ply_out_path,
+            'out_filename': png_filename,
+            'ply_filename': ply_filename,
         }
         with open(pbrt_out_path, 'w') as f:
           f.write(pbrt_template % d)

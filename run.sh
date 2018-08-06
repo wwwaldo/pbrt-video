@@ -64,7 +64,7 @@ frames() {
 }
 
 # Oops has to be in original dir
-render-all() {
+render-killeroo-frames() {
   # TODO: xargs
 
   # Or just use a single command to share?
@@ -116,12 +116,19 @@ ply-demo() {
   pbrt render/convex_render.pbrt
 }
 
-pbrt-4d() {
+gen-pbrt-4d() {
   local out_dir=_out/4d
   mkdir -p $out_dir
-  ./polytope.py pbrt $out_dir/5-3-3_frame%02d 5 3 3
+  ./polytope.py pbrt $out_dir 5-3-3_frame%02d 5 3 3
 
   ls -l $out_dir
+}
+
+# Oops has to be in original dir
+render-4d() {
+  for input in _out/4d/*.pbrt; do
+    pbrt $input
+  done
 }
 
 "$@"
