@@ -97,6 +97,16 @@ all-jpg() {
 
 # https://superuser.com/questions/249101/how-can-i-combine-30-000-images-into-a-timelapse-movie
 
+join-frames() {
+  local out=$1
+  shift
+
+  # 41.66 ms is 24 fps
+  # ticks are 10ms, so delay is 4.166
+  time convert -delay 4.1666 -quality 95 "$@" out
+  echo "Wrote $out"
+}
+
 make-video() {
   # with imagemagick
   # http://jupiter.ethz.ch/~pjt/makingMovies.html 
@@ -143,18 +153,34 @@ render-4d() {
 }
 
 video-4d() {
-  # 41.66 ms is 24 fps
-  # ticks are 10ms, so delay is 4.166
   for dir in _out/4d/*; do
     if ! test -d $dir; then
       continue
     fi
     local name=$(basename $dir)
     local out=_out/4d/$name.mp4
-    time convert -delay 4.1666 -quality 95 $dir/*.png $out
+    join-frames $dir/*.png $out
     echo "Wrote $out"
   done
 }
+
+# A particular one
+
+gen-120-cell() {
+  gen-pbrt-4d 5-3-3
+}
+
+# 1:01 at low quality
+render-120-cell() {
+  time for input in _out/4d/5-3-3/*.pbrt; do
+    pbrt $input
+  done
+}
+
+video-120-cell() {
+  join-frames _out/4d/5-3-3.mp4 _out/4d/5-3-3/*.png 
+}
+
 
 
 "$@"
