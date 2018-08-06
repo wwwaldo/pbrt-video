@@ -167,7 +167,7 @@ video-4d() {
     fi
     local name=$(basename $dir)
     local out=_out/4d/$name.mp4
-    join-frames $dir/*.png $out
+    join-frames $out $dir/*.png 
     echo "Wrote $out"
   done
 }
