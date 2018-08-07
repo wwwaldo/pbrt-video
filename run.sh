@@ -9,6 +9,11 @@
 #   ./run.sh render-all  # generates .exr files
 #   ./run.sh all-jpg     # generates .jpg files
 #   ./run.sh make-video  # generate .mp4 file
+#
+# Quick polytope:
+#
+#   ./run.sh all-120-cell
+
 
 set -o nounset
 set -o pipefail

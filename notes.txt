@@ -9,13 +9,13 @@ TODO
   - right now you have a delay of 6 ms?
 - DONE parameterize over different polytopes
 
-- rotate the camera to show it off
+- DONE rotate the camera to show it off
   - problem: if it doesn't rotate about the center, it looks like it's moving
 
 - experiment with different materials and bumps
-  - try glass
+  - DONE try glass
 
-- get a decent quality version of the contemporary bathroom scene running
+- DONE get a decent quality version of the contemporary bathroom scene running
 
 - combine this with the contemporary bathroom scene
   - place the polyhedron
