@@ -594,6 +594,7 @@ def main(argv):
     elif len(schlafli) == 3:  # Animate the 4D case
       # Example: ./polytope.py pbrt _out/4d foo%02d.ply 4 3 3
       num_frames = int(os.getenv('NUM_FRAMES', '10'))
+      frame_template = os.getenv('FRAME_TEMPLATE', 'polytope-frame.template')
 
       # Calculate W range AFTER ROTATION.
       w = [v[3] for v in vertices]
@@ -615,7 +616,7 @@ def main(argv):
       y_min, y_max = min(y), max(y)
       z_min, z_max = min(z), max(z)
 
-      with open('polytope-frame.template') as f:
+      with open(frame_template) as f:
         pbrt_template = f.read()
 
       # These two values from the original convex-render.pbrt file
