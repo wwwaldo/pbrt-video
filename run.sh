@@ -269,7 +269,7 @@ readonly NUM_BATHROOM_FRAMES=$(( FRAMES_PER_MACHINE * NUM_MACHINES ))
 
 pbrt-bathroom() {
   local out_dir=$BATHROOM_OUT
-  rm -v -f $out_dir/frame*.{ply,pbrt}
+  rm -v -f $out_dir/frame*.{ply,pbrt,png}
 
   NUM_FRAMES=$NUM_BATHROOM_FRAMES \
   FRAME_TEMPLATE=4d-contemporary-bathroom.template \
@@ -283,7 +283,11 @@ copy-bathroom-pbrt() {
   for machine in "${MACHINES[@]}"; do
     echo "=== $machine"
 
+    # UNCOMMENT TO CLEAR THE REMOTE DIRECTORY
+    #ssh $machine "rm -r -f /home/$USER/pbrt-video/bathroom/"
+
     ssh $machine "mkdir -p /home/$USER/pbrt-video/bathroom/"
+
     rsync --archive --verbose \
       $BATHROOM_OUT/ "$machine:/home/$USER/pbrt-video/bathroom/"
 
