@@ -33,7 +33,14 @@ deps() {
 }
 
 pbrt() {
-  ~andy/git/other/pbrt-v3-build/pbrt "$@"
+  if [[ "$USER" == "caroline_lin" ]] 
+  then ~/pbrt-exec "$@"
+  elif [[ "$USER" == "andy" ]]
+    ~andy/git/other/pbrt-v3-build/pbrt "$@"
+  else
+    echo "Illegal user. Are you trying to run pbrt locally?"
+    exit 1
+  fi
 }
 
 render-simple() {
