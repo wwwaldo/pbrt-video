@@ -332,7 +332,9 @@ dist-render-bathroom() {
   local hostname=$(hostname)
   time for input in ~/pbrt-video/bathroom/frame*.pbrt; do
     if should-render-frame $input $worker_id; then
+      echo
       echo "=== $input on $hostname ==="
+      echo
       $PBRT_REMOTE $input
     fi
   done
