@@ -38,7 +38,15 @@ deps() {
 }
 
 pbrt() {
-  ~andy/git/other/pbrt-v3-build/pbrt "$@"
+  if [[ "$USER" == "caroline_lin" ]] 
+  then ~/pbrt-exec "$@"
+  elif [[ "$USER" == "andy" ]]
+  then
+    ~andy/git/other/pbrt-v3-build/pbrt "$@"
+  else
+    echo "Please only run this on Heap!"
+    exit 1
+  fi
 }
 
 render-simple() {
