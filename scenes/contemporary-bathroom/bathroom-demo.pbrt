@@ -4,7 +4,7 @@ Film "image"
     "integer xresolution" 400 "integer yresolution" 400 # originally 500
     "string filename" "contemporary-bathroom.exr"
     "float scale" 5
-"float maxsampleluminance" 50
+"float maxsampleluminance" 100
 
 Scale -1 1 1
 LookAt -.5 1.1 -.5  # 0 1.25 -.5  # eye position

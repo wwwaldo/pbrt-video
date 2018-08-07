@@ -30,9 +30,9 @@ def main(argv):
     parser.add_argument('--resy', type=int, help='num pixels for y-coordinate')
     parser.add_argument('--nsamples', type=int, help='num samples per ray for sobol integrator')
     parser.add_argument('--depth', type=int, help='max depth per ray for integrator')
-
+    parser.add_argument('--fname', type=str, help='template name')
     args = parser.parse_args(argv[1:])
-    _bathroom_settings(args.resx, args.resy, args.nsamples, args.depth)
+    _bathroom_settings(args.resx, args.resy, args.nsamples, args.depth, template_path=args.fname)
     return
 
 if __name__ == "__main__":

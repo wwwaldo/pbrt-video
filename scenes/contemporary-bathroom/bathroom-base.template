@@ -55,7 +55,7 @@ AttributeEnd
 
 # Load 120-cell xsection
 AttributeBegin
-  Material "metal
+  Material "metal"
   Translate -1.6 1.2 -1.8
   Scale 0.14 0.14 0.14
   Shape "plymesh" "string filename" "%(ply_filename)s"
