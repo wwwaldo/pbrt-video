@@ -23,7 +23,17 @@
 #   ./run.sh pbrt-bathroom
 #   ./run.sh render-bathroom  # takes a couple minutes
 #   ./run.sh video-bathroom
-
+#
+# Distributed bathroom rendering:
+#
+# Once:
+#   ./run.sh copy-pbrt-bin   # copy the binary (one-time setup)o
+#
+#   - Check that MACHINES in this shell script is what you want.
+#   - Set FRAMES_PER_MACHINE
+#   ./run.sh pbrt-bathroom to generates input files
+#   ./run.sh copy-bathroom-pbrt
+#   ./run.sh dist-render-bathroom
 
 set -o nounset
 set -o pipefail
@@ -47,16 +57,27 @@ deps() {
   pip3 install numpy matplotlib scipy
 }
 
+# $USER is expanded on the local machine.
+readonly PBRT_REMOTE=/home/$USER/bin/pbrt 
+readonly ANDY_PBRT_BUILD=~andy/git/other/pbrt-v3-build/pbrt 
+
 pbrt() {
-  if [[ "$USER" == "caroline_lin" ]] 
-  then ~/pbrt-exec "$@"
-  elif [[ "$USER" == "andy" ]]
-  then
-    ~andy/git/other/pbrt-v3-build/pbrt "$@"
+  if [[ "$USER" == "caroline_lin" ]]; then
+    ~/pbrt-exec "$@"
+  elif [[ "$USER" == "andy" ]]; then
+    $ANDY_PBRT_BUILD "$@"
   else
-    echo "Please only run this on Heap!"
+    echo "Caroline: please only run this on Heap!"
     exit 1
   fi
+}
+
+copy-pbrt-bin() {
+  local dir=$(dirname $PBRT_REMOTE)
+  for machine in ${MACHINES[@]}; do
+    ssh $machine "mkdir -v -p $dir"
+    scp $ANDY_PBRT_BUILD $machine:$dir
+  done
 }
 
 render-simple() {
@@ -220,6 +241,7 @@ all-120-cell() {
   video-120-cell
 }
 
+# Must be a relative path
 readonly BATHROOM_OUT=_out/4d/bathroom
 
 # Put everything in the right dirs.
@@ -239,15 +261,88 @@ prepare-bathroom() {
   ls -l $BATHROOM_OUT
 }
 
+#readonly -a MACHINES=( {spring,mercer,crosby}.cluster.recurse.com )
+readonly -a MACHINES=( {spring,mercer}.cluster.recurse.com )
+readonly NUM_MACHINES=${#MACHINES[@]}
+
+readonly FRAMES_PER_MACHINE=10
+readonly NUM_BATHROOM_FRAMES=$(( FRAMES_PER_MACHINE * NUM_MACHINES ))
+
 pbrt-bathroom() {
   local out_dir=$BATHROOM_OUT
-  rm -v -f $out_dir/frame*.pbrt
+  rm -v -f $out_dir/frame*.{ply,pbrt,png}
 
-  NUM_FRAMES=5 \
+  NUM_FRAMES=$NUM_BATHROOM_FRAMES \
   FRAME_TEMPLATE=4d-contemporary-bathroom.template \
-    ./polytope.py pbrt $out_dir "frame%02d" 5 3 3
+    ./polytope.py pbrt $out_dir "frame%03d" 5 3 3
 
   ls $out_dir
+}
+
+copy-bathroom-pbrt() {
+  local i=0
+  for machine in "${MACHINES[@]}"; do
+    echo "=== $machine"
+
+    # UNCOMMENT TO CLEAR THE REMOTE DIRECTORY
+    #ssh $machine "rm -r -f /home/$USER/pbrt-video/$BATHROOM_OUT/"
+
+    ssh $machine "mkdir -p /home/$USER/pbrt-video/$BATHROOM_OUT/"
+
+    rsync --archive --verbose \
+      $BATHROOM_OUT/ "$machine:/home/$USER/pbrt-video/$BATHROOM_OUT/"
+
+    # So we can run ./run.sh dist-render-bathroom on each machine
+    rsync --archive --verbose \
+      $0 "$machine:/home/$USER/pbrt-video/"
+
+    echo $i > worker-id.txt
+
+    rsync --archive --verbose \
+      worker-id.txt "$machine:/home/$USER/pbrt-video/"
+
+    (( i++ )) || true  # bash annoyance with errexit!
+  done
+}
+
+# Do mod-sharding on worker ID!
+should-render-frame() {
+  local path=$1
+  local worker_id=$2
+
+  python3 -c '
+import re
+import sys
+
+num_workers = int(sys.argv[1])
+path = sys.argv[2]
+worker_id = int(sys.argv[3])
+
+m = re.search("frame(\d+)", path)
+if not m:
+  print("INVALID PATH %s" % path)
+  sys.exit(2)
+
+frame_number = int(m.group(1))
+
+# mod sharding!
+should_render = (frame_number % num_workers == worker_id)
+sys.exit(0 if should_render else 1)
+
+  ' $NUM_MACHINES $path $worker_id
+}
+
+dist-render-bathroom() {
+  local worker_id=$(cat worker-id.txt)
+  local hostname=$(hostname)
+  time for input in ~/pbrt-video/$BATHROOM_OUT/frame*.pbrt; do
+    if should-render-frame $input $worker_id; then
+      echo
+      echo "=== $input on $hostname ==="
+      echo
+      $PBRT_REMOTE $input
+    fi
+  done
 }
 
 # 1:01 at low quality
