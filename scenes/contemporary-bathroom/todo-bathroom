@@ -1,0 +1,35 @@
+aug 6th evening
+current status:
+got the polytope to finally render-in place!
+tested by angling the camera in the x direction only, 
+drawing a sphere, and translating the coordinates 1 by 1.
+
+quirks about the scene:
+the camera eye look-at point is by default actually pointing out of the scene.
+the entire washroom is roughly within a 2x1x1 rectangular prism.
+pbrt *does* render shapes when they intersect; if you don't see the shape, then it's probably because it's being occluded
+by some other object, or because camera is not pointing at it.
+using environment camera doesn't work very well. pbrt gets a segfault for this scene.
+every object has its translation, scaling etc. hard-coded into the scene.
+
+what's next:
+1. turn bathroom pbrt file into a template.
+move.pbrt is best option for this. it has correct shape placements. 
+if you need to reset the camera coords, diff it with lower.pbrt.
+
+2. comment out sphere code, and delete extra dodecahedrons in geometry.pbrt.
+
+3. move lighting code to be after the geometry includes, so errors go away.
+I think the errors are occurring because John Doe is putting the light declarations before the custom materials are declared.
+
+4. modify andy's code so that the video generation takes the bathroom file as a template.
+this may take some time; see if you can check in with andy.
+
+5. refactor and tweaks.
+this includes better lighting for the scene, and playing around with different materials and textures.
+
+6. Figure out why default meshlab transform method from earlier didn't work, and write down solution.
+
+
+
+
