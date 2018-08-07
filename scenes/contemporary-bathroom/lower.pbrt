@@ -53,9 +53,11 @@ Include "geometry.pbrt"
 
 ### Caroline's testing stuff ### 
 # A red sphere.
+# turns out that the sphere was too big, not too small, for the scene.
 AttributeBegin
+  Transform [ 0.220914 0. 0. -1.15159 0. 0.220914 0. 1.14304 0. 0. 0.220914 -1.84058 0. 0. 0. 1. ]
   Material "matte" "rgb Kd" [ .7 .2 .2 ]
-  Shape "sphere" "float radius" 10000
+  Shape "sphere" "float radius" 3 
 AttributeEnd
 
 WorldEnd
