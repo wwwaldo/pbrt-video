@@ -23,7 +23,16 @@
 #   ./run.sh pbrt-bathroom
 #   ./run.sh render-bathroom  # takes a couple minutes
 #   ./run.sh video-bathroom
-
+#
+# Distributed bathroom rendering:
+#
+# Once:
+#   ./run.sh copy-pbrt-bin   # copy the binary (one-time setup)o
+#
+#   - Check that MACHINES in this shell script is what you want.
+#   - Set FRAMES_PER_MACHINE
+#   ./run.sh pbrt-bathroom to generates input files
+#   ./run.sh copy-bathroom-pbrt
 
 set -o nounset
 set -o pipefail
@@ -51,9 +60,11 @@ deps() {
 readonly PBRT_REMOTE=/home/$USER/bin/pbrt 
 readonly ANDY_PBRT_BUILD=~andy/git/other/pbrt-v3-build/pbrt 
 
+# Make sure this is defined.
+DISTRIBUTED=${DISTRIBUTED:-}
+
 pbrt() {
   if [[ -n "$DISTRIBUTED" ]]; then
-    # T
     $PBRT_REMOTE "$@"
     return $?
   fi
@@ -68,11 +79,11 @@ pbrt() {
   fi
 }
 
-copy-pbrt() {
+copy-pbrt-bin() {
   local dir=$(dirname $PBRT_REMOTE)
   for machine in ${MACHINES[@]}; do
-    ssh $machine.cluster.recurse.com "mkdir -v -p $dir"
-    scp $ANDY_PBRT_BUILD $machine.cluster.recurse.com:$dir
+    ssh $machine "mkdir -v -p $dir"
+    scp $ANDY_PBRT_BUILD $machine:$dir
   done
 }
 
@@ -256,8 +267,8 @@ prepare-bathroom() {
   ls -l $BATHROOM_OUT
 }
 
-#readonly MACHINES=(spring mercer crosby)
-readonly -a MACHINES=(spring mercer)
+#readonly -a MACHINES=( {spring,mercer,crosby}.cluster.recurse.com )
+readonly -a MACHINES=( {spring,mercer}.cluster.recurse.com )
 readonly NUM_MACHINES=${#MACHINES[@]}
 
 readonly FRAMES_PER_MACHINE=10
@@ -272,6 +283,14 @@ pbrt-bathroom() {
     ./polytope.py pbrt $out_dir "frame%03d" 5 3 3
 
   ls $out_dir
+}
+
+copy-bathroom-pbrt() {
+  for machine in "${MACHINES[@]}"; do
+    ssh $machine "mkdir -p /home/$USER/pbrt-video/bathroom/"
+    rsync --archive --verbose \
+      $BATHROOM_OUT/ "$machine:/home/$USER/pbrt-video/bathroom/"
+  done
 }
 
 # Need to copy the PBRT binary, as well as the whole _out/4d/bathroom
