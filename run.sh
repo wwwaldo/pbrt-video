@@ -47,16 +47,33 @@ deps() {
   pip3 install numpy matplotlib scipy
 }
 
+# $USER is expanded on the local machine.
+readonly PBRT_REMOTE=/home/$USER/bin/pbrt 
+readonly ANDY_PBRT_BUILD=~andy/git/other/pbrt-v3-build/pbrt 
+
 pbrt() {
-  if [[ "$USER" == "caroline_lin" ]] 
-  then ~/pbrt-exec "$@"
-  elif [[ "$USER" == "andy" ]]
-  then
-    ~andy/git/other/pbrt-v3-build/pbrt "$@"
+  if [[ -n "$DISTRIBUTED" ]]; then
+    # T
+    $PBRT_REMOTE "$@"
+    return $?
+  fi
+
+  if [[ "$USER" == "caroline_lin" ]]; then
+    ~/pbrt-exec "$@"
+  elif [[ "$USER" == "andy" ]]; then
+    $ANDY_PBRT_BUILD "$@"
   else
-    echo "Please only run this on Heap!"
+    echo "Caroline: please only run this on Heap!"
     exit 1
   fi
+}
+
+copy-pbrt() {
+  local dir=$(dirname $PBRT_REMOTE)
+  for machine in ${MACHINES[@]}; do
+    ssh $machine.cluster.recurse.com "mkdir -v -p $dir"
+    scp $ANDY_PBRT_BUILD $machine.cluster.recurse.com:$dir
+  done
 }
 
 render-simple() {
@@ -239,15 +256,28 @@ prepare-bathroom() {
   ls -l $BATHROOM_OUT
 }
 
+#readonly MACHINES=(spring mercer crosby)
+readonly -a MACHINES=(spring mercer)
+readonly NUM_MACHINES=${#MACHINES[@]}
+
+readonly FRAMES_PER_MACHINE=10
+readonly NUM_BATHROOM_FRAMES=$(( FRAMES_PER_MACHINE * NUM_MACHINES ))
+
 pbrt-bathroom() {
   local out_dir=$BATHROOM_OUT
-  rm -v -f $out_dir/frame*.pbrt
+  rm -v -f $out_dir/frame*.{ply,pbrt}
 
-  NUM_FRAMES=5 \
+  NUM_FRAMES=$NUM_BATHROOM_FRAMES \
   FRAME_TEMPLATE=4d-contemporary-bathroom.template \
-    ./polytope.py pbrt $out_dir "frame%02d" 5 3 3
+    ./polytope.py pbrt $out_dir "frame%03d" 5 3 3
 
   ls $out_dir
+}
+
+# Need to copy the PBRT binary, as well as the whole _out/4d/bathroom
+# directory.
+distribute-pbrt() {
+  echo $NUM_BATHROOM_FRAMES
 }
 
 # 1:01 at low quality
