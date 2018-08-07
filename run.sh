@@ -241,6 +241,7 @@ all-120-cell() {
   video-120-cell
 }
 
+# Must be a relative path
 readonly BATHROOM_OUT=_out/4d/bathroom
 
 # Put everything in the right dirs.
@@ -284,12 +285,12 @@ copy-bathroom-pbrt() {
     echo "=== $machine"
 
     # UNCOMMENT TO CLEAR THE REMOTE DIRECTORY
-    #ssh $machine "rm -r -f /home/$USER/pbrt-video/bathroom/"
+    #ssh $machine "rm -r -f /home/$USER/pbrt-video/$BATHROOM_OUT/"
 
-    ssh $machine "mkdir -p /home/$USER/pbrt-video/bathroom/"
+    ssh $machine "mkdir -p /home/$USER/pbrt-video/$BATHROOM_OUT/"
 
     rsync --archive --verbose \
-      $BATHROOM_OUT/ "$machine:/home/$USER/pbrt-video/bathroom/"
+      $BATHROOM_OUT/ "$machine:/home/$USER/pbrt-video/$BATHROOM_OUT/"
 
     # So we can run ./run.sh dist-render-bathroom on each machine
     rsync --archive --verbose \
@@ -317,7 +318,7 @@ num_workers = int(sys.argv[1])
 path = sys.argv[2]
 worker_id = int(sys.argv[3])
 
-m = re.search("(\d+)", path)
+m = re.search("frame(\d+)", path)
 if not m:
   print("INVALID PATH %s" % path)
   sys.exit(2)
@@ -334,7 +335,7 @@ sys.exit(0 if should_render else 1)
 dist-render-bathroom() {
   local worker_id=$(cat worker-id.txt)
   local hostname=$(hostname)
-  time for input in ~/pbrt-video/bathroom/frame*.pbrt; do
+  time for input in ~/pbrt-video/$BATHROOM_OUT/frame*.pbrt; do
     if should-render-frame $input $worker_id; then
       echo
       echo "=== $input on $hostname ==="
