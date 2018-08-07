@@ -13,6 +13,13 @@
 # Quick polytope:
 #
 #   ./run.sh all-120-cell
+#
+# Bathroom:
+#
+#   ./run.sh prepare-bathroom  # copy files into the right place
+#   ./run.sh pbrt-bathroom
+#   ./run.sh render-bathroom  # takes a couple minutes
+#   ./run.sh video-bathroom
 
 
 set -o nounset
@@ -210,9 +217,45 @@ all-120-cell() {
   video-120-cell
 }
 
-bathroom-pbrt() {
+readonly BATHROOM_OUT=_out/4d/bathroom
+
+# Put everything in the right dirs.
+prepare-bathroom() {
+  rm -r -f $BATHROOM_OUT
+  mkdir -p $BATHROOM_OUT
+
+  for dir in scenes/contemporary-bathroom/{geometry,spds,textures,bsdfs}; do
+    cp -r $dir $BATHROOM_OUT
+  done
+
+  cp scenes/contemporary-bathroom/contemporary_bathroom.blend $BATHROOM_OUT
+
+  cp scenes/contemporary-bathroom/geometry.pbrt $BATHROOM_OUT/geometry
+  cp scenes/contemporary-bathroom/materials.pbrt $BATHROOM_OUT/geometry
+
+  ls -l $BATHROOM_OUT
+}
+
+pbrt-bathroom() {
+  local out_dir=$BATHROOM_OUT
+  rm -v -f $out_dir/frame*.pbrt
+
   FRAME_TEMPLATE=4d-contemporary-bathroom.template \
-    ./polytope.py pbrt _out/4d/5-3-3 "5-3-3_frame%02d.pbrt" 5 3 3
+    ./polytope.py pbrt $out_dir "frame%02d" 5 3 3
+
+  ls $out_dir
+}
+
+# 1:01 at low quality
+render-bathroom() {
+  rm -v -f $BATHROOM_OUT/*.png
+  time for input in $BATHROOM_OUT/frame*.pbrt; do
+    pbrt $input
+  done
+}
+
+video-bathroom() {
+  join-frames _out/4d/bathroom.mp4 $BATHROOM_OUT/*.png 
 }
 
 "$@"
