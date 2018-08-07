@@ -33,6 +33,7 @@
 #   - Set FRAMES_PER_MACHINE
 #   ./run.sh pbrt-bathroom to generates input files
 #   ./run.sh copy-bathroom-pbrt
+#   ./run.sh dist-render-bathroom
 
 set -o nounset
 set -o pipefail
@@ -60,15 +61,7 @@ deps() {
 readonly PBRT_REMOTE=/home/$USER/bin/pbrt 
 readonly ANDY_PBRT_BUILD=~andy/git/other/pbrt-v3-build/pbrt 
 
-# Make sure this is defined.
-DISTRIBUTED=${DISTRIBUTED:-}
-
 pbrt() {
-  if [[ -n "$DISTRIBUTED" ]]; then
-    $PBRT_REMOTE "$@"
-    return $?
-  fi
-
   if [[ "$USER" == "caroline_lin" ]]; then
     ~/pbrt-exec "$@"
   elif [[ "$USER" == "andy" ]]; then
@@ -286,17 +279,41 @@ pbrt-bathroom() {
 }
 
 copy-bathroom-pbrt() {
+  local i=0
   for machine in "${MACHINES[@]}"; do
+    echo "=== $machine"
+
     ssh $machine "mkdir -p /home/$USER/pbrt-video/bathroom/"
     rsync --archive --verbose \
       $BATHROOM_OUT/ "$machine:/home/$USER/pbrt-video/bathroom/"
+
+    # So we can run ./run.sh dist-render-bathroom on each machine
+    rsync --archive --verbose \
+      $0 "$machine:/home/$USER/pbrt-video/"
+
+    echo $i > worker-id.txt
+
+    rsync --archive --verbose \
+      worker-id.txt "$machine:/home/$USER/pbrt-video/"
+
+    (( i++ )) || true  # bash annoyance with errexit!
   done
 }
 
-# Need to copy the PBRT binary, as well as the whole _out/4d/bathroom
-# directory.
-distribute-pbrt() {
-  echo $NUM_BATHROOM_FRAMES
+should-render-frame() {
+  local path=$1
+  local worker_id=$2
+
+  return 0
+}
+
+dist-render-bathroom() {
+  local worker_id=$(cat worker-id.txt)
+  time for input in ~/pbrt-video/bathroom/frame*.pbrt; do
+    if should-render-frame $input $worker_id; then
+      $PBRT_REMOTE $input
+    fi
+  done
 }
 
 # 1:01 at low quality
