@@ -1,18 +1,6 @@
 # Converted from "contemporary_bathroom.obj" by obj2pbrt
 # Scene bounds: (-7.714911, -4.399745, -11.240966) - (3.559370, 3.157831, 2.465844)
 
-# battub (more shiny interior?)
-MakeNamedMaterial "bathtube" 
-   "string type" "fourier" "string bsdffile" "bsdfs/ceramic.bsdf"
-
-# porcelain bathtub (exterior?)
-MakeNamedMaterial "bathtube.001" 
-   "string type" "fourier" "string bsdffile" "bsdfs/ceramic.bsdf"
-
-# frothy bubbly water
-MakeNamedMaterial "bathtube.002" 
-        "string type" [ "mirror" ]
-
 # rug on floor
 Texture "rug-kd" "color" "imagemap"
     "string filename" "textures/tapis.png"

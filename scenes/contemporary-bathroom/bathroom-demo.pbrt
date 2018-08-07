@@ -1,21 +1,28 @@
+# Original bathroom file with dodecahedron model
 
 Film "image"
     "integer xresolution" 400 "integer yresolution" 400 # originally 500
     "string filename" "contemporary-bathroom.exr"
-    "float scale" 3
+    "float scale" 5
 "float maxsampleluminance" 50
 
-# imgtool convert -bloomlevel 3 -bloomscale .1 contemporary-bathroom.{exr,png}
-
 Scale -1 1 1
-LookAt 0 1.25 -.5   -10 0 -9  0 1 0
-Camera "perspective" "float fov" 65
+LookAt -.5 1.1 -.5  # 0 1.25 -.5  # eye position
+       -.8 1.1 -.9 # -.5 1.25 -.9 is towards mirror (lookat point)
+       0 1 0       # up vector 
 
-Sampler "sobol" "integer pixelsamples" 32 # 8192
-Integrator "bdpt" "integer maxdepth" 3 # 10
+Camera "perspective" "float fov" 70 # 65
+
+# Use these values for a 10s render time
+Sampler "sobol" "integer pixelsamples" 32
+Integrator "bdpt" "integer maxdepth" 3
+
+# Sampler "sobol" "integer pixelsamples" 128 # 8192
+# Integrator "bdpt" "integer maxdepth" 6 # 10
 
 WorldBegin
 
+Include "materials.pbrt"
 
 ###########################################################################
 # lights
@@ -47,17 +54,27 @@ AttributeEnd
 
 ###########################################################################
 
-Include "materials.pbrt"
+#AttributeBegin
+#  Material "matte"
+#  Translate -2 1 -1.
+#  Shape "sphere" "float radius" 0.3
+#AttributeEnd
+
+AttributeBegin
+Translate -.5 1.1 -.5 # same as camera eye
+LightSource "point" "rgb I" [ .5 .5 .5 ]
+AttributeEnd
+
+AttributeBegin
+  Material "metal"
+  Translate -1.6 1.2 -1.8
+  Scale 0.14 0.14 0.14
+  Shape "plymesh" "string filename" "models/dodecsmall.ply"
+AttributeEnd
+
 
 Include "geometry.pbrt"
 
-### Caroline's testing stuff ### 
-# A red sphere.
-# turns out that the sphere was too big, not too small, for the scene.
-AttributeBegin
-  Transform [ 0.220914 0. 0. -1.15159 0. 0.220914 0. 1.14304 0. 0. 0.220914 -1.84058 0. 0. 0. 1. ]
-  Material "matte" "rgb Kd" [ .7 .2 .2 ]
-  Shape "sphere" "float radius" 3 
-AttributeEnd
 
 WorldEnd
+
