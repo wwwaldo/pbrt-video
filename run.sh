@@ -210,4 +210,8 @@ all-120-cell() {
   video-120-cell
 }
 
+bathroom() {
+  ./polytope-bathroom.py pbrt _out/4d/5-3-3 "5-3-3_frame%02d.pbrt" 5 3 3
+}
+
 "$@"
