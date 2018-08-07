@@ -36,9 +36,10 @@ pbrt() {
   if [[ "$USER" == "caroline_lin" ]] 
   then ~/pbrt-exec "$@"
   elif [[ "$USER" == "andy" ]]
+  then
     ~andy/git/other/pbrt-v3-build/pbrt "$@"
   else
-    echo "Illegal user. Are you trying to run pbrt locally?"
+    echo "Please only run this on Heap!"
     exit 1
   fi
 }
