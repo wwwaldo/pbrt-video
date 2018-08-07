@@ -300,17 +300,39 @@ copy-bathroom-pbrt() {
   done
 }
 
+# Do mod-sharding on worker ID!
 should-render-frame() {
   local path=$1
   local worker_id=$2
 
-  return 0
+  python3 -c '
+import re
+import sys
+
+num_workers = int(sys.argv[1])
+path = sys.argv[2]
+worker_id = int(sys.argv[3])
+
+m = re.search("(\d+)", path)
+if not m:
+  print("INVALID PATH %s" % path)
+  sys.exit(2)
+
+frame_number = int(m.group(1))
+
+# mod sharding!
+should_render = (frame_number % num_workers == worker_id)
+sys.exit(0 if should_render else 1)
+
+  ' $NUM_MACHINES $path $worker_id
 }
 
 dist-render-bathroom() {
   local worker_id=$(cat worker-id.txt)
+  local hostname=$(hostname)
   time for input in ~/pbrt-video/bathroom/frame*.pbrt; do
     if should-render-frame $input $worker_id; then
+      echo "=== $input on $hostname ==="
       $PBRT_REMOTE $input
     fi
   done
