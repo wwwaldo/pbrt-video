@@ -16,7 +16,10 @@
 #
 # Bathroom:
 #
+# Once:
 #   ./run.sh prepare-bathroom  # copy files into the right place
+#
+# Each time:
 #   ./run.sh pbrt-bathroom
 #   ./run.sh render-bathroom  # takes a couple minutes
 #   ./run.sh video-bathroom
@@ -240,6 +243,7 @@ pbrt-bathroom() {
   local out_dir=$BATHROOM_OUT
   rm -v -f $out_dir/frame*.pbrt
 
+  NUM_FRAMES=5 \
   FRAME_TEMPLATE=4d-contemporary-bathroom.template \
     ./polytope.py pbrt $out_dir "frame%02d" 5 3 3
 
