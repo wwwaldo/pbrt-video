@@ -1,3 +1,7 @@
+aug 7th afternoon
+current status:
+
+
 aug 6th evening
 current status:
 got the polytope to finally render-in place!
@@ -13,19 +17,19 @@ using environment camera doesn't work very well. pbrt gets a segfault for this s
 every object has its translation, scaling etc. hard-coded into the scene.
 
 what's next:
-1. turn bathroom pbrt file into a template.
+DONE 1. turn bathroom pbrt file into a template.
 move.pbrt is best option for this. it has correct shape placements. 
 if you need to reset the camera coords, diff it with lower.pbrt.
 
-2. comment out sphere code, and delete extra dodecahedrons in geometry.pbrt.
+DONE 2. comment out sphere code, and delete extra dodecahedrons in geometry.pbrt.
 
-3. move lighting code to be after the geometry includes, so errors go away.
+[TO-DO] 3. move lighting code to be after the geometry includes, so errors go away.
 I think the errors are occurring because John Doe is putting the light declarations before the custom materials are declared.
 
-4. modify andy's code so that the video generation takes the bathroom file as a template.
+[IPR] 4. modify andy's code so that the video generation takes the bathroom file as a template.
 this may take some time; see if you can check in with andy.
 
-5. refactor and tweaks.
+[IPR] 5. refactor and tweaks.
 this includes better lighting for the scene, and playing around with different materials and textures.
 
 6. Figure out why default meshlab transform method from earlier didn't work, and write down solution.
