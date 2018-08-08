@@ -469,6 +469,11 @@ backup-mp4() {
     _out/4d/ spring.cluster.recurse.com:backup/
 }
 
+make_sky () {
+  ~/andy-pbrt/imgtool makesky -elevation 40 --outfile textures/sky.exr 
+}
+
+
 if test $(basename $0) = 'run.sh'; then
   "$@"
 fi
