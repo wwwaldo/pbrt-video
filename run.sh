@@ -279,17 +279,18 @@ prepare-bathroom() {
 readonly -a MACHINES=( {spring,mercer,broome}.cluster.recurse.com )
 readonly NUM_MACHINES=${#MACHINES[@]}
 
-#readonly FRAMES_PER_MACHINE=5
-readonly FRAMES_PER_MACHINE=10
+readonly FRAMES_PER_MACHINE=5
+#readonly FRAMES_PER_MACHINE=10
 readonly NUM_BATHROOM_FRAMES=$(( FRAMES_PER_MACHINE * NUM_MACHINES ))
 
 pbrt-bathroom() {
   local out_dir=$BATHROOM_OUT
   rm -v -f $out_dir/frame*.{ply,pbrt,png}
 
-  NUM_FRAMES=$NUM_BATHROOM_FRAMES \
-  FRAME_TEMPLATE=4d-contemporary-bathroom.template \
-    ./polytope.py pbrt $out_dir "frame%03d" 5 3 3
+  ./polytope.py \
+    --num-frames $NUM_BATHROOM_FRAMES \
+    --frame-template 4d-contemporary-bathroom.template \
+    pbrt $out_dir "frame%03d" 5 3 3
 
   ls $out_dir
 }

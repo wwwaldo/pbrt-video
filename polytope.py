@@ -356,14 +356,12 @@ def Plot(schlafli):
     plt.show()
 
   elif len(schlafli) == 3:
-    num_frames = 40
-
     if 1:
       PrintBounds(vertices)
 
     # Calculate W range AFTER ROTATION.
     w = [v[3] for v in vertices]
-    w_offsets = np.linspace(-max(w), -min(w), num=num_frames)
+    w_offsets = np.linspace(-max(w), -min(w), num=opts.num_frames)
 
     print('w_offsets:')
     print(w_offsets)
@@ -568,7 +566,12 @@ def main(argv):
       '--integrator-depth', type=int, default=3,
       help='max depth per ray for integrator')
   parser.add_option(
-      '--fname', type=str, help='template name')
+      '--num-frames', type=int, default=5,
+      help='number of frames')
+  parser.add_option(
+      '--frame-template', type=str, default='polytope-frame.template',
+      help='PBRT template to expand')
+
   opts, argv = parser.parse_args(argv[1:])
 
   try:
@@ -611,13 +614,9 @@ def main(argv):
       print('Wrote %s' % out_path)
 
     elif len(schlafli) == 3:  # Animate the 4D case
-      # Example: ./polytope.py pbrt _out/4d foo%02d.ply 4 3 3
-      num_frames = int(os.getenv('NUM_FRAMES', '10'))
-      frame_template = os.getenv('FRAME_TEMPLATE', 'polytope-frame.template')
-
       # Calculate W range AFTER ROTATION.
       w = [v[3] for v in vertices]
-      w_offsets = np.linspace(-max(w), -min(w), num=num_frames)
+      w_offsets = np.linspace(-max(w), -min(w), num=opts.num_frames)
 
       print('w_offsets:')
       print(w_offsets)
@@ -635,7 +634,7 @@ def main(argv):
       y_min, y_max = min(y), max(y)
       z_min, z_max = min(z), max(z)
 
-      with open(frame_template) as f:
+      with open(opts.frame_template) as f:
         pbrt_template = f.read()
 
       # These two values from the original convex-render.pbrt file
@@ -644,7 +643,7 @@ def main(argv):
       radius = rotate.distance(look_at, orig_eye)
 
       # Rotate a quarter turn
-      eye_points = rotate.circle(look_at, radius, num_frames,
+      eye_points = rotate.circle(look_at, radius, opts.num_frames,
                                  max_angle=math.pi/2)
 
       print('NEW w_offsets %s' % w_offsets)
@@ -706,9 +705,8 @@ def main(argv):
     if len(schlafli) not in (2, 3):
       raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
 
-    num_frames = 20
     if len(schlafli) == 2:
-      Animate3D(schlafli, num_frames)
+      Animate3D(schlafli, opts.num_frames)
     elif len(schlafli) == 3:
       # Inconsistency: In 4D, the Plot() functions animates 
       # We used a different method to animate 4D than 3D.
