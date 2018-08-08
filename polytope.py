@@ -4,6 +4,7 @@ from __future__ import print_function
 polytope.py
 """
 
+import optparse
 import os
 import math
 from math import sin, cos  # shortcuts
@@ -531,7 +532,7 @@ def Animate3D(schlafli, num_frames):
   fig = plt.figure()
   ax = fig.gca(projection='3d')  # create 3d axes?
 
-  # Draw the initial frame -- calls ax.plot()0
+  # Draw the initial frame -- calls ax.plot()
   plane = None
   mpl_lines, mpl_points = Draw(ax, edges, plane, intersections)
 
@@ -552,24 +553,23 @@ def Animate3D(schlafli, num_frames):
 
 
 def main(argv):
-  if 0:
-    parser = argparse.ArgumentParser(
-        description='Tweak quality settings for bathroom scene.')
-    parser.add_argument(
-        '--resx', type=int, help='num pixels for x-coordinate')
-    parser.add_argument(
-        '--resy', type=int, help='num pixels for y-coordinate')
-    parser.add_argument(
-        '--nsamples', type=int,
-        help='num samples per ray for sobol integrator')
-    parser.add_argument(
-        '--depth', type=int, help='max depth per ray for integrator')
-    parser.add_argument(
-        '--fname', type=str, help='template name')
-    args = parser.parse_args(argv[1:])
+  parser = optparse.OptionParser(
+      description='Tweak quality settings for bathroom scene.')
+  parser.add_option(
+      '--resx', type=int, help='num pixels for x-coordinate')
+  parser.add_option(
+      '--resy', type=int, help='num pixels for y-coordinate')
+  parser.add_option(
+      '--nsamples', type=int,
+      help='num samples per ray for sobol integrator')
+  parser.add_option(
+      '--depth', type=int, help='max depth per ray for integrator')
+  parser.add_option(
+      '--fname', type=str, help='template name')
+  opts, argv = parser.parse_args(argv[1:])
 
   try:
-    action = argv[1]
+    action = argv[0]
   except IndexError:
     raise RuntimeError('Action required: bounds, plot, or pbrt')
 
@@ -578,10 +578,10 @@ def main(argv):
 
   elif action == 'pbrt':
 
-    out_dir = argv[2]
-    filename_template = argv[3]
+    out_dir = argv[1]
+    filename_template = argv[2]
 
-    schlafli = [int(a) for a in sys.argv[4:]]  # e.g. 4 3 3 for hypercube
+    schlafli = [int(a) for a in sys.argv[3:]]  # e.g. 4 3 3 for hypercube
     if len(schlafli) not in (2, 3):
       raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
 
@@ -696,14 +696,14 @@ def main(argv):
         print('Wrote %s' % pbrt_out_path)
 
   elif action == 'plot':
-    schlafli = [int(a) for a in argv[2:]]  # e.g. 4 3 for cube
+    schlafli = [int(a) for a in argv[1:]]  # e.g. 4 3 for cube
     if len(schlafli) not in (2, 3):
       raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
 
     Plot(schlafli)
 
   elif action == 'anim':  # animate
-    schlafli = [int(a) for a in argv[2:]]  # e.g. 4 3 for cube
+    schlafli = [int(a) for a in argv[1:]]  # e.g. 4 3 for cube
     if len(schlafli) not in (2, 3):
       raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
 
