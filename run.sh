@@ -470,10 +470,17 @@ backup-mp4() {
     _out/4d/ spring.cluster.recurse.com:backup/
 }
 
+# ORIGINAL COMMAND
 make_sky () {
   ~/andy-pbrt/imgtool makesky -elevation 40 --outfile textures/sky.exr 
 }
 
+sky-exr() {
+  local out=$BATHROOM_OUT/textures/sky.exr 
+  time ~/git/other/pbrt-v3-build/imgtool makesky \
+    -elevation 40 --outfile $out
+  ls -l $out
+}
 
 if test $(basename $0) = 'run.sh'; then
   "$@"
