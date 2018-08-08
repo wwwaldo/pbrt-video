@@ -602,14 +602,34 @@ def GenPbrt(opts, argv):
     with open(opts.frame_template) as f:
       pbrt_template = f.read()
 
-    # These two values from the original convex-render.pbrt file
-    orig_eye = np.array([3, 3, 2])
-    look_at = np.array([0.5, 0.5, 0])
-    radius = rotate.distance(look_at, orig_eye)
+    if opts.camera == 'fixed':
+      orig_eye = np.array([-0.5, 1.1, -0.5])
+      eye_points = np.array([orig_eye for _ in range(opts.num_frames)])
 
-    # Rotate a quarter turn
-    eye_points = rotate.circle(look_at, radius, opts.num_frames,
-                               max_angle=math.pi/2)
+    elif opts.camera == '120cell':
+      # These two values from the original convex-render.pbrt file
+      orig_eye = np.array([3, 3, 2])
+      look_at = np.array([0.5, 0.5, 0])
+      radius = rotate.distance(look_at, orig_eye)
+
+      # Rotate a quarter turn
+      eye_points = rotate.circle(look_at, radius, opts.num_frames,
+                                 max_angle=math.pi/2)
+
+    elif opts.camera == 'bathroom':
+      # These two values from 4d-*.template file
+      # LookAt -.5 1.1 -.5  # 0 1.25 -.5  # eye position
+      # -.8 1.1 -.9 # -.5 1.25 -.9 is towards mirror (lookat point)
+
+      orig_eye = np.array([-0.5, 1.1, -0.5])
+      look_at = np.array([-0.8, 1.1, -0.9])
+      radius = rotate.distance(look_at, orig_eye)
+
+      # Rotate quarter turn
+      eye_points = rotate.circle(look_at, radius, opts.num_frames,
+                                 max_angle=math.pi/2)
+    else:
+      raise RuntimeError('Invalid camera %r' % opts.camera)
 
     print('NEW w_offsets %s' % w_offsets)
     for i, w_offset in enumerate(w_offsets):
@@ -687,6 +707,9 @@ def main(argv):
   parser.add_option(
       '--out-template', type=str, default='frame%03d',
       help='Python % template string for frame name')
+  parser.add_option(
+      '--camera', type=str, default='fixed',
+      help='Type of camera rotation for a particular scene')
 
   opts, argv = parser.parse_args(argv[1:])
 

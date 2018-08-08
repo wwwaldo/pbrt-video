@@ -198,7 +198,10 @@ gen-pbrt-4d() {
   local -a sch_array=( ${sch//-/ } )
   ./polytope.py \
     --num-frames $num_frames \
-    pbrt $out_dir ${sch}_frame%02d "${sch_array[@]}"
+    --camera '120cell' \
+    --out-dir $out_dir \
+    --out-template ${sch}_frame%02d \
+    pbrt "${sch_array[@]}"
 
   ls -l $out_dir
 }
@@ -331,7 +334,9 @@ gen-pbrt-bathroom-quick() {
     --integrator-depth 3 \
     --out-dir $out_dir  \
     --out-template 'frame%03d' \
+    --camera fixed \
     pbrt 5 3 3
+    #--camera bathroom \
 
   ls $out_dir
 }
