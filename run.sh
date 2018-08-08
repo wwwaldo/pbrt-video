@@ -343,6 +343,27 @@ gen-pbrt-bathroom-quick() {
   ls $out_dir
 }
 
+gen-pbrt-bathroom-pngtest() {
+  local out_dir=$BATHROOM_OUT
+  rm -v -f $out_dir/frame*.{ply,pbrt,png}
+
+  ./polytope.py \
+    --num-frames 1 \
+    --frame-template 4d-contemporary-bathroom.template \
+    --width 2000 \
+    --height 2000 \
+    --pixel-samples 16 \
+    --integrator-depth 3 \
+    --out-dir $out_dir  \
+    --out-template 'frame%03d' \
+    --camera bathroom \
+    pbrt 5 3 3
+    #--camera fixed \
+
+  ls $out_dir
+}
+
+
 # Normally we rsync but this is if you want to start over.
 remove-remote-dirs() {
   for machine in "${MACHINES[@]}"; do
