@@ -278,7 +278,8 @@ prepare-bathroom() {
 
 #readonly -a MACHINES=( {spring,mercer,crosby}.cluster.recurse.com )
 # crosby is down
-readonly -a MACHINES=( {spring,mercer,broome}.cluster.recurse.com )
+#readonly -a MACHINES=( {spring,mercer,broome}.cluster.recurse.com )
+readonly -a MACHINES=( {spring,mercer}.cluster.recurse.com )
 readonly NUM_MACHINES=${#MACHINES[@]}
 
 readonly FRAMES_PER_MACHINE=30
@@ -289,8 +290,9 @@ readonly NUM_BATHROOM_FRAMES=$(( FRAMES_PER_MACHINE * NUM_MACHINES ))
 #  5 frames/machine,  64 pixel samples, 3 depth: 3 minutes on each machine
 #                   This is 30 seconds/frame instead of 10 seconds with 32.
 #     
-# 30 frames/machine, 128 pixel samples, 3 depth: ?
+# 30 frames/machine, 128 pixel samples, 3 depth: 30 minutes on each machine
 #                   This is 60-70 seconds/frame
+#                   90 frames ended up at about 11 seconds.  Looks OK.
 
 pbrt-bathroom() {
   local out_dir=$BATHROOM_OUT
