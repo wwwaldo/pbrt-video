@@ -1,33 +1,14 @@
 TODO
 ----
 
-- DONE generate .ply files/.pbrt files from the 4D animation
-- DONE write a shell function to render them to a video
-
-- DONE adjust frame rate of video:
-  - 48 frames should be 2 seconds?
-  - right now you have a delay of 6 ms?
-- DONE parameterize over different polytopes
-
-- DONE rotate the camera to show it off
-  - problem: if it doesn't rotate about the center, it looks like it's moving
-
-- experiment with different materials and bumps
-  - DONE try glass
-
-- DONE get a decent quality version of the contemporary bathroom scene running
-
-- combine this with the contemporary bathroom scene
-  - place the polyhedron
-  - size of polyhedron -- scale it?
-  - place the camera -- same for every polytope?
-  - render low quality version
-
-- render high quality version
+- in _out/4d/remote-bathroom, save the parameters somewhere?
+  - that is, don't delete any of the .png or the .mp4 
 
 - optional:
   - rotate the 3d slice as its growing
+  - or just rotate/pan the camera?
   - more than one shape in the scene
+
 
 - loop the video: https://video.stackexchange.com/questions/16919/is-it-possible-to-create-a-continuously-looping-video
   - using html5 <video> ?
