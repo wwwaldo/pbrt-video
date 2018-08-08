@@ -1,6 +1,6 @@
 
 Film "image"
-    "integer xresolution" %(resolution_x)d "integer yresolution" %(resolution_y)d
+    "integer xresolution" %(width)d "integer yresolution" %(height)d
     "string filename" "%(out_filename)s"
     "float scale" 3
 "float maxsampleluminance" 50
@@ -12,8 +12,8 @@ LookAt -.5 1.1 -.5  # 0 1.25 -.5  # eye position
 
 Camera "perspective" "float fov" 70 # 65
 
-Sampler "sobol" "integer pixelsamples" %(sobol_pixelsamples)d
-Integrator "bdpt" "integer maxdepth" %(bdpt_integrator_depth)d
+Sampler "sobol" "integer pixelsamples" %(pixel_samples)d
+Integrator "bdpt" "integer maxdepth" %(integrator_depth)d
 
 WorldBegin
 

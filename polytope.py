@@ -556,14 +556,17 @@ def main(argv):
   parser = optparse.OptionParser(
       description='Tweak quality settings for bathroom scene.')
   parser.add_option(
-      '--resx', type=int, help='num pixels for x-coordinate')
+      '--width', type=int, default=400, help='num pixels for x-coordinate')
   parser.add_option(
-      '--resy', type=int, help='num pixels for y-coordinate')
+      '--height', type=int, default=400, help='num pixels for y-coordinate')
+  # 32 is low quality, 8192 is high quality
   parser.add_option(
-      '--nsamples', type=int,
+      '--pixel-samples', type=int, default=32,
       help='num samples per ray for sobol integrator')
+  # 3 is low quality, 10 is high quality
   parser.add_option(
-      '--depth', type=int, help='max depth per ray for integrator')
+      '--integrator-depth', type=int, default=3,
+      help='max depth per ray for integrator')
   parser.add_option(
       '--fname', type=str, help='template name')
   opts, argv = parser.parse_args(argv[1:])
@@ -577,11 +580,11 @@ def main(argv):
     ShowBounds()
 
   elif action == 'pbrt':
-
+    # TODO: These should be flags
     out_dir = argv[1]
     filename_template = argv[2]
 
-    schlafli = [int(a) for a in sys.argv[3:]]  # e.g. 4 3 3 for hypercube
+    schlafli = [int(a) for a in argv[3:]]  # e.g. 4 3 3 for hypercube
     if len(schlafli) not in (2, 3):
       raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
 
@@ -682,14 +685,10 @@ def main(argv):
             'eye_y': eye[1],
             'eye_z': eye[2],
 
-            # TODO: Get these from flags
-            'resolution_x': 400,
-            'resolution_y': 400,
-
-            # high: 8192
-            'sobol_pixelsamples' : 32,
-            # high: 10
-            'bdpt_integrator_depth' :3,
+            'width': opts.width,
+            'height': opts.height,
+            'pixel_samples': opts.pixel_samples,
+            'integrator_depth': opts.integrator_depth,
         }
         with open(pbrt_out_path, 'w') as f:
           f.write(pbrt_template % d)
