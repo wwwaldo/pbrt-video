@@ -29,11 +29,24 @@
 # Once:
 #   ./run.sh copy-pbrt-bin   # copy the binary (one-time setup)o
 #
+# On "master" machine:
+
 #   - Check that MACHINES in this shell script is what you want.
 #   - Set FRAMES_PER_MACHINE
+#
 #   ./run.sh pbrt-bathroom to generates input files
 #   ./run.sh copy-bathroom-pbrt
+#   MAYBE: ./run.sh remove-remote-png  # if there is anythinng left over
+#
+# On each machine in a tmux session:j
+#
+#   cd ~/pbrt-video
 #   ./run.sh dist-render-bathroom
+#
+# Back on the master machine:
+#
+#   ./run.sh copy-remote-png
+#   ./run.sh video-remote-bathroom
 
 set -o nounset
 set -o pipefail
@@ -76,7 +89,7 @@ copy-pbrt-bin() {
   local dir=$(dirname $PBRT_REMOTE)
   for machine in ${MACHINES[@]}; do
     ssh $machine "mkdir -v -p $dir"
-    scp $ANDY_PBRT_BUILD $machine:$dir
+    rsync --archive --verbose $ANDY_PBRT_BUILD $machine:$dir/
   done
 }
 
@@ -262,10 +275,12 @@ prepare-bathroom() {
 }
 
 #readonly -a MACHINES=( {spring,mercer,crosby}.cluster.recurse.com )
-readonly -a MACHINES=( {spring,mercer}.cluster.recurse.com )
+# crosby is down
+readonly -a MACHINES=( {spring,mercer,broome}.cluster.recurse.com )
 readonly NUM_MACHINES=${#MACHINES[@]}
 
-readonly FRAMES_PER_MACHINE=5
+#readonly FRAMES_PER_MACHINE=5
+readonly FRAMES_PER_MACHINE=10
 readonly NUM_BATHROOM_FRAMES=$(( FRAMES_PER_MACHINE * NUM_MACHINES ))
 
 pbrt-bathroom() {
