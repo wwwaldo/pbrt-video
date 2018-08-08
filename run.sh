@@ -287,8 +287,26 @@ remove-remote-dirs() {
   done
 }
 
-# TODO: I think this needs a job ID.  Because we render locally and then copy
-# the files to the remote machines, which isn't right.
+remove-remote-png() {
+  for machine in "${MACHINES[@]}"; do
+    echo "=== $machine"
+    ssh $machine "rm -r -f -v /home/$USER/pbrt-video/$BATHROOM_OUT/*.png"
+  done
+}
+
+readonly JOIN_DIR=_out/4d/remote-bathroom
+
+copy-remote-png() {
+  local dir=$JOIN_DIR
+  mkdir -p $dir
+  rm -f -v $dir/*
+  for machine in "${MACHINES[@]}"; do
+    echo "=== $machine"
+    rsync --archive --verbose \
+      "$machine:/home/$USER/pbrt-video/$BATHROOM_OUT/*.png" $dir/
+  done
+}
+
 copy-bathroom-pbrt() {
   local i=0
   for machine in "${MACHINES[@]}"; do
@@ -296,6 +314,8 @@ copy-bathroom-pbrt() {
 
     ssh $machine "mkdir -p /home/$USER/pbrt-video/$BATHROOM_OUT/"
 
+    # TODO: I think this needs a job ID.  Because we render locally and then
+    # copy the files to the remote machines, which isn't right.
     rsync --archive --verbose \
       $BATHROOM_OUT/ "$machine:/home/$USER/pbrt-video/$BATHROOM_OUT/"
 
@@ -362,6 +382,10 @@ render-bathroom() {
 
 video-bathroom() {
   join-frames _out/4d/bathroom.mp4 $BATHROOM_OUT/*.png 
+}
+
+video-remote-bathroom() {
+  join-frames _out/4d/remote-bathroom.mp4 $JOIN_DIR/*.png 
 }
 
 "$@"
