@@ -279,13 +279,20 @@ pbrt-bathroom() {
   ls $out_dir
 }
 
+# Normally we rsync but this is if you want to start over.
+remove-remote-dirs() {
+  for machine in "${MACHINES[@]}"; do
+    echo "=== $machine"
+    ssh $machine "rm -r -f -v /home/$USER/pbrt-video/"
+  done
+}
+
+# TODO: I think this needs a job ID.  Because we render locally and then copy
+# the files to the remote machines, which isn't right.
 copy-bathroom-pbrt() {
   local i=0
   for machine in "${MACHINES[@]}"; do
     echo "=== $machine"
-
-    # UNCOMMENT TO CLEAR THE REMOTE DIRECTORY
-    #ssh $machine "rm -r -f /home/$USER/pbrt-video/$BATHROOM_OUT/"
 
     ssh $machine "mkdir -p /home/$USER/pbrt-video/$BATHROOM_OUT/"
 
