@@ -285,6 +285,13 @@ readonly FRAMES_PER_MACHINE=30
 #readonly FRAMES_PER_MACHINE=10
 readonly NUM_BATHROOM_FRAMES=$(( FRAMES_PER_MACHINE * NUM_MACHINES ))
 
+# Run log:
+#  5 frames/machine,  64 pixel samples, 3 depth: 3 minutes on each machine
+#                   This is 30 seconds/frame instead of 10 seconds with 32.
+#     
+# 30 frames/machine, 128 pixel samples, 3 depth: ?
+#                   This is 60-70 seconds/frame
+
 pbrt-bathroom() {
   local out_dir=$BATHROOM_OUT
   rm -v -f $out_dir/frame*.{ply,pbrt,png}
