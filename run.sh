@@ -293,6 +293,8 @@ readonly NUM_BATHROOM_FRAMES=$(( FRAMES_PER_MACHINE * NUM_MACHINES ))
 # 30 frames/machine, 128 pixel samples, 3 depth: 30 minutes on each machine
 #                   This is 60-70 seconds/frame
 #                   90 frames ended up at about 11 seconds.  Looks OK.
+#
+# samples=128,depth=6, 500x500: 120 seconds per frame
 
 pbrt-bathroom() {
   local out_dir=$BATHROOM_OUT
@@ -398,7 +400,8 @@ dist-render-bathroom() {
       echo
       echo "=== $input on $hostname ==="
       echo
-      $PBRT_REMOTE $input
+      # 22 hyperthreads out of 24, or 11 out of 12 cores.
+      $PBRT_REMOTE --nthreads 22 $input
     fi
   done
 
