@@ -312,12 +312,13 @@ gen-pbrt-bathroom() {
   ./polytope.py \
     --num-frames $NUM_BATHROOM_FRAMES \
     --frame-template 4d-contemporary-bathroom.template \
-    --width 500 \
-    --height 500 \
-    --pixel-samples 512 \
-    --integrator-depth 6 \
+    --width 4800 \
+    --height 4800 \
+    --pixel-samples 16 \
+    --integrator-depth 3 \
     --out-dir $out_dir  \
     --out-template 'frame%03d' \
+    --camera bathroom \
     pbrt 5 3 3
 
   ls $out_dir
