@@ -550,6 +550,117 @@ def Animate3D(schlafli, num_frames):
     plt.show()
 
 
+def GenPbrt(opts, argv):
+  """Generate a series of PBRT files."""
+  schlafli = [int(a) for a in argv[1:]]  # e.g. 4 3 3 for hypercube
+  if len(schlafli) not in (2, 3):
+    raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
+
+  vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
+  vertices = [np.array(v) for v in vertices]
+
+  if len(schlafli) == 2:  # Just plot a polygon
+    # Example: ./polytope.py pbrt foo.ply 4 3
+    schlafli = [int(a) for a in sys.argv[3:]]  # e.g. 4 3 for cube
+    if len(schlafli) not in (2, 3):
+      raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
+
+    vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
+    vertices = [np.array(v) for v in vertices]
+
+    vertices = Tilt3D(vertices)
+
+    # Just treat this as a filename
+    out_path = os.path.join(opts.out_dir, opts.out_template)
+    with open(out_path, 'w') as f:
+      generate_ply.generate_ply(f, vertices,
+                                template_path='render/ply-header.template')
+
+    print('Wrote %s' % out_path)
+
+  elif len(schlafli) == 3:  # Animate the 4D case
+    # Calculate W range AFTER ROTATION.
+    w = [v[3] for v in vertices]
+    w_offsets = np.linspace(-max(w), -min(w), num=opts.num_frames)
+
+    print('w_offsets:')
+    print(w_offsets)
+
+    # Set W axis
+    p0 = np.array([0, 0, 0, 0])
+    plane_normal = np.array([0, 0, 0, 1])
+
+    # Set axes so they don't move between frames
+    x = [v[0] for v in vertices]
+    y = [v[1] for v in vertices]
+    z = [v[2] for v in vertices]
+
+    x_min, x_max = min(x), max(x)
+    y_min, y_max = min(y), max(y)
+    z_min, z_max = min(z), max(z)
+
+    with open(opts.frame_template) as f:
+      pbrt_template = f.read()
+
+    # These two values from the original convex-render.pbrt file
+    orig_eye = np.array([3, 3, 2])
+    look_at = np.array([0.5, 0.5, 0])
+    radius = rotate.distance(look_at, orig_eye)
+
+    # Rotate a quarter turn
+    eye_points = rotate.circle(look_at, radius, opts.num_frames,
+                               max_angle=math.pi/2)
+
+    print('NEW w_offsets %s' % w_offsets)
+    for i, w_offset in enumerate(w_offsets):
+      print('--- OFFSET %d = %f' % (i, w_offset))
+
+      translated = Translate4D(vertices, w_offset)
+      #PrintBounds(translated)
+
+      edge_numbers = edges_etc[0]
+      edges = []
+      for a, b in edge_numbers:
+        edges.append((translated[a], translated[b]))
+
+      intersections = Intersect(edges, plane_normal, p0)
+      print('%d intersections' % len(intersections))
+
+      # Remove w-axis to project onto hyperplane (not strictly necessary)
+      intersections = [np.array(v[:3]) for v in intersections]
+
+      ply_filename = opts.out_template % i + '.ply'
+
+      ply_out_path = os.path.join(opts.out_dir, ply_filename)
+      pbrt_out_path = os.path.join(
+          opts.out_dir, opts.out_template % i + '.pbrt')
+      png_out_path = os.path.join(
+          opts.out_dir, opts.out_template % i + '.png')
+
+      with open(ply_out_path, 'w') as f:
+        # This does the ConvexHull!
+        generate_ply.generate_ply(f, intersections,
+                                  template_path='render/ply-header.template')
+      print('Wrote %s' % ply_out_path)
+
+      eye = eye_points[i]
+      d = {
+          'out_filename': png_out_path,
+          'ply_filename': ply_filename,
+          'eye_x': eye[0],
+          'eye_y': eye[1],
+          'eye_z': eye[2],
+
+          'width': opts.width,
+          'height': opts.height,
+          'pixel_samples': opts.pixel_samples,
+          'integrator_depth': opts.integrator_depth,
+      }
+      with open(pbrt_out_path, 'w') as f:
+        f.write(pbrt_template % d)
+      print('Wrote %s' % pbrt_out_path)
+
+
 def main(argv):
   parser = optparse.OptionParser(
       description='Tweak quality settings for bathroom scene.')
@@ -588,113 +699,7 @@ def main(argv):
     ShowBounds()
 
   elif action == 'pbrt':
-    schlafli = [int(a) for a in argv[1:]]  # e.g. 4 3 3 for hypercube
-    if len(schlafli) not in (2, 3):
-      raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
-
-    vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
-    vertices = [np.array(v) for v in vertices]
-
-    if len(schlafli) == 2:  # Just plot a polygon
-      # Example: ./polytope.py pbrt foo.ply 4 3
-      schlafli = [int(a) for a in sys.argv[3:]]  # e.g. 4 3 for cube
-      if len(schlafli) not in (2, 3):
-        raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
-
-      vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
-      vertices = [np.array(v) for v in vertices]
-
-      vertices = Tilt3D(vertices)
-
-      # Just treat this as a filename
-      out_path = os.path.join(opts.out_dir, opts.out_template)
-      with open(out_path, 'w') as f:
-        generate_ply.generate_ply(f, vertices,
-                                  template_path='render/ply-header.template')
-
-      print('Wrote %s' % out_path)
-
-    elif len(schlafli) == 3:  # Animate the 4D case
-      # Calculate W range AFTER ROTATION.
-      w = [v[3] for v in vertices]
-      w_offsets = np.linspace(-max(w), -min(w), num=opts.num_frames)
-
-      print('w_offsets:')
-      print(w_offsets)
-
-      # Set W axis
-      p0 = np.array([0, 0, 0, 0])
-      plane_normal = np.array([0, 0, 0, 1])
-
-      # Set axes so they don't move between frames
-      x = [v[0] for v in vertices]
-      y = [v[1] for v in vertices]
-      z = [v[2] for v in vertices]
-
-      x_min, x_max = min(x), max(x)
-      y_min, y_max = min(y), max(y)
-      z_min, z_max = min(z), max(z)
-
-      with open(opts.frame_template) as f:
-        pbrt_template = f.read()
-
-      # These two values from the original convex-render.pbrt file
-      orig_eye = np.array([3, 3, 2])
-      look_at = np.array([0.5, 0.5, 0])
-      radius = rotate.distance(look_at, orig_eye)
-
-      # Rotate a quarter turn
-      eye_points = rotate.circle(look_at, radius, opts.num_frames,
-                                 max_angle=math.pi/2)
-
-      print('NEW w_offsets %s' % w_offsets)
-      for i, w_offset in enumerate(w_offsets):
-        print('--- OFFSET %d = %f' % (i, w_offset))
-
-        translated = Translate4D(vertices, w_offset)
-        #PrintBounds(translated)
-
-        edge_numbers = edges_etc[0]
-        edges = []
-        for a, b in edge_numbers:
-          edges.append((translated[a], translated[b]))
-
-        intersections = Intersect(edges, plane_normal, p0)
-        print('%d intersections' % len(intersections))
-
-        # Remove w-axis to project onto hyperplane (not strictly necessary)
-        intersections = [np.array(v[:3]) for v in intersections]
-
-        ply_filename = opts.out_template % i + '.ply'
-
-        ply_out_path = os.path.join(opts.out_dir, ply_filename)
-        pbrt_out_path = os.path.join(
-            opts.out_dir, opts.out_template % i + '.pbrt')
-        png_out_path = os.path.join(
-            opts.out_dir, opts.out_template % i + '.png')
-
-        with open(ply_out_path, 'w') as f:
-          # This does the ConvexHull!
-          generate_ply.generate_ply(f, intersections,
-                                    template_path='render/ply-header.template')
-        print('Wrote %s' % ply_out_path)
-
-        eye = eye_points[i]
-        d = {
-            'out_filename': png_out_path,
-            'ply_filename': ply_filename,
-            'eye_x': eye[0],
-            'eye_y': eye[1],
-            'eye_z': eye[2],
-
-            'width': opts.width,
-            'height': opts.height,
-            'pixel_samples': opts.pixel_samples,
-            'integrator_depth': opts.integrator_depth,
-        }
-        with open(pbrt_out_path, 'w') as f:
-          f.write(pbrt_template % d)
-        print('Wrote %s' % pbrt_out_path)
+    GenPbrt(opts, argv)
 
   elif action == 'plot':
     schlafli = [int(a) for a in argv[1:]]  # e.g. 4 3 for cube
