@@ -281,7 +281,7 @@ prepare-bathroom() {
 readonly -a MACHINES=( {spring,mercer,broome}.cluster.recurse.com )
 readonly NUM_MACHINES=${#MACHINES[@]}
 
-readonly FRAMES_PER_MACHINE=5
+readonly FRAMES_PER_MACHINE=30
 #readonly FRAMES_PER_MACHINE=10
 readonly NUM_BATHROOM_FRAMES=$(( FRAMES_PER_MACHINE * NUM_MACHINES ))
 
@@ -294,7 +294,7 @@ pbrt-bathroom() {
     --frame-template 4d-contemporary-bathroom.template \
     --width 500 \
     --height 500 \
-    --pixel-samples 64 \
+    --pixel-samples 128 \
     --integrator-depth 3 \
     pbrt $out_dir "frame%03d" 5 3 3
 
@@ -309,7 +309,7 @@ remove-remote-dirs() {
   done
 }
 
-remove-remote() {
+remove-remote-old() {
   for machine in "${MACHINES[@]}"; do
     echo "=== $machine"
     ssh $machine "rm -r -f -v /home/$USER/pbrt-video/$BATHROOM_OUT/*.{ply,pbrt,png}"
