@@ -261,19 +261,20 @@ readonly BATHROOM_OUT=_out/4d/bathroom
 
 # Put everything in the right dirs.
 prepare-bathroom() {
-  rm -r -f $BATHROOM_OUT
-  mkdir -p $BATHROOM_OUT
+  local out_dir=${1:-$BATHROOM_OUT}
+  rm -r -f $out_dir
+  mkdir -p $out_dir
 
   for dir in scenes/contemporary-bathroom/{geometry,spds,textures}; do
-    cp -r $dir $BATHROOM_OUT
+    cp -r $dir $out_dir
   done
 
-  cp scenes/contemporary-bathroom/contemporary_bathroom.blend $BATHROOM_OUT
+  cp scenes/contemporary-bathroom/contemporary_bathroom.blend $out_dir
 
-  cp scenes/contemporary-bathroom/geometry.pbrt $BATHROOM_OUT/geometry
-  cp scenes/contemporary-bathroom/materials.pbrt $BATHROOM_OUT/geometry
+  cp scenes/contemporary-bathroom/geometry.pbrt $out_dir/geometry
+  cp scenes/contemporary-bathroom/materials.pbrt $out_dir/geometry
 
-  ls -l $BATHROOM_OUT
+  ls -l $out_dir
 }
 
 #readonly -a MACHINES=( {spring,mercer,crosby}.cluster.recurse.com )
@@ -434,7 +435,7 @@ video-remote-bathroom() {
 }
 
 backup-mp4() {
-  ssh spring.cluster.recurse.com mkdir -p backup
+  ssh spring.cluster.recurse.com 'mkdir -p backup'
 
   # Wow this has a horrible syntax!  Not sure why I need the first --include.
   # For subdirectories?
