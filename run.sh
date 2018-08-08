@@ -20,7 +20,7 @@
 #   ./run.sh prepare-bathroom  # copy files into the right place
 #
 # Each time:
-#   ./run.sh pbrt-bathroom
+#   ./run.sh gen-pbrt-bathroom
 #   ./run.sh render-bathroom  # takes a couple minutes
 #   ./run.sh video-bathroom
 #
@@ -34,10 +34,10 @@
 #   - Check that MACHINES in this shell script is what you want.
 #   - Set FRAMES_PER_MACHINE
 #
-#   ./run.sh pbrt-bathroom to generates input files
+#   ./run.sh gen-pbrt-bathroom to generates input files
 #
 #   MAYBE: ./run.sh remove-remote  # if there is anythinng left over
-#   ./run.sh copy-bathroom-pbrt
+#   ./run.sh copy-pbrt-bathroom
 #
 # On each machine in a tmux session:j
 #
@@ -278,11 +278,11 @@ prepare-bathroom() {
 
 #readonly -a MACHINES=( {spring,mercer,crosby}.cluster.recurse.com )
 # crosby is down
-#readonly -a MACHINES=( {spring,mercer,broome}.cluster.recurse.com )
-readonly -a MACHINES=( {spring,mercer}.cluster.recurse.com )
+readonly -a MACHINES=( {spring,mercer,broome}.cluster.recurse.com )
+#readonly -a MACHINES=( {spring,mercer}.cluster.recurse.com )
 readonly NUM_MACHINES=${#MACHINES[@]}
 
-readonly FRAMES_PER_MACHINE=5
+readonly FRAMES_PER_MACHINE=30
 #readonly FRAMES_PER_MACHINE=10
 readonly NUM_BATHROOM_FRAMES=$(( FRAMES_PER_MACHINE * NUM_MACHINES ))
 
@@ -296,7 +296,10 @@ readonly NUM_BATHROOM_FRAMES=$(( FRAMES_PER_MACHINE * NUM_MACHINES ))
 #
 # samples=128,depth=6, 500x500: 120 seconds per frame
 
-pbrt-bathroom() {
+# samples=512,depth=6, 500x500: I think this should be 8 minutes per frame.
+# 8 minutes * 30 frames = 240 minutes = 4 hours
+
+gen-pbrt-bathroom() {
   local out_dir=$BATHROOM_OUT
   rm -v -f $out_dir/frame*.{ply,pbrt,png}
 
@@ -305,7 +308,7 @@ pbrt-bathroom() {
     --frame-template 4d-contemporary-bathroom.template \
     --width 500 \
     --height 500 \
-    --pixel-samples 128 \
+    --pixel-samples 512 \
     --integrator-depth 6 \
     --out-dir $out_dir  \
     --out-template 'frame%03d' \
@@ -342,7 +345,7 @@ copy-remote-png() {
   done
 }
 
-copy-bathroom-pbrt() {
+copy-pbrt-bathroom() {
   local i=0
   for machine in "${MACHINES[@]}"; do
     echo "=== $machine"
