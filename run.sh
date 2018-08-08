@@ -195,8 +195,9 @@ gen-pbrt-4d() {
 
   # split 5 3 3 into 5 3 3
   local -a sch_array=( ${sch//-/ } )
-  NUM_FRAMES=$num_frames \
-    ./polytope.py pbrt $out_dir ${sch}_frame%02d "${sch_array[@]}"
+  ./polytope.py \
+    --num-frames $num_frames \
+    pbrt $out_dir ${sch}_frame%02d "${sch_array[@]}"
 
   ls -l $out_dir
 }
