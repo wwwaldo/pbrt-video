@@ -18,6 +18,7 @@
 #
 # Once:
 #   ./run.sh prepare-bathroom  # copy files into the right place
+#   ./run.sh sky-exr           # run imgtool
 #
 # Each time:
 #   ./run.sh gen-pbrt-bathroom  OR

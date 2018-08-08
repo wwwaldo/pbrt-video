@@ -629,7 +629,7 @@ def GenPbrt(opts, argv):
       #max_angle = 2 * math.pi/8
 
       min_angle = 3 * math.pi/16
-      max_angle = 7 * math.pi/16
+      max_angle = 6 * math.pi/16
 
       # Rotate in XZ plane, since "up" vector is Y.
       eye_points = rotate.arc_xz(look_at, radius, opts.num_frames,
