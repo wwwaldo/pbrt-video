@@ -249,7 +249,7 @@ prepare-bathroom() {
   rm -r -f $BATHROOM_OUT
   mkdir -p $BATHROOM_OUT
 
-  for dir in scenes/contemporary-bathroom/{geometry,spds,textures,bsdfs}; do
+  for dir in scenes/contemporary-bathroom/{geometry,spds,textures}; do
     cp -r $dir $BATHROOM_OUT
   done
 
@@ -265,7 +265,7 @@ prepare-bathroom() {
 readonly -a MACHINES=( {spring,mercer}.cluster.recurse.com )
 readonly NUM_MACHINES=${#MACHINES[@]}
 
-readonly FRAMES_PER_MACHINE=10
+readonly FRAMES_PER_MACHINE=5
 readonly NUM_BATHROOM_FRAMES=$(( FRAMES_PER_MACHINE * NUM_MACHINES ))
 
 pbrt-bathroom() {
