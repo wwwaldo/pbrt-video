@@ -22,7 +22,7 @@ gen-tasks() {
     for dim in 500 1200; do
     #for dim in 400 600; do
       #for pixel_samples in 512 1024 2048; do
-      for pixel_samples in 64 128 256;
+      for pixel_samples in 64 128 256; do
       #for pixel_samples in 16 32; do
         echo $dim $pixel_samples $depth
       done
