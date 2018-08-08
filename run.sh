@@ -20,8 +20,9 @@
 #   ./run.sh prepare-bathroom  # copy files into the right place
 #
 # Each time:
-#   ./run.sh gen-pbrt-bathroom
-#   ./run.sh render-bathroom  # takes a couple minutes
+#   ./run.sh gen-pbrt-bathroom  OR
+#   ./run.sh gen-pbrt-bathroom-quick   (fewer frames)
+#   ./run.sh render-bathroom           # takes a couple minutes
 #   ./run.sh video-bathroom
 #
 # Distributed bathroom rendering:
