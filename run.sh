@@ -433,6 +433,18 @@ video-remote-bathroom() {
   join-frames _out/4d/remote-bathroom.mp4 $JOIN_DIR/*.png 
 }
 
+backup-mp4() {
+  ssh spring.cluster.recurse.com mkdir -p backup
+
+  # Wow this has a horrible syntax!  Not sure why I need the first --include.
+  # For subdirectories?
+
+  # https://stackoverflow.com/questions/11111562/rsync-copy-over-only-certain-types-of-files-using-include-option
+  rsync --archive --verbose --recursive \
+    --include '*/' --include '*.mp4' --exclude '*' \
+    _out/4d/ spring.cluster.recurse.com:backup/
+}
+
 if test $(basename $0) = 'run.sh'; then
   "$@"
 fi
