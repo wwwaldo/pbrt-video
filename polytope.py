@@ -552,6 +552,22 @@ def Animate3D(schlafli, num_frames):
 
 
 def main(argv):
+  if 0:
+    parser = argparse.ArgumentParser(
+        description='Tweak quality settings for bathroom scene.')
+    parser.add_argument(
+        '--resx', type=int, help='num pixels for x-coordinate')
+    parser.add_argument(
+        '--resy', type=int, help='num pixels for y-coordinate')
+    parser.add_argument(
+        '--nsamples', type=int,
+        help='num samples per ray for sobol integrator')
+    parser.add_argument(
+        '--depth', type=int, help='max depth per ray for integrator')
+    parser.add_argument(
+        '--fname', type=str, help='template name')
+    args = parser.parse_args(argv[1:])
+
   try:
     action = argv[1]
   except IndexError:
@@ -646,8 +662,6 @@ def main(argv):
         # Remove w-axis to project onto hyperplane (not strictly necessary)
         intersections = [np.array(v[:3]) for v in intersections]
 
-        # TODO: intersections should get passed to generate_ply.
-
         ply_filename = filename_template % i + '.ply'
 
         ply_out_path = os.path.join(out_dir, ply_filename)
@@ -667,6 +681,15 @@ def main(argv):
             'eye_x': eye[0],
             'eye_y': eye[1],
             'eye_z': eye[2],
+
+            # TODO: Get these from flags
+            'resolution_x': 400,
+            'resolution_y': 400,
+
+            # high: 8192
+            'sobol_pixelsamples' : 32,
+            # high: 10
+            'bdpt_integrator_depth' :3,
         }
         with open(pbrt_out_path, 'w') as f:
           f.write(pbrt_template % d)
