@@ -21,18 +21,17 @@ WorldBegin
 # lights
 
 # window
-AttributeBegin
-    NamedMaterial "light"
-    AreaLightSource "diffuse" "blackbody L" [6500 10]
-    Shape "plymesh" "string filename" "geometry/mesh_00023.ply" 
-AttributeEnd
+#AttributeBegin
+#    NamedMaterial "light"
+#    AreaLightSource "diffuse" "blackbody L" [6500 10]
+#    Shape "plymesh" "string filename" "geometry/mesh_00023.ply" 
+# AttributeEnd
 
 AttributeBegin
 Rotate 125 0 1 0  # 125 -> ~100 is more straight through the window 
-Rotate -90 1 0 0
-# imgtool makesky -turbidity 5 -elevation 30 --outfile textures/sky.exr
-#LightSource "infinite" "string mapname" "textures/sky.exr"
-#   "rgb L" [270 270 270] 
+Rotate -120 1 0 0
+LightSource "infinite" "string mapname" "textures/sky.exr"
+   "rgb L" [3 3 3] 
 AttributeEnd
 
 # filaments in light bulbs
