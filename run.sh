@@ -35,8 +35,9 @@
 #   - Set FRAMES_PER_MACHINE
 #
 #   ./run.sh pbrt-bathroom to generates input files
+#
+#   MAYBE: ./run.sh remove-remote  # if there is anythinng left over
 #   ./run.sh copy-bathroom-pbrt
-#   MAYBE: ./run.sh remove-remote-png  # if there is anythinng left over
 #
 # On each machine in a tmux session:j
 #
@@ -291,6 +292,10 @@ pbrt-bathroom() {
   ./polytope.py \
     --num-frames $NUM_BATHROOM_FRAMES \
     --frame-template 4d-contemporary-bathroom.template \
+    --width 500 \
+    --height 500 \
+    --pixel-samples 64 \
+    --integrator-depth 3 \
     pbrt $out_dir "frame%03d" 5 3 3
 
   ls $out_dir
@@ -304,10 +309,10 @@ remove-remote-dirs() {
   done
 }
 
-remove-remote-png() {
+remove-remote() {
   for machine in "${MACHINES[@]}"; do
     echo "=== $machine"
-    ssh $machine "rm -r -f -v /home/$USER/pbrt-video/$BATHROOM_OUT/*.png"
+    ssh $machine "rm -r -f -v /home/$USER/pbrt-video/$BATHROOM_OUT/*.{ply,pbrt,png}"
   done
 }
 
