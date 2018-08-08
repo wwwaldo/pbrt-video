@@ -282,7 +282,7 @@ prepare-bathroom() {
 readonly -a MACHINES=( {spring,mercer}.cluster.recurse.com )
 readonly NUM_MACHINES=${#MACHINES[@]}
 
-readonly FRAMES_PER_MACHINE=10
+readonly FRAMES_PER_MACHINE=5
 #readonly FRAMES_PER_MACHINE=10
 readonly NUM_BATHROOM_FRAMES=$(( FRAMES_PER_MACHINE * NUM_MACHINES ))
 
@@ -307,7 +307,9 @@ pbrt-bathroom() {
     --height 500 \
     --pixel-samples 128 \
     --integrator-depth 6 \
-    pbrt $out_dir "frame%03d" 5 3 3
+    --out-dir $out_dir  \
+    --out-template 'frame%03d' \
+    pbrt 5 3 3
 
   ls $out_dir
 }
@@ -428,4 +430,6 @@ video-remote-bathroom() {
   join-frames _out/4d/remote-bathroom.mp4 $JOIN_DIR/*.png 
 }
 
-"$@"
+if test $(basename $0) = 'run.sh'; then
+  "$@"
+fi

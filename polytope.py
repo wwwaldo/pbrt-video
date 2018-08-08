@@ -571,6 +571,11 @@ def main(argv):
   parser.add_option(
       '--frame-template', type=str, default='polytope-frame.template',
       help='PBRT template to expand')
+  parser.add_option(
+      '--out-dir', type=str, help='output directory')
+  parser.add_option(
+      '--out-template', type=str, default='frame%03d',
+      help='Python % template string for frame name')
 
   opts, argv = parser.parse_args(argv[1:])
 
@@ -583,11 +588,7 @@ def main(argv):
     ShowBounds()
 
   elif action == 'pbrt':
-    # TODO: These should be flags
-    out_dir = argv[1]
-    filename_template = argv[2]
-
-    schlafli = [int(a) for a in argv[3:]]  # e.g. 4 3 3 for hypercube
+    schlafli = [int(a) for a in argv[1:]]  # e.g. 4 3 3 for hypercube
     if len(schlafli) not in (2, 3):
       raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
 
@@ -606,7 +607,7 @@ def main(argv):
       vertices = Tilt3D(vertices)
 
       # Just treat this as a filename
-      out_path = os.path.join(out_dir, filename_template)
+      out_path = os.path.join(opts.out_dir, opts.out_template)
       with open(out_path, 'w') as f:
         generate_ply.generate_ply(f, vertices,
                                   template_path='render/ply-header.template')
@@ -664,11 +665,13 @@ def main(argv):
         # Remove w-axis to project onto hyperplane (not strictly necessary)
         intersections = [np.array(v[:3]) for v in intersections]
 
-        ply_filename = filename_template % i + '.ply'
+        ply_filename = opts.out_template % i + '.ply'
 
-        ply_out_path = os.path.join(out_dir, ply_filename)
-        pbrt_out_path = os.path.join(out_dir, filename_template % i + '.pbrt')
-        png_out_path = os.path.join(out_dir, filename_template % i + '.png')
+        ply_out_path = os.path.join(opts.out_dir, ply_filename)
+        pbrt_out_path = os.path.join(
+            opts.out_dir, opts.out_template % i + '.pbrt')
+        png_out_path = os.path.join(
+            opts.out_dir, opts.out_template % i + '.png')
 
         with open(ply_out_path, 'w') as f:
           # This does the ConvexHull!
