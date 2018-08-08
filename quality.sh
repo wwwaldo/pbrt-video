@@ -14,12 +14,16 @@ set -o errexit
 . run.sh
 
 # tasks
+#
+# 4096 and 3 is 40 minutes
+#
 gen-tasks() {
-  #for dim in 400 500 600; do
-  for dim in 400 600; do
-    #for pixel_samples in 128 256 512; do
-    for pixel_samples in 16 32; do
-      for depth in 3 6; do
+  for depth in 3 5; do
+    for dim in 500 1200; do
+    #for dim in 400 600; do
+      #for pixel_samples in 512 1024 2048; do
+      for pixel_samples in 64 128 256;
+      #for pixel_samples in 16 32; do
         echo $dim $pixel_samples $depth
       done
     done
