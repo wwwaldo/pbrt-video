@@ -350,8 +350,8 @@ gen-pbrt-bathroom-pngtest() {
   ./polytope.py \
     --num-frames 1 \
     --frame-template 4d-contemporary-bathroom.template \
-    --width 2000 \
-    --height 2000 \
+    --width 4800 \
+    --height 4800 \
     --pixel-samples 16 \
     --integrator-depth 3 \
     --out-dir $out_dir  \
@@ -359,6 +359,7 @@ gen-pbrt-bathroom-pngtest() {
     --camera bathroom \
     pbrt 5 3 3
     #--camera fixed \
+    #--exr \
 
   ls $out_dir
 }

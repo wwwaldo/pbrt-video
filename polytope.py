@@ -662,8 +662,13 @@ def GenPbrt(opts, argv):
       ply_out_path = os.path.join(opts.out_dir, ply_filename)
       pbrt_out_path = os.path.join(
           opts.out_dir, opts.out_template % i + '.pbrt')
-      png_out_path = os.path.join(
-          opts.out_dir, opts.out_template % i + '.png')
+
+      if opts.exr:
+        out_filename = os.path.join(
+            opts.out_dir, opts.out_template % i + '.exr')
+      else:
+        out_filename = os.path.join(
+            opts.out_dir, opts.out_template % i + '.png')
 
       with open(ply_out_path, 'w') as f:
         # This does the ConvexHull!
@@ -673,7 +678,7 @@ def GenPbrt(opts, argv):
 
       eye = eye_points[i]
       d = {
-          'out_filename': png_out_path,
+          'out_filename': out_filename,
           'ply_filename': ply_filename,
           'eye_x': eye[0],
           'eye_y': eye[1],
@@ -718,6 +723,9 @@ def main(argv):
   parser.add_option(
       '--camera', type=str, default='fixed',
       help='Type of camera rotation for a particular scene')
+  parser.add_option(
+      '--exr', action='store_true',
+      help='Render EXR instead of PNG')
 
   opts, argv = parser.parse_args(argv[1:])
 
