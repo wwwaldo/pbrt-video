@@ -282,7 +282,7 @@ prepare-bathroom() {
 readonly -a MACHINES=( {spring,mercer}.cluster.recurse.com )
 readonly NUM_MACHINES=${#MACHINES[@]}
 
-readonly FRAMES_PER_MACHINE=30
+readonly FRAMES_PER_MACHINE=10
 #readonly FRAMES_PER_MACHINE=10
 readonly NUM_BATHROOM_FRAMES=$(( FRAMES_PER_MACHINE * NUM_MACHINES ))
 
@@ -304,7 +304,7 @@ pbrt-bathroom() {
     --width 500 \
     --height 500 \
     --pixel-samples 128 \
-    --integrator-depth 3 \
+    --integrator-depth 6 \
     pbrt $out_dir "frame%03d" 5 3 3
 
   ls $out_dir
@@ -401,6 +401,12 @@ dist-render-bathroom() {
       $PBRT_REMOTE $input
     fi
   done
+
+  # So we can inspect each machine
+  date > finish-time.txt
+  echo
+  echo FINISHED
+  cat finish-time.txt
 }
 
 # 1:01 at low quality
