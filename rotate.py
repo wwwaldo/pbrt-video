@@ -9,6 +9,7 @@ def distance(p1, p2):
           pow(abs(p1[1] - p2[1]), 2) + 
           pow(abs(p1[2] - p2[2]), 2) )
 
+
 def circle(center, radius, npoints, max_angle=2*pi):
     points = np.linspace(0, max_angle, npoints)
     
@@ -17,6 +18,21 @@ def circle(center, radius, npoints, max_angle=2*pi):
     vals += center
     
     return vals
+
+
+# rotate in xz plane, for the bathroom video.
+def arc_xz(center, radius, npoints, min_angle, max_angle):
+    points = np.linspace(min_angle, max_angle, npoints)
+    
+    vals = np.array([ [radius * cos(x), 0, radius * sin(x)] for x in points])
+
+    if 1:
+      for v in vals:
+        print(v)
+
+    vals += center
+    return vals
+
 
 if __name__ == "__main__":
     points = circle([1,0,0], 3, 100, pi/6)
@@ -28,9 +44,3 @@ if __name__ == "__main__":
 
     plt.plot(flatpoints[:,0], flatpoints[:,1])
     plt.show()
-
-
-
-
-
-

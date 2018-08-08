@@ -625,9 +625,17 @@ def GenPbrt(opts, argv):
       look_at = np.array([-0.8, 1.1, -0.9])
       radius = rotate.distance(look_at, orig_eye)
 
-      # Rotate quarter turn
-      eye_points = rotate.circle(look_at, radius, opts.num_frames,
-                                 max_angle=math.pi/2)
+      #min_angle = math.pi/8
+      #max_angle = 2 * math.pi/8
+
+      min_angle = 3 * math.pi/16
+      max_angle = 5 * math.pi/16
+
+      # Rotate in XZ plane, since "up" vector is Y.
+      eye_points = rotate.arc_xz(look_at, radius, opts.num_frames,
+                                 min_angle, max_angle)
+      #print('DONE')
+      #return
     else:
       raise RuntimeError('Invalid camera %r' % opts.camera)
 

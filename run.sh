@@ -334,9 +334,9 @@ gen-pbrt-bathroom-quick() {
     --integrator-depth 3 \
     --out-dir $out_dir  \
     --out-template 'frame%03d' \
-    --camera fixed \
+    --camera bathroom \
     pbrt 5 3 3
-    #--camera bathroom \
+    #--camera fixed \
 
   ls $out_dir
 }
