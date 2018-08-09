@@ -527,10 +527,14 @@ resize-remote() {
 save-3d-anim() {
   # Plot action does animations in the 2D case!
   ./polytope.py \
+    --num-frames 60 \
+    --fps 6 \
     --mpl-mp4-out-template '_out/matplotlib-2d-%d-%d.mp4' \
     anim 5 3 
 
   ./polytope.py \
+    --num-frames 60 \
+    --fps 6 \
     --mpl-mp4-out-template '_out/matplotlib-2d-%d-%d.mp4' \
     anim 4 3 
 }

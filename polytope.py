@@ -503,7 +503,7 @@ class Animation3D(object):
       line.set_3d_properties(z)
 
 
-def Animate3D(schlafli, num_frames, mp4_out_template=None):
+def Animate3D(schlafli, num_frames, fps, mp4_out_template=None):
   vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
   vertices = [np.array(v) for v in vertices]
 
@@ -544,7 +544,8 @@ def Animate3D(schlafli, num_frames, mp4_out_template=None):
   if mp4_out_template:
   # https://jakevdp.github.io/blog/2013/02/16/animating-the-lorentz-system-in-3d
     out_path = mp4_out_template % tuple(schlafli)
-    anim.save(out_path, fps=15, extra_args=['-vcodec', 'libx264'])
+    # 4 FPS shows it better
+    anim.save(out_path, fps=fps, extra_args=['-vcodec', 'libx264'])
     print('Wrote %s' % out_path)
   else:
     plt.show()
@@ -736,6 +737,9 @@ def main(argv):
       '--mpl-mp4-out-template', type=str,
       help='Instead of plotting, save an .mp4 from matplotlib')
   parser.add_option(
+      '--fps', type=int, default=30,
+      help='Frames per second for matplotlib mp4')
+  parser.add_option(
       '--camera', type=str, default='fixed',
       help='Type of camera rotation for a particular scene')
   parser.add_option(
@@ -771,7 +775,7 @@ def main(argv):
       raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
 
     if len(schlafli) == 2:
-      Animate3D(schlafli, opts.num_frames,
+      Animate3D(schlafli, opts.num_frames, opts.fps,
                 mp4_out_template=opts.mpl_mp4_out_template)
 
     elif len(schlafli) == 3:
