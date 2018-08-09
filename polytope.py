@@ -639,6 +639,10 @@ def GenPbrt(opts, argv):
     else:
       raise RuntimeError('Invalid camera %r' % opts.camera)
 
+    # Very small angle because the dodecahedron isn't centered
+    #ply_angles = np.linspace(0, 10, opts.num_frames)
+    ply_angles = np.linspace(-10, 0, opts.num_frames)
+
     print('NEW w_offsets %s' % w_offsets)
     for i, w_offset in enumerate(w_offsets):
       print('--- OFFSET %d = %f' % (i, w_offset))
@@ -676,6 +680,13 @@ def GenPbrt(opts, argv):
                                   template_path='render/ply-header.template')
       print('Wrote %s' % ply_out_path)
 
+      ply_angle = ply_angles[i]
+      if opts.ply_rotation:
+        # Rotate about Y axis, which is pointing up.
+        ply_rotation = 'Rotate %f 0 1 0' % ply_angle
+      else:
+        ply_rotation = ''
+
       eye = eye_points[i]
       d = {
           'out_filename': out_filename,
@@ -688,6 +699,7 @@ def GenPbrt(opts, argv):
           'height': opts.height,
           'pixel_samples': opts.pixel_samples,
           'integrator_depth': opts.integrator_depth,
+          'ply_rotation': ply_rotation,
       }
       with open(pbrt_out_path, 'w') as f:
         f.write(pbrt_template % d)
@@ -723,6 +735,9 @@ def main(argv):
   parser.add_option(
       '--camera', type=str, default='fixed',
       help='Type of camera rotation for a particular scene')
+  parser.add_option(
+      '--ply-rotation', action='store_true',
+      help='Rotate the ply mesh in every frame.')
   parser.add_option(
       '--exr', action='store_true',
       help='Render EXR instead of PNG')

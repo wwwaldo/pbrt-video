@@ -314,11 +314,12 @@ gen-pbrt-bathroom() {
     --frame-template 4d-contemporary-bathroom.template \
     --width 4800 \
     --height 4800 \
-    --pixel-samples 32 \
+    --pixel-samples 16 \
     --integrator-depth 3 \
     --out-dir $out_dir  \
     --out-template 'frame%03d' \
     --camera bathroom \
+    --ply-rotation \
     pbrt 5 3 3
 
   ls $out_dir
@@ -328,8 +329,11 @@ gen-pbrt-bathroom-quick() {
   local out_dir=$BATHROOM_OUT
   rm -v -f $out_dir/frame*.{ply,pbrt,png}
 
+  #local num_frames=10
+  local num_frames=30  # To see rotation more clearly
+
   ./polytope.py \
-    --num-frames 10 \
+    --num-frames $num_frames \
     --frame-template 4d-contemporary-bathroom.template \
     --width 400 \
     --height 400 \
@@ -338,6 +342,7 @@ gen-pbrt-bathroom-quick() {
     --out-dir $out_dir  \
     --out-template 'frame%03d' \
     --camera bathroom \
+    --ply-rotation \
     pbrt 5 3 3
     #--camera fixed \
 
