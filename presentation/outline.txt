@@ -14,6 +14,18 @@ Progression:
 
 - Final video
 
+Influences / Prior Art
+----------------------
+
+- Bathsheba
+- 4D Toys, Miegakure (120 cell)
+- Flatland, etc.
+
+TODO: What's the best explanation of 4D?  Extruding 2D to 3D
+  1978 video
+  numberphile video
+
+
 Components
 ----------
 
@@ -46,17 +58,6 @@ Components
   - 21 MB blend file?
   - Sky environment map (imgtool)
 
-
-Influences / Prior Art
-----------------------
-
-- Bathsheba
-- 4D Toys, Miegakure (120 cell)
-- Flatland, etc.
-
-TODO: What's the best explanation of 4D?  Extruding 2D to 3D
-  1978 video
-  numberphile video
 
 Algorithm / Pipeline 
 --------------------
@@ -117,13 +118,6 @@ Things Learned
 
 - ipython3 (hadn't used it before)
 
-Credits
--------
-
-- Schlafli interpreter
-- Bathroom Scene
-
-
 Possible Directions
 -------------------
 
@@ -132,4 +126,11 @@ Possible Directions
 - Automation could be improved / more foolproof
 - Interactive polytopes in the browser (several existing implementations)
 - Android Filament: real-time rendering?
+
+
+Credits
+-------
+
+- Schlafli interpreter
+- Bathroom Scene
 
