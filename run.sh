@@ -524,6 +524,17 @@ resize-remote() {
   echo $JOIN_DIR/*.png | xargs --verbose -n 1 -P $NPROC -- $0 resize-one
 }
 
+save-3d-anim() {
+  # Plot action does animations in the 2D case!
+  ./polytope.py \
+    --mpl-mp4-out-template '_out/%d-%d.mpd4' \
+    anim 5 3 
+
+  ./polytope.py \
+    --mpl-mp4-out-template '_out/%d-%d.mpd4' \
+    anim 4 3 
+}
+
 if test $(basename $0) = 'run.sh'; then
   "$@"
 fi

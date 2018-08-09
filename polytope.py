@@ -284,7 +284,7 @@ def PrintBounds(vertices):
 
 
 # NOTE: It might be better to separate this into Plot3D and Plot4D.
-def Plot(schlafli):
+def Plot(schlafli, opts):
   #p0 = np.array([0.5, 0.5, 0.5])  # center of the cube
 
   p0 = np.array([0, 0, 0])
@@ -503,7 +503,7 @@ class Animation3D(object):
       line.set_3d_properties(z)
 
 
-def Animate3D(schlafli, num_frames):
+def Animate3D(schlafli, num_frames, mp4_out_template=None):
   vertices, edges_etc = schlafli_interpreter.regular_polytope(schlafli)
   vertices = [np.array(v) for v in vertices]
 
@@ -541,9 +541,9 @@ def Animate3D(schlafli, num_frames):
   # Just creating this object seems to mutate global state.
   anim = animation.FuncAnimation(fig, anim_func, num_frames, interval=300)
 
-  if 0:
+  if mp4_out_template:
   # https://jakevdp.github.io/blog/2013/02/16/animating-the-lorentz-system-in-3d
-    out_path = '%d-%d.mp4' % tuple(schlafli)
+    out_path = mp4_out_template % tuple(schlafli)
     anim.save(out_path, fps=15, extra_args=['-vcodec', 'libx264'])
     print('Wrote %s' % out_path)
   else:
@@ -733,6 +733,9 @@ def main(argv):
       '--out-template', type=str, default='frame%03d',
       help='Python % template string for frame name')
   parser.add_option(
+      '--mpl-mp4-out-template', type=str,
+      help='Instead of plotting, save an .mp4 from matplotlib')
+  parser.add_option(
       '--camera', type=str, default='fixed',
       help='Type of camera rotation for a particular scene')
   parser.add_option(
@@ -760,7 +763,7 @@ def main(argv):
     if len(schlafli) not in (2, 3):
       raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
 
-    Plot(schlafli)
+    Plot(schlafli, opts)
 
   elif action == 'anim':  # animate
     schlafli = [int(a) for a in argv[1:]]  # e.g. 4 3 for cube
@@ -768,11 +771,14 @@ def main(argv):
       raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
 
     if len(schlafli) == 2:
-      Animate3D(schlafli, opts.num_frames)
+      Animate3D(schlafli, opts.num_frames,
+                mp4_out_template=opts.mpl_mp4_out_template)
+
     elif len(schlafli) == 3:
       # Inconsistency: In 4D, the Plot() functions animates 
       # We used a different method to animate 4D than 3D.
-      Plot(schlafli)
+      Plot(schlafli, opts)
+
     else:
       raise AssertionError
 
