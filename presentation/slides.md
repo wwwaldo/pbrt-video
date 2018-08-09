@@ -1,24 +1,25 @@
 Hyperdodecahedron in a Bathroom
 ===============================
 
-Intro (1 minute)
----------------
+Intro 
+-----
+
+<!-- (1 minute) -->
 
 We made a video!
 
-## What is raytracing?
+### What is raytracing?
 
-- http://pbrt.org/scenes-v3.html
+- Pixar Movies!
+- [PBRT Scenes](http://pbrt.org/scenes-v3.html)
+- PBRT = Physically-Based Ray Tracer
+- Lights, Geometry + Materials, Cameras
 
-Pixar Movies!
-Lighting, Cameras, Geometry
+### What is a regular polyhedron?
 
-## What is a regular polyhedron?
+[Dodecahedron on Wikipedia](https://en.wikipedia.org/wiki/Platonic_solid)
 
-Dodecahedron:
-https://en.wikipedia.org/wiki/Platonic_solid
-
-## What is 4D?  What is a 4D polytope?
+### What is 4D?  What is a 4D polytope?
 
 https://en.wikipedia.org/wiki/120-cell
 
