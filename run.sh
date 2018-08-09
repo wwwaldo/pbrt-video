@@ -5,10 +5,10 @@
 #
 # Examples:
 #
-#   ./run.sh frames      # generates .pbrt files
-#   ./run.sh render-all  # generates .exr files
-#   ./run.sh all-jpg     # generates .jpg files
-#   ./run.sh make-video  # generate .mp4 file
+#   ./run.sh gen-k-frames     # generates .pbrt files
+#   ./run.sh render-k-frames  # generates .exr files
+#   ./run.sh k-jpg            # generates .jpg files
+#   ./run.sh k-video          # generate .mp4 file
 #
 # Quick polytope:
 #
@@ -112,7 +112,7 @@ clean() {
   rm -v _out/pbrt/* _out/exr/* _out/jpg/*
 }
 
-frames() {
+gen-k-frames() {
   mkdir -p _out/{pbrt,exr,jpg}
 
   local NUM_FRAMES=10
@@ -124,7 +124,7 @@ frames() {
 }
 
 # Oops has to be in original dir
-render-killeroo-frames() {
+render-k-frames() {
   # TODO: xargs
 
   # Or just use a single command to share?
@@ -148,7 +148,7 @@ exr-to-jpg() {
 
 readonly NPROC=$(( $(nproc) - 1 ))
 
-all-jpg() {
+k-jpg() {
   echo _out/exr/k-*.exr | xargs --verbose -n 1 -P $NPROC -- $0 exr-to-jpg
 }
 
@@ -172,7 +172,7 @@ join-frames() {
   echo "Wrote $out"
 }
 
-make-video() {
+k-video() {
   # with imagemagick
   # http://jupiter.ethz.ch/~pjt/makingMovies.html 
   time convert -delay 6 -quality 95 _out/jpg/k-*.jpg _out/movie.mp4
