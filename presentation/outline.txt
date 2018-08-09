@@ -124,5 +124,12 @@ Credits
 - Bathroom Scene
 
 
+Possible Directions
+-------------------
 
+- More polytopes in more scenes
+  - Reduce manual work
+- Automation could be improved / more foolproof
+- Interactive polytopes in the browser (several existing implementations)
+- Android Filament: real-time rendering?
 
