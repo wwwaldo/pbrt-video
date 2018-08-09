@@ -1,18 +1,10 @@
 TODO
 ----
 
-- use 11 cores instead of 12?  22 hyperthreads
-
-- experiment with the rendering params and find a good quality/speed tradeoff
-  - not sure what integrator depth does yet!
-
-- in _out/4d/remote-bathroom, save the parameters somewhere?
-  - that is, don't delete any of the .png or the .mp4 
-
-- optional:
-  - rotate the 3d slice as its growing
-  - or just rotate/pan the camera?
-  - more than one shape in the scene
+- let the sky one finish, around midnight?
+- do pngtest again?  i thought it looked better?
+- revert the sky change and generate a test video
+- then render the 10 hour one overnight
 
 - trim off the first frame since it seems degenerate?  There's a jump, not
   smooth.
@@ -20,6 +12,20 @@ TODO
 - loop the video: https://video.stackexchange.com/questions/16919/is-it-possible-to-create-a-continuously-looping-video
   - using html5 <video> ?
   - or just an mp4 tag?
+
+
+- DONE use 11 cores instead of 12?  22 hyperthreads
+
+- DONE experiment with the rendering params and find a good quality/speed
+  tradeoff
+  - not sure what integrator depth does yet!
+
+- in _out/4d/remote-bathroom, save the parameters somewhere?
+  - that is, don't delete any of the .png or the .mp4 
+
+- optional:
+  - DONE or just rotate/pan the camera?
+  - more than one shape in the scene
 
 ------
 
