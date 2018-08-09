@@ -314,7 +314,7 @@ gen-pbrt-bathroom() {
     --frame-template 4d-contemporary-bathroom.template \
     --width 4800 \
     --height 4800 \
-    --pixel-samples 16 \
+    --pixel-samples 32 \
     --integrator-depth 3 \
     --out-dir $out_dir  \
     --out-template 'frame%03d' \
