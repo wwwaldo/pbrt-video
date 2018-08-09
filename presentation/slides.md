@@ -1,5 +1,5 @@
-120-cell in a bathroom
-======================
+Hyperdodecahedron in a Bathroom
+===============================
 
 Intro (1 minute)
 ---------------
@@ -18,11 +18,12 @@ Lighting, Cameras, Geometry
 Dodecahedron:
 https://en.wikipedia.org/wiki/Platonic_solid
 
-## What is 4D?  What isa  4D polytope?
+## What is 4D?  What is a 4D polytope?
+
+https://en.wikipedia.org/wiki/120-cell
 
 - 2D slices of 3D: MRI scan
   - https://www.youtube.com/watch?v=rGyONAoeRJk
-
 
 Show Videos (2 minutes)
 -----------------------
@@ -30,29 +31,32 @@ Show Videos (2 minutes)
 Showing 5 things
 
 - Killeroo video.
-  - https://drive.google.com/file/d/1-9AQq3jCGx20PJKsSjhnYvS19qxtgaNq/view
+  - VLC
 
 - 2d wireframe, then animation
-  ./polytope.py --num-frames 20 anim 5 3   -- RED DOTS
+  ./pres.sh matplot-3d
 
 - 3D wireframe, then animation
-  ./polytope.py --num-frames 20 anim 5 3 3
+  ./pres.sh matplot-4d
 
 - Polytope on its own
-  https://drive.google.com/file/d/1t3zJtQV6PLnetLr0X58My9AZ6Zo0pdmm/view
+  - VLC
 
 - bathroom on its own
   (showed in first section)
 
 - Combined polytope and bathroom (low res):
-  - https://drive.google.com/file/d/1rvQ-gBZrvSBBxwjVkB0Bog2AAgTNWav3/view
+  - VLC
 
 - Final video (high res, environment map, rotation)
+  - VLC
 
 Components  (1 minute)
 ----------------------
 
 Show README
+
+4 hours on 66 cores / 3 machines
 
 
 Influences / Prior Art / Future Directions (1 minute)
@@ -61,5 +65,4 @@ Influences / Prior Art / Future Directions (1 minute)
 Show README
 
 120-Cell Miegakure https://youtu.be/vZp0ETdD37E?t=213
-
 
