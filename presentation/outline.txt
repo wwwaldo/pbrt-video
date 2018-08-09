@@ -31,6 +31,7 @@ Components
   - 19 MB geometry
   - 14 MB textures
   - 21 MB blend file?
+  - Sky environment map (imgtool)
 
 
 Influences / Prior Art
@@ -96,6 +97,10 @@ Things Learned
 - rotations in 3D and 4D
 - animations with matplotlib
 - Raytracing -- tuning the sample and size parameters
+
+- File formats
+  - PLY mesh format
+  - EXR image format
 
 - ipython3 (hadn't used it before)
 
