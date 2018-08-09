@@ -479,7 +479,8 @@ video-bathroom() {
 }
 
 video-remote-bathroom() {
-  join-frames _out/4d/remote-bathroom.mp4 $JOIN_DIR/*.png 
+  #join-frames _out/4d/remote-bathroom.mp4 $JOIN_DIR/*.png 
+  join-frames _out/4d/remote-bathroom.mp4 $JOIN_DIR/*.800x800.png 
 }
 
 backup-mp4() {
@@ -504,6 +505,17 @@ sky-exr() {
   time ~/git/other/pbrt-v3-build/imgtool makesky \
     -elevation 40 --outfile $out
   ls -l $out
+}
+
+resize-one() {
+  local in=$1
+  local out=${in//.png/.800x800.png}
+  # targeting 1280x800
+  time convert $in -resize '800x800' $out
+}
+
+resize-remote() {
+  echo $JOIN_DIR/*.png | xargs --verbose -n 1 -P $NPROC -- $0 resize-one
 }
 
 if test $(basename $0) = 'run.sh'; then
