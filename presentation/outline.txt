@@ -1,6 +1,19 @@
 Polytope in a Bathroom
 ======================
 
+Things to Show
+--------------
+
+Progression:
+
+- Killeroo video?  Rotating the camera.
+- 2d wireframe, then animation
+- 3D wireframe, then animation
+- Polytope on its own
+- bathroom on its own
+
+- Final video
+
 Components
 ----------
 
@@ -103,19 +116,6 @@ Things Learned
   - EXR image format
 
 - ipython3 (hadn't used it before)
-
-Things to Show
---------------
-
-Progression:
-
-- Killeroo video?  Rotating the camera.
-- 2d wireframe, then animation
-- 3D wireframe, then animation
-- Polytope on its own
-- bathroom on its own
-
-- Final video
 
 Credits
 -------
