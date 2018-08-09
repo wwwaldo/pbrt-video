@@ -50,7 +50,7 @@ to-html() {
     </style>
   </head>
   <body>
-    <p style="text-align: right; font-style: italic">Andy Chu &mdash; $date</p>
+    <p style="text-align: right; font-style: italic">Andy Chu and Caroline Lin &mdash; $date</p>
 EOF
 
   cmark $path
@@ -61,23 +61,8 @@ EOF
 EOF
 }
 
-05-24-pres() {
-  mkdir -p _tmp
-  to-html 05-24-pres/05-24-pres.md "xargs -P" "2018/05/28" > ~/vm-shared/05-24-pres.html
-}
-
-2-pres() {
-  mkdir -p _tmp
-  to-html 05-31-pres/slides.md "Regular Languages" "2018/6/7" > ~/vm-shared/05-31-pres.html
-}
-
-share2() {
-  scp ~/vm-shared/05-31-pres.html chubot@chubot.org:oilshell.org/share/
-}
-
-3-pres() {
-  to-html 06-14-pres/slides.md "Unicode" "2018/6/21" > ~/vm-shared/06-14-pres.html
-  cp -v 06-14-pres/escaped.html ~/vm-shared
+build() {
+  to-html slides.md "" "2018/08/29" > ~/vm-shared/08-09-pres.html
 }
 
 

@@ -1,9 +1,6 @@
 Hyperdodecahedron in a Bathroom
 ===============================
 
-Intro 
------
-
 <!-- (1 minute) -->
 
 We made a video!
@@ -21,13 +18,13 @@ We made a video!
 
 ### What is 4D?  What is a 4D polytope?
 
-https://en.wikipedia.org/wiki/120-cell
+[https://en.wikipedia.org/wiki/120-cell](https://en.wikipedia.org/wiki/120-cell)
 
 - 2D slices of 3D: MRI scan
-  - https://www.youtube.com/watch?v=rGyONAoeRJk
+  - [https://www.youtube.com/watch?v=rGyONAoeRJk](https://www.youtube.com/watch?v=rGyONAoeRJk)
 
-Show Videos (2 minutes)
------------------------
+Show Videos
+-----------
 
 Showing 5 things
 
