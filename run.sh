@@ -175,8 +175,9 @@ join-frames() {
 k-video() {
   # with imagemagick
   # http://jupiter.ethz.ch/~pjt/makingMovies.html 
-  time convert -delay 6 -quality 95 _out/jpg/k-*.jpg _out/movie.mp4
-  echo "Wrote $PWD/_out/movie.mp4"
+  local out=_out/k.mp4
+  time convert -delay 6 -quality 95 _out/jpg/k-*.jpg $out
+  echo "Wrote $PWD/$out"
 }
 
 ply-demo() {
