@@ -18,6 +18,7 @@
 #
 # Once:
 #   ./run.sh prepare-bathroom  # copy files into the right place
+#   ./run.sh sky-exr           # run imgtool
 #
 # Each time:
 #   ./run.sh gen-pbrt-bathroom  OR
@@ -311,12 +312,14 @@ gen-pbrt-bathroom() {
   ./polytope.py \
     --num-frames $NUM_BATHROOM_FRAMES \
     --frame-template 4d-contemporary-bathroom.template \
-    --width 500 \
-    --height 500 \
-    --pixel-samples 512 \
-    --integrator-depth 6 \
+    --width 4800 \
+    --height 4800 \
+    --pixel-samples 16 \
+    --integrator-depth 3 \
     --out-dir $out_dir  \
     --out-template 'frame%03d' \
+    --camera bathroom \
+    --ply-rotation \
     pbrt 5 3 3
 
   ls $out_dir
@@ -326,8 +329,11 @@ gen-pbrt-bathroom-quick() {
   local out_dir=$BATHROOM_OUT
   rm -v -f $out_dir/frame*.{ply,pbrt,png}
 
+  #local num_frames=10
+  local num_frames=30  # To see rotation more clearly
+
   ./polytope.py \
-    --num-frames 10 \
+    --num-frames $num_frames \
     --frame-template 4d-contemporary-bathroom.template \
     --width 400 \
     --height 400 \
@@ -336,11 +342,34 @@ gen-pbrt-bathroom-quick() {
     --out-dir $out_dir  \
     --out-template 'frame%03d' \
     --camera bathroom \
+    --ply-rotation \
     pbrt 5 3 3
     #--camera fixed \
 
   ls $out_dir
 }
+
+gen-pbrt-bathroom-pngtest() {
+  local out_dir=$BATHROOM_OUT
+  rm -v -f $out_dir/frame*.{ply,pbrt,png}
+
+  ./polytope.py \
+    --num-frames 1 \
+    --frame-template 4d-contemporary-bathroom.template \
+    --width 4800 \
+    --height 4800 \
+    --pixel-samples 16 \
+    --integrator-depth 3 \
+    --out-dir $out_dir  \
+    --out-template 'frame%03d' \
+    --camera bathroom \
+    pbrt 5 3 3
+    #--camera fixed \
+    #--exr \
+
+  ls $out_dir
+}
+
 
 # Normally we rsync but this is if you want to start over.
 remove-remote-dirs() {
@@ -455,7 +484,8 @@ video-bathroom() {
 }
 
 video-remote-bathroom() {
-  join-frames _out/4d/remote-bathroom.mp4 $JOIN_DIR/*.png 
+  #join-frames _out/4d/remote-bathroom.mp4 $JOIN_DIR/*.png 
+  join-frames _out/4d/remote-bathroom.mp4 $JOIN_DIR/*.800x800.png 
 }
 
 backup-mp4() {
@@ -470,10 +500,28 @@ backup-mp4() {
     _out/4d/ spring.cluster.recurse.com:backup/
 }
 
+# ORIGINAL COMMAND
 make_sky () {
   ~/andy-pbrt/imgtool makesky -elevation 40 --outfile textures/sky.exr 
 }
 
+sky-exr() {
+  local out=$BATHROOM_OUT/textures/sky.exr 
+  time ~/git/other/pbrt-v3-build/imgtool makesky \
+    -elevation 40 --outfile $out
+  ls -l $out
+}
+
+resize-one() {
+  local in=$1
+  local out=${in//.png/.800x800.png}
+  # targeting 1280x800
+  time convert $in -resize '800x800' $out
+}
+
+resize-remote() {
+  echo $JOIN_DIR/*.png | xargs --verbose -n 1 -P $NPROC -- $0 resize-one
+}
 
 if test $(basename $0) = 'run.sh'; then
   "$@"

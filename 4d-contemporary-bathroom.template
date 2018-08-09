@@ -48,13 +48,14 @@ AttributeEnd
 
 # Point Light at Camera Position
 AttributeBegin
-Translate -.5 1.1 -.5 # same as camera eye
+Translate 0 1.1 -.5 # like camera eye, but X is different
 LightSource "point" "rgb I" [ .5 .5 .5 ]
 AttributeEnd
 
 # Load 120-cell xsection
 AttributeBegin
   Material "metal"
+  %(ply_rotation)s
   Translate -1.6 1.2 -1.8
   Scale 0.14 0.14 0.14
   Shape "plymesh" "string filename" "%(ply_filename)s"

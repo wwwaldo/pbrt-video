@@ -629,7 +629,7 @@ def GenPbrt(opts, argv):
       #max_angle = 2 * math.pi/8
 
       min_angle = 3 * math.pi/16
-      max_angle = 7 * math.pi/16
+      max_angle = 6 * math.pi/16
 
       # Rotate in XZ plane, since "up" vector is Y.
       eye_points = rotate.arc_xz(look_at, radius, opts.num_frames,
@@ -638,6 +638,10 @@ def GenPbrt(opts, argv):
       #return
     else:
       raise RuntimeError('Invalid camera %r' % opts.camera)
+
+    # Very small angle because the dodecahedron isn't centered
+    #ply_angles = np.linspace(0, 10, opts.num_frames)
+    ply_angles = np.linspace(-10, 0, opts.num_frames)
 
     print('NEW w_offsets %s' % w_offsets)
     for i, w_offset in enumerate(w_offsets):
@@ -662,8 +666,13 @@ def GenPbrt(opts, argv):
       ply_out_path = os.path.join(opts.out_dir, ply_filename)
       pbrt_out_path = os.path.join(
           opts.out_dir, opts.out_template % i + '.pbrt')
-      png_out_path = os.path.join(
-          opts.out_dir, opts.out_template % i + '.png')
+
+      if opts.exr:
+        out_filename = os.path.join(
+            opts.out_dir, opts.out_template % i + '.exr')
+      else:
+        out_filename = os.path.join(
+            opts.out_dir, opts.out_template % i + '.png')
 
       with open(ply_out_path, 'w') as f:
         # This does the ConvexHull!
@@ -671,9 +680,16 @@ def GenPbrt(opts, argv):
                                   template_path='render/ply-header.template')
       print('Wrote %s' % ply_out_path)
 
+      ply_angle = ply_angles[i]
+      if opts.ply_rotation:
+        # Rotate about Y axis, which is pointing up.
+        ply_rotation = 'Rotate %f 0 1 0' % ply_angle
+      else:
+        ply_rotation = ''
+
       eye = eye_points[i]
       d = {
-          'out_filename': png_out_path,
+          'out_filename': out_filename,
           'ply_filename': ply_filename,
           'eye_x': eye[0],
           'eye_y': eye[1],
@@ -683,6 +699,7 @@ def GenPbrt(opts, argv):
           'height': opts.height,
           'pixel_samples': opts.pixel_samples,
           'integrator_depth': opts.integrator_depth,
+          'ply_rotation': ply_rotation,
       }
       with open(pbrt_out_path, 'w') as f:
         f.write(pbrt_template % d)
@@ -718,6 +735,12 @@ def main(argv):
   parser.add_option(
       '--camera', type=str, default='fixed',
       help='Type of camera rotation for a particular scene')
+  parser.add_option(
+      '--ply-rotation', action='store_true',
+      help='Rotate the ply mesh in every frame.')
+  parser.add_option(
+      '--exr', action='store_true',
+      help='Render EXR instead of PNG')
 
   opts, argv = parser.parse_args(argv[1:])
 
