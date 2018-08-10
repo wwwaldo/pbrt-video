@@ -152,8 +152,12 @@ k-jpg() {
   echo _out/exr/k-*.exr | xargs --verbose -n 1 -P $NPROC -- $0 exr-to-jpg
 }
 
-
-# NOTE: Tried 'convert' from imagemagick but it didn't seem to work
+# NOTE: 'convert' on Ubuntu seems to produce videos that can't be opened with
+# the Apple ecosystem: Safari on OS X, QuickTime, iPad, iPhone.
+#
+# See join-ffmpeg below for a command line that works.
+#
+# I think ImageMagick delegates to ffmpeg anyway.
 
 # https://superuser.com/questions/249101/how-can-i-combine-30-000-images-into-a-timelapse-movie
 
@@ -537,6 +541,29 @@ save-3d-anim() {
     --fps 6 \
     --mpl-mp4-out-template '_out/matplotlib-2d-%d-%d.mp4' \
     anim 4 3 
+}
+
+# ffmpeg -r 1/5 -i img%03d.png -c:v libx264 -vf fps=25 -pix_fmt yuv420p out.mp4
+
+# https://stackoverflow.com/questions/24961127/how-to-create-a-video-from-images-with-ffmpeg
+
+video-bathroom-ffmpeg() {
+  local out=_out/4d/remote-bathroom-plyrotate.mp4
+
+  ffmpeg \
+    -framerate 10 \
+    -pattern_type glob \
+    -i '_out/4d/remote-bathroom-plyrotate/*.800x800.png' \
+    -c:v libx264 \
+    -pix_fmt yuv420p \
+    $out
+
+  echo "Wrote $PWD/$out"
+}
+
+publish-media() {
+  cp -v -f \
+    _out/4d/remote-bathroom-plyrotate.mp4 media/120-cell-bathroom.mp4
 }
 
 if test $(basename $0) = 'run.sh'; then
