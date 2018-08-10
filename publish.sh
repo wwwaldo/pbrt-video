@@ -9,9 +9,9 @@ set -o errexit
 
 readonly PLACEHOLDER='<!-- REPLACE HERE -->'
 
-readonly ORIG_LINK='<p><a href="http://oilshell.org/recurse/120-cell-bathroom.original.html">Original Copy</a></p>'
+readonly ORIG_LINK='<p><a id="link" href="http://oilshell.org/recurse/120-cell-bathroom.original.html">Original Copy</a></p>'
 
-readonly MIRROR_LINK='<p><a href="https://andychu.github.io/recurse/120-cell-bathroom.mirror.html">Github Mirror</a> (in case the video does not load)</p>'
+readonly MIRROR_LINK='<p><a id="link" href="https://andychu.github.io/recurse/120-cell-bathroom.mirror.html">Mirror</a> (in case the video does not load)</p>'
 
 build-html() {
   mkdir -p _tmp
