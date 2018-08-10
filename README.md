@@ -20,9 +20,10 @@ was done [Recurse Center][] by Caroline Lin and Andy Chu.
 See the Full Video
 ------------------
 
-[10 second, 2.8 MB video][120-cell-bathroom]
+[10 second, 2.8 MB video][120-cell-bathroom] ([mirror][120-cell-mirror])
 
-[120-cell-bathroom]: http://www.oilshell.org/recurse/120-cell-bathroom.html
+[120-cell-bathroom]: http://www.oilshell.org/recurse/120-cell-bathroom.original.html
+[120-cell-mirror]: https://andychu.github.io/recurse/120-cell-bathroom.mirror.html
 
 Components
 ----------
