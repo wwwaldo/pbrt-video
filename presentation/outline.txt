@@ -1,21 +1,16 @@
-Polytope in a Bathroom
-======================
+Hyperdodecahedron in a Bathroom
+===============================
 
-Things to Show
---------------
+This repository contains code and data to render a video using [PBRT][]!  It
+was done [Recurse Center][] by Caroline Lin and Andy Chu.
 
-Progression:
-
-- Killeroo video?  Rotating the camera.
-- 2d wireframe, then animation
-- 3D wireframe, then animation
-- Polytope on its own
-- bathroom on its own
-
-- Final video
+[PBRT]: http://www.pbrt.org/gallery.html
+[Recurse Center]: https://recurse.com
 
 Components
 ----------
+
+    $ ./count.sh code  # an overview of relevant code / data
 
 - ~900 lines of our own Python code
 - ~200 lines of Schlafli interpreter in Python
@@ -46,7 +41,6 @@ Components
   - 21 MB blend file?
   - Sky environment map (imgtool)
 
-
 Influences / Prior Art
 ----------------------
 
@@ -62,7 +56,6 @@ Algorithm / Pipeline
 --------------------
 
 https://news.ycombinator.com/item?id=17687033
-
 
 Step 1: Use Schlafli generator from here [1]. Schlafli numbers are a compact
 description of regular polytopes, and there is a recursive algorithm to
@@ -117,13 +110,6 @@ Things Learned
 
 - ipython3 (hadn't used it before)
 
-Credits
--------
-
-- Schlafli interpreter
-- Bathroom Scene
-
-
 Possible Directions
 -------------------
 
@@ -131,5 +117,11 @@ Possible Directions
   - Reduce manual work
 - Automation could be improved / more foolproof
 - Interactive polytopes in the browser (several existing implementations)
-- Android Filament: real-time rendering?
+- Android filament: real-time rendering?
+
+Credits
+-------
+
+- Schlafli interpreter
+- Bathroom Scene
 
