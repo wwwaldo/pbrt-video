@@ -7,6 +7,18 @@ was done [Recurse Center][] by Caroline Lin and Andy Chu.
 [PBRT]: http://www.pbrt.org/gallery.html
 [Recurse Center]: https://recurse.com
 
+Influences / Prior Art
+----------------------
+
+- Bathsheba
+- 4D Toys, Miegakure (120 cell)
+- Flatland, etc.
+
+TODO: What's the best explanation of 4D?  Extruding 2D to 3D
+  1978 video
+  numberphile video
+
+
 Components
 ----------
 
@@ -124,4 +136,3 @@ Credits
 
 - Schlafli interpreter
 - Bathroom Scene
-
