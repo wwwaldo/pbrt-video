@@ -4,20 +4,8 @@ Hyperdodecahedron in a Bathroom
 This repository contains code and data to render a video using [PBRT][]!  It
 was done [Recurse Center][] by Caroline Lin and Andy Chu.
 
-[PBRT]: http://www.pbrt.org/gallery.html
+[PBRT]: http://www.pbrt.org/
 [Recurse Center]: https://recurse.com
-
-Influences / Prior Art
-----------------------
-
-- Bathsheba
-- 4D Toys, Miegakure (120 cell)
-- Flatland, etc.
-
-TODO: What's the best explanation of 4D?  Extruding 2D to 3D
-  1978 video
-  numberphile video
-
 
 Components
 ----------
@@ -26,7 +14,7 @@ Components
 
 - ~900 lines of our own Python code
 - ~200 lines of Schlafli interpreter in Python
-  - link:
+  - [https://github.com/aruth2/schlafli](https://github.com/aruth2/schlafli)
 
 - Libraries used
   - numpy for linear algebra
@@ -90,8 +78,6 @@ polytope using time as the 4th dimension.
 I sure he is doing something more advanced (4D collision detection), but this
 is all we needed to reproduce something that looks kinda cool.
 
-[1] https://github.com/aruth2/schlafli
-
 Also:
 - Rotate the camera
 - Rotate the polytope
@@ -115,24 +101,34 @@ Things Learned
 - rotations in 3D and 4D
 - animations with matplotlib
 - Raytracing -- tuning the sample and size parameters
-
 - File formats
   - PLY mesh format
   - EXR image format
-
 - ipython3 (hadn't used it before)
 
 Possible Directions
 -------------------
 
 - More polytopes in more scenes
-  - Reduce manual work
-- Automation could be improved / more foolproof
-- Interactive polytopes in the browser (several existing implementations)
+- Automation could be improved / more foolproof.  Reduce manual work.
+
+Maybe:
+
+- Interactive polytopes in the browser (look at existing implementations)
 - Android filament: real-time rendering?
 
 Credits
 -------
 
-- Schlafli interpreter
-- Bathroom Scene
+- [https://github.com/aruth2/schlafli](https://github.com/aruth2/schlafli)
+- `contemporary-bathroom` scene from http://pbrt.org/scenes-v3.html
+
+> Scene thanks to Mareck. CC-Zero (public domain) license.
+> "contemporary_china" texture used for wallpaper thanks to Adam Charlts;
+> texture contrast was increased for the render. "American_walnut_pxr128" wood
+> texture courtesy Pixar Animation Studios, CC-BY license. Abstract print seen
+> in mirror based on a smoke photograph by Vanessa Pike-Russell, CC-BY
+> license; the photo was inverted and contrast was adjusted for rendering.
+> Hurricane image used for photo on wall courtesy NASA Goddard Space Flight
+> Center, CC-BY license.
+
