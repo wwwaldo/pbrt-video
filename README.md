@@ -24,7 +24,7 @@ with PBRT.
 See the Full Video
 ------------------
 
-[10 second, 2.8 MB video][120-cell-bathroom] ([mirror][120-cell-mirror])
+[10 second video of a Hyperdodecahedron in a Bathroom][120-cell-bathroom] (2.8 MB) ([mirror][120-cell-mirror])
 
 [120-cell-bathroom]: http://www.oilshell.org/recurse/120-cell-bathroom.original.html
 [120-cell-mirror]: https://andychu.github.io/recurse/120-cell-bathroom.mirror.html
