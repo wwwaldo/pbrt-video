@@ -17,11 +17,12 @@ was done [Recurse Center][] by Caroline Lin and Andy Chu.
 
 [rendered-120]: https://raw.githubusercontent.com/caroline-lin/pbrt-video/master/media/frame050.small.png
 
-<p style="font-size: x-large">
-  <a href="http://www.oilshell.org/recurse/120-cell-bathroom.mp4">
-    See the full video here
-  </a>
-</p>
+See the Full Video
+------------------
+
+[10 second, 2.8 MB video][120-cell-bathroom]
+
+[120-cell-bathroom]: http://www.oilshell.org/recurse/120-cell-bathroom.html
 
 Components
 ----------
