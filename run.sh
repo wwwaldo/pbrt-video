@@ -566,6 +566,21 @@ publish-media() {
     _out/4d/remote-bathroom-plyrotate.mp4 media/120-cell-bathroom.mp4
 }
 
+png-120-cell() {
+  local out=_out/wireframe
+  mkdir -p $out
+  rm --verbose -f $out/*
+
+  ./polytope.py \
+    --num-frames 10 \
+    --mpl-png-out-template "$out/5-3-3__frame%03d.png" \
+    anim 5 3 3 
+}
+
+gif-120-cell() {
+  convert -loop 0 -delay 100 _out/wireframe/5-3-3__*.png _out/5-3-3__wireframe.gif
+}
+
 if test $(basename $0) = 'run.sh'; then
   "$@"
 fi

@@ -397,7 +397,11 @@ def Plot(schlafli, opts):
         intersections = [np.array(v[:3]) for v in intersections]
 
         Draw4dSlice(ax, intersections, draw_hull=True)
-        plt.pause(0.001)
+
+        if opts.mpl_png_out_template:
+          plt.savefig(opts.mpl_png_out_template % i)
+        else:
+          plt.pause(0.001)
 
         # Hm this is the only way I can figure out to draw a new Convex hull
         # on each frame.  There is a ax.collections.remove() hack for the
@@ -725,7 +729,11 @@ def main(argv):
       help='Python % template string for frame name')
   parser.add_option(
       '--mpl-mp4-out-template', type=str,
-      help='Instead of plotting, save an .mp4 from matplotlib')
+      help='Instead of plotting, save an .mp4 from matplotlib.'
+           'The schlafi symbol is substituted.')
+  parser.add_option(
+      '--mpl-png-out-template', type=str,
+      help='Save PNG frames (e.g. to convert to animated gif')
   parser.add_option(
       '--fps', type=int, default=30,
       help='Frames per second for matplotlib mp4')
