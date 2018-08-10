@@ -2,12 +2,16 @@ Hyperdodecahedron in a Bathroom
 ===============================
 
 This repository contains code and data to render a video using [PBRT][]!  It
-was done [Recurse Center][] by Caroline Lin and Andy Chu.
+was done at [Recurse Center][] by Caroline Lin and Andy Chu.
 
 [PBRT]: http://www.pbrt.org/
 [Recurse Center]: https://recurse.com
 
-<!-- TODO: screenshot of video -->
+Screenshots
+-----------
+
+We prototyped the geometry with NumPy and matplotlib, and then rendered it
+with PBRT.
 
 ![Wireframe of Hyperdodecahedron][wireframe-120]
 
