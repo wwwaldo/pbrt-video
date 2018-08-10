@@ -578,7 +578,8 @@ png-120-cell() {
 }
 
 gif-120-cell() {
-  convert -loop 0 -delay 100 _out/wireframe/5-3-3__*.png _out/5-3-3__wireframe.gif
+  convert -loop 0 -delay 100 \
+    _out/wireframe/5-3-3__*.png _out/5-3-3__wireframe.gif
 }
 
 if test $(basename $0) = 'run.sh'; then
