@@ -17,13 +17,14 @@ Components
 - ~900 lines of our own Python code
 - ~200 lines in [schlafli_interpreter.py][] from `aruth2`
 - Libraries used
-  - NumPy for linear algebra
-  - SciPy for convex hull algorithm
-  - matplotlib for plotting the prototypes
+  - [NumPy][] for linear algebra
+  - [SciPy][] for the convex hull algorithm
+  - [matplotlib][] for plotting the prototypes
 - Tools used:
-  - PBRT for rendering
-  - ImageMagick for resizing frames, joining frames to video
-  - Meshlab (a GUI tool) for combining the polytope with the bathroom scene
+  - [PBRT][] for rendering
+  - [ImageMagick][] for resizing frames
+  - [ffmpeg][] for encoding frames to video
+  - [MeshLab][] (a GUI tool) for combining the polytope with the bathroom scene
 - ~500 lines of shell
   - Coordinating Python, PBRT, ImageMagick, etc.
   - Running rendering over 3 machines
@@ -39,6 +40,14 @@ Components
   - Sky environment map (imgtool)
 
 [schlafli_interpreter.py]: https://github.com/aruth2/schlafli/blob/master/schlafli_interpreter.py
+
+[NumPy]: http://www.numpy.org/
+[SciPy]: https://www.scipy.org/
+[matplotlib]: https://matplotlib.org/
+
+[ImageMagick]: https://www.imagemagick.org/script/index.php
+[ffmpeg]: https://www.ffmpeg.org/
+[MeshLab]: http://www.meshlab.net/
 
 Influences / Prior Art
 ----------------------
@@ -115,6 +124,8 @@ Possible Future Directions
 
 - More polytopes in more scenes
 - Automation could be improved / more foolproof.  Reduce manual work.
+- Rotation about different axes (in 4D too).  Look at the Polytope slicer
+  applet again.
 
 Maybe:
 
@@ -125,6 +136,8 @@ Future Research:
 
 - How does the Schlafli generator work, exactly?
 - How does Convex Hull work?  SciPy uses http://www.qhull.org .
+- How to obtain triangles for star polytopes?  Taking the Convex hull won't
+  work in this case.
 
 Credits
 -------
