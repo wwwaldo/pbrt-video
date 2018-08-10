@@ -7,12 +7,12 @@ set -o nounset
 set -o pipefail
 set -o errexit
 
-# User must set DESTNAME
-
 publish() {
-  ssh $DESTNAME@$DESTNAME.org 'mkdir -p oilshell.org/recurse'
+  local destname=$1
+
+  ssh $destname@$destname.org 'mkdir -p oilshell.org/recurse'
   rsync --archive --verbose \
-    120-cell-bathroom.* $DESTNAME@oilshell.org:oilshell.org/recurse
+    120-cell-bathroom.* $destname@oilshell.org:oilshell.org/recurse
 }
 
 "$@"
