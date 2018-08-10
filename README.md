@@ -41,13 +41,13 @@ Components
   - [ImageMagick][] for resizing frames
   - [ffmpeg][] for encoding frames to video
   - [MeshLab][] (a GUI tool) for combining the polytope with the bathroom scene
-- ~500 lines of shell
-  - Coordinating Python, PBRT, ImageMagick, etc.
-  - Running rendering over 3 machines
+- ~500 lines of shell scripts (more motivation for [Oil shell](http://www.oilshell.org/))
+  - To coordinate Python code and the tools above
+  - To render across 3 machines
     - Rendering time: 4-8 hours on 33 cores/66 hyperthreads across 3 Heap
       machines
     - mod-sharding with shell scripts!
-  - `ssh`, `rsync`
+  - `ssh`, `rsync` to distribute inputs and collect outputs
   - `xargs -P` for resizing frames in parallel
 - ~5800 lines of textual PBRT description for bathroom
   - 19 MB geometry
@@ -72,7 +72,7 @@ Influences / Prior Art
 - [Bathsheba Grossman](https://bathsheba.com/sculpt/) -- making mathematical
   objects real!
 
-Stuff I was fascinated by 15+ years ago!
+Stuff Andy was fascinated by 15+ years ago!
 
 - [HyperSpace Polytope Slicer](http://dogfeathers.com/java/hyperslice.html)
   (not sure if the Java Applet still works)
