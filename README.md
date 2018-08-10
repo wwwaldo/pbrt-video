@@ -9,6 +9,10 @@ was done [Recurse Center][] by Caroline Lin and Andy Chu.
 
 <!-- TODO: screenshot of video -->
 
+![Wireframe of Hyperdodecahedron][wireframe-120]
+
+[wireframe-120]: https://raw.githubusercontent.com/caroline-lin/pbrt-video/master/media/5-3-3__wireframe.gif
+
 Components
 ----------
 
