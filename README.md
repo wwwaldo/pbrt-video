@@ -13,11 +13,15 @@ was done [Recurse Center][] by Caroline Lin and Andy Chu.
 
 ![Rendered Screenshot][rendered-120]
 
-#[wireframe-120]: https://raw.githubusercontent.com/caroline-lin/pbrt-video/master/media/5-3-3__wireframe.gif
-
 [wireframe-120]: https://raw.githubusercontent.com/caroline-lin/pbrt-video/master/media/5-3-3__frame002.small.png
 
 [rendered-120]: https://raw.githubusercontent.com/caroline-lin/pbrt-video/master/media/frame050.small.png
+
+<p style="font-size: x-large">
+  <a href="http://www.oilshell.org/recurse/120-cell-bathroom.mp4">
+    See the full video here
+  </a>
+</p>
 
 Components
 ----------
