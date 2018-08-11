@@ -27,11 +27,11 @@ Components
 - ~500 lines of shell
   - Coordinating Python, PBRT, ImageMagick, etc.
   - Running rendering over 3 machines
-    - Rendering time: 4-8 hours on 33 cores/66 hyperthreads over 3 Heap
+    - Rendering time: 4-8 hours on 33 cores/66 hyperthreads across 3 Heap
       machines
     - mod-sharding with shell scripts!
-  - ssh, rsync
-  - xargs -P for resizing frames in parallel
+  - `ssh`, `rsync`
+  - `xargs -P` for resizing frames in parallel
 - ~5800 lines of textual PBRT description for bathroom
   - 19 MB geometry
   - 14 MB textures
@@ -43,22 +43,25 @@ Components
 Influences / Prior Art
 ----------------------
 
-- Bathsheba
-- 4D Toys, Miegakure (120 cell)
-- Flatland, etc.
+- [4D Toys](http://4dtoys.com/), [Miegakure](http://miegakure.com/)
+- [Bathsheba Grossman](https://bathsheba.com/sculpt/) -- making mathematical
+  objects real!
 
-TODO: What's the best explanation of 4D?  Extruding 2D to 3D
-  1978 video
-  numberphile video
+Stuff I was fascinated by 15+ years ago!
+
+- [HyperSpace Polytope Slicer](http://dogfeathers.com/java/hyperslice.html)
+  (not sure if the Java Applet still works)o
+- [Russell Towle's 4D Star Polytope Animations](http://dogfeathers.com/towle/star.html)
 
 Algorithm
 ---------
 
 1. Use [schlafli_interpreter.py][] to generate a polytope.  It takes a
-   Schlafli symbol -- like `{5,3,3}` for the hyperdodecahedron aka 120-cell --
-   and generates algorithm to generate vertices, edges, faces, hyperfaces,
-   etc.  There is general recursive algorithm to do this.  The base case of
-   the recursion is dimension 1, so you make 4 calls to get to dimension 4.
+   Schlafli symbol -- like `{5,3,3}` for the hyperdodecahedron aka
+   [120-cell][] -- and generates algorithm to generate vertices, edges, faces,
+   hyperfaces, etc.  There is general recursive algorithm to do this.  The
+   base case of the recursion is dimension 1, so you make 4 calls to get to
+   dimension 4.
 2. Intersect the edges of the polytope with a hyperplane (a 3D subset of 4D).
 3. You get a set of 3D points out of step 2. Draw the convex hull of them,
    which gives you triangles.
@@ -72,6 +75,8 @@ Also:
 
 - Rotate the camera
 - Rotate the polytope
+
+[120-cell]: https://bathsheba.com/sculpt/
 
 [schlafli]: https://github.com/aruth2/schlafli
 
