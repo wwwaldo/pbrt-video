@@ -15,17 +15,14 @@ Components
 - ~900 lines of our own Python code
 - ~200 lines of Schlafli interpreter in Python
   - [https://github.com/aruth2/schlafli](https://github.com/aruth2/schlafli)
-
 - Libraries used
-  - numpy for linear algebra
-  - scipy for convex hull algorithm
+  - NumPy for linear algebra
+  - SciPy for convex hull algorithm
   - matplotlib for plotting the prototypes
-
 - Tools used:
-  - ImageMagick for resizing frames, joining frames to video
   - PBRT for rendering
-  - GUI Tool: Meshlab for combining the polytope with the bathroom scene
-
+  - ImageMagick for resizing frames, joining frames to video
+  - Meshlab (a GUI tool) for combining the polytope with the bathroom scene
 - ~500 lines of shell
   - Coordinating Python, PBRT, ImageMagick, etc.
   - Running rendering over 3 machines
@@ -34,7 +31,6 @@ Components
     - mod-sharding with shell scripts!
   - ssh, rsync
   - xargs -P for resizing frames in parallel
-
 - ~5800 lines of textual PBRT description for bathroom
   - 19 MB geometry
   - 14 MB textures
@@ -52,43 +48,40 @@ TODO: What's the best explanation of 4D?  Extruding 2D to 3D
   1978 video
   numberphile video
 
-Algorithm / Pipeline 
---------------------
+Algorithm
+---------
 
-https://news.ycombinator.com/item?id=17687033
-
-Step 1: Use Schlafli generator from here [1]. Schlafli numbers are a compact
-description of regular polytopes, and there is a recursive algorithm to
-generate vertices, edges, faces, etc. from them. The base case of the
-recursion is dimension 1, so you make 4 calls to get to dimension 4.
-
-Step 2: Intersect the edges of the polytope with a hyperplane (a 3D subset of
-4D).
-
-Step 3: You get a set of 3D points out of step 2. Draw the convex hull of
-them, which gives you triangles.
-
-Step 4: Render the triangles somehow. I used matplotlib's 3d facilities
-(mplot3d), and we are working on raytracing them.
-
-Step 5: Animate over different hyperplanes. Take the min and max in the w
-plane and that will give you non-empty slices. Now you can "see" the 4D
-polytope using time as the 4th dimension.
-
-I sure he is doing something more advanced (4D collision detection), but this
-is all we needed to reproduce something that looks kinda cool.
+1. Use this [this Python code][1] to generate a polytope.  It takes a Schlafli
+   symbol -- like `{5,3,3}` for the hyperdodecahedron aka 120-cell -- and
+   generates algorithm to generate vertices, edges, faces, hyperfaces, etc.
+   There is general recursive algorithm to do this.  The base case of the
+   recursion is dimension 1, so you make 4 calls to get to dimension 4.
+2. Intersect the edges of the polytope with a hyperplane (a 3D subset of 4D).
+3. You get a set of 3D points out of step 2. Draw the convex hull of them,
+   which gives you triangles.
+4. Render the triangles somehow.  We used both matplotlib's 3d facilities
+   (mplot3d) and [PBRT][].
+5. Animate over different hyperplanes. Take the min and max along the w axis
+   and that will give you non-empty slices. Now you can "see" the 4D polytope
+   using time as the 4th dimension.
 
 Also:
+
 - Rotate the camera
 - Rotate the polytope
 
-Pipeline
+[schlafli]: https://github.com/aruth2/schlafli
 
-- Export to PBRT
+Original comment: https://news.ycombinator.com/item?id=17687033
+
+Pipeline
+--------
+
+- Export a `.pbrt` file per frame
 - Distribute code, data, and configuration to 3 machines with rsync
-- render to PNG with PBRT running under tmux (so we don't lose the sessions)
+- Render to PNG with PBRT running under tmux (so we don't lose the sessions)
 - Copy frames back with rsync
-- Resize frames and join to video with ImageMagick
+- Resize frames and join to video with ImageMagick.
 
 Things Learned
 --------------
@@ -120,7 +113,8 @@ Maybe:
 Credits
 -------
 
-- [https://github.com/aruth2/schlafli](https://github.com/aruth2/schlafli)
+- Polytope generator from
+  [https://github.com/aruth2/schlafli](https://github.com/aruth2/schlafli)
 - `contemporary-bathroom` scene from http://pbrt.org/scenes-v3.html
 
 > Scene thanks to Mareck. CC-Zero (public domain) license.
