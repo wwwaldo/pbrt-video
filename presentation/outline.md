@@ -50,7 +50,7 @@ Influences / Prior Art
 Stuff I was fascinated by 15+ years ago!
 
 - [HyperSpace Polytope Slicer](http://dogfeathers.com/java/hyperslice.html)
-  (not sure if the Java Applet still works)o
+  (not sure if the Java Applet still works)
 - [Russell Towle's 4D Star Polytope Animations](http://dogfeathers.com/towle/star.html)
 
 Algorithm
