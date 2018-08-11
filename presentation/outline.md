@@ -13,8 +13,7 @@ Components
     $ ./count.sh code  # an overview of relevant code / data
 
 - ~900 lines of our own Python code
-- ~200 lines of Schlafli interpreter in Python
-  - [https://github.com/aruth2/schlafli](https://github.com/aruth2/schlafli)
+- ~200 lines in [schlafli_interpreter.py][] from `aruth2`
 - Libraries used
   - NumPy for linear algebra
   - SciPy for convex hull algorithm
@@ -37,6 +36,8 @@ Components
   - 21 MB blend file?
   - Sky environment map (imgtool)
 
+[schlafli_interpreter.py]: https://github.com/aruth2/schlafli/blob/master/schlafli_interpreter.py
+
 Influences / Prior Art
 ----------------------
 
@@ -51,11 +52,11 @@ TODO: What's the best explanation of 4D?  Extruding 2D to 3D
 Algorithm
 ---------
 
-1. Use this [this Python code][1] to generate a polytope.  It takes a Schlafli
-   symbol -- like `{5,3,3}` for the hyperdodecahedron aka 120-cell -- and
-   generates algorithm to generate vertices, edges, faces, hyperfaces, etc.
-   There is general recursive algorithm to do this.  The base case of the
-   recursion is dimension 1, so you make 4 calls to get to dimension 4.
+1. Use [schlafli_interpreter.py][] to generate a polytope.  It takes a
+   Schlafli symbol -- like `{5,3,3}` for the hyperdodecahedron aka 120-cell --
+   and generates algorithm to generate vertices, edges, faces, hyperfaces,
+   etc.  There is general recursive algorithm to do this.  The base case of
+   the recursion is dimension 1, so you make 4 calls to get to dimension 4.
 2. Intersect the edges of the polytope with a hyperplane (a 3D subset of 4D).
 3. You get a set of 3D points out of step 2. Draw the convex hull of them,
    which gives you triangles.
@@ -113,8 +114,6 @@ Maybe:
 Credits
 -------
 
-- Polytope generator from
-  [https://github.com/aruth2/schlafli](https://github.com/aruth2/schlafli)
 - `contemporary-bathroom` scene from http://pbrt.org/scenes-v3.html
 
 > Scene thanks to Mareck. CC-Zero (public domain) license.
@@ -125,4 +124,6 @@ Credits
 > license; the photo was inverted and contrast was adjusted for rendering.
 > Hurricane image used for photo on wall courtesy NASA Goddard Space Flight
 > Center, CC-BY license.
+
+- `aruth2` for [schlafli_interpreter.py][]
 
