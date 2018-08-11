@@ -7,6 +7,8 @@ was done [Recurse Center][] by Caroline Lin and Andy Chu.
 [PBRT]: http://www.pbrt.org/
 [Recurse Center]: https://recurse.com
 
+<!-- TODO: screenshot of video -->
+
 Components
 ----------
 
@@ -78,30 +80,33 @@ Original comment: https://news.ycombinator.com/item?id=17687033
 Pipeline
 --------
 
-- Export a `.pbrt` file per frame
-- Distribute code, data, and configuration to 3 machines with rsync
-- Render to PNG with PBRT running under tmux (so we don't lose the sessions)
-- Copy frames back with rsync
-- Resize frames and join to video with ImageMagick.
+1. Export a `.pbrt` file per frame.
+2. Distribute code, data, and configuration to 3 machines with rsync
+3. Render to PNG with PBRT running under tmux (so we don't lose the sessions).
+4. Copy frames back with rsync.
+5. Resize frames and join to video with ImageMagick.
 
-Things Learned
---------------
+Things We Learned About
+-----------------------
 
-- Schlafli symbol representation of polytopes in arbitrary dimensions
-- v-polytope vs. h-polytope 
-  - Convex Hull converts between two representations
-- math for line segment-plane intersection (this generalized from 3D to 4D
-  easily, so we didn't need to do anything special)
-- rotations in 3D and 4D
-- animations with matplotlib
+- Geometry
+  - Schlafli symbol representation of polytopes in arbitrary dimensions.
+  - v-polytope vs. h-polytope 
+    - Convex Hull gives you the h-polytope from the v-polytope (roughly).
+- Linear Algebra:
+  - for line segment-plane intersection (this generalized from 3D to 4D
+    easily, so we didn't need to do anything special)
+  - rotations in 3D and 4D
 - Raytracing -- tuning the sample and size parameters
 - File formats
   - PLY mesh format
   - EXR image format
-- ipython3 (hadn't used it before)
+- Tools
+  - matplotlib: mplot3d and animations
+  - ipython3 (hadn't used it before)
 
-Possible Directions
--------------------
+Possible Future Directions
+--------------------------
 
 - More polytopes in more scenes
 - Automation could be improved / more foolproof.  Reduce manual work.
@@ -110,6 +115,11 @@ Maybe:
 
 - Interactive polytopes in the browser (look at existing implementations)
 - Android filament: real-time rendering?
+
+Future Research:
+
+- How does the Schlafli generator work, exactly?
+- How does Convex Hull work?  SciPy uses http://www.qhull.org .
 
 Credits
 -------
