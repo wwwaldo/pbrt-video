@@ -547,15 +547,23 @@ save-3d-anim() {
 
 # https://stackoverflow.com/questions/24961127/how-to-create-a-video-from-images-with-ffmpeg
 
-join-ffmpeg() {
+video-bathroom-ffmpeg() {
+  local out=_out/4d/remote-bathroom-plyrotate.mp4
+
   ffmpeg \
-    -framerate 1 \
+    -framerate 10 \
     -pattern_type glob \
     -i '_out/4d/remote-bathroom-plyrotate/*.800x800.png' \
     -c:v libx264 \
-    -r 30 \
     -pix_fmt yuv420p \
-    _out/4d/remote-bathroom-plyrotate.mp4
+    $out
+
+  echo "Wrote $PWD/$out"
+}
+
+publish-media() {
+  cp -v -f \
+    _out/4d/remote-bathroom-plyrotate.mp4 media/120-cell-bathroom.mp4
 }
 
 if test $(basename $0) = 'run.sh'; then
