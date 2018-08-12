@@ -21,29 +21,14 @@ from schlafli import schlafli_interpreter
 from render import generate_ply
 
 
-# https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
-#
-# triangle: p0, p1, p2 (9 params)
-# vectors: p0 -> p1
-#          p0 -> p2
-# but really I want to start with a normal vector and distance d?
-#   Then take any two vectors in the plane that the normal vector defines0
-
-
-# mplot3d examples
-# https://matplotlib.org/examples/mplot3d/
-
-# TODO:
-# - change representation of plane: normal and d
-# - animate the plane in matplotlib?  Just change d.
-#   - allow user to rotate the plane?
-# - could make the intersection nicer?  Use a polygon to plot?
-
-
 def Intersect(edges, plane_normal, p0):
   """Intersect a list of edges with a plane.
 
   The plane is defined by a point and a normal vector.
+
+  This is the "parametric form" from
+
+  https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
   """
   intersections = []
   for la, lb in edges:
@@ -61,7 +46,7 @@ def Intersect(edges, plane_normal, p0):
     #print()
 
     inter = la + lab*t
-    if 0.0 <= t <= 1.0:
+    if 0.0 <= t <= 1.0:  # It intersected the line segment!
       intersections.append(inter)
     else:
       #print('does not intersect')
@@ -212,9 +197,9 @@ def Tilt3D(vertices):
 
 def Tilt4D(vertices):
   """
-  4D version of above:
+  4D version of above.
   """
-  # divide by a prime number to make sure it's not sligned
+  # divide by a prime number to make sure it's not aligned
   divisor = 11.0
 
   theta_xy = math.pi / divisor
@@ -283,8 +268,11 @@ def PrintBounds(vertices):
   #print('w: %s' % sorted(w))
 
 
-# NOTE: It might be better to separate this into Plot3D and Plot4D.
 def Plot(schlafli, opts):
+  """
+  Plot a polytope with matplotlib.  Inconsistency: This plots in 3D, but
+  animates in 4D!
+  """
   #p0 = np.array([0.5, 0.5, 0.5])  # center of the cube
 
   p0 = np.array([0, 0, 0])
@@ -440,6 +428,7 @@ def Plot(schlafli, opts):
 
 
 class Animation3D(object):
+  """Callback for matplotlib."""
 
   def __init__(self, vertices, edge_numbers, z_offsets, mpl_lines,
                mpl_points):
@@ -553,6 +542,7 @@ def Animate3D(schlafli, num_frames, fps, mp4_out_template=None):
 
 def GenPbrt(opts, argv):
   """Generate a series of PBRT files."""
+
   schlafli = [int(a) for a in argv[1:]]  # e.g. 4 3 3 for hypercube
   if len(schlafli) not in (2, 3):
     raise RuntimeError('2 or 3 args required (e.g. "4 3" for cube)')
@@ -788,6 +778,7 @@ def main(argv):
 
   else:
     raise RuntimeError('Invalid action %r' % action)
+
 
 if __name__ == '__main__':
   try:
