@@ -115,12 +115,12 @@ Original comment: https://news.ycombinator.com/item?id=17687033
 Pipeline
 --------
 
-1. Export a `.pbrt` file per frame.
+1. Export a `.pbrt` scene description and `.ply` mesh per frame.
 2. Distribute code, data, and configuration to 3 machines with rsync.
 3. Render to PNG with [PBRT][] running under tmux (so we don't lose the sessions).
 4. Copy frames back with rsync.
-5. Resize frames with [ImageMagick][].
-6. Join them with [ffmpeg][].
+5. Resize them with [ImageMagick][].
+6. Use [ffmpeg][] to create an `.mp4` video out of the frames.
 
 Things We Learned About
 -----------------------
