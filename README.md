@@ -85,15 +85,15 @@ Stuff Andy was fascinated by 15+ years ago!
 Algorithm
 ---------
 
-1. Use [schlafli_interpreter.py][] to generate a polytope.  It takes a
-   Schlafli symbol -- like `{5,3,3}` for the hyperdodecahedron aka
-   [120-cell][] -- and generates algorithm to generate vertices, edges, faces,
-   hyperfaces, etc.  There is general recursive algorithm to do this.  The
-   base case of the recursion is dimension 1, so you make 4 calls to get to
-   dimension 4.
-2. Intersect the edges of the polytope with a hyperplane (a 3D subset of 4D).
-3. You get a set of 3D points out of step 2. Draw the convex hull of them,
-   which gives you triangles.
+1. Use [schlafli_interpreter.py][] to generate a regular polytope.  It takes as
+   input a Schlafli symbol -- e.g. `{5,3,3}` for the hyperdodecahedron aka
+   [120-cell][] -- and generates a list of vertices, edges, faces, hyperfaces,
+   etc.
+   - The algorithm is recursive, and the base case of the recursion is
+     dimension 1.  So you make 4 calls to get to dimension 4.
+2. Intersect the edges of the polytope with a hyperplane (a 3D subset of 4D),
+   which gives you a set of 3D points.
+3. Draw the convex hull of these points, which gives you triangles.
 4. Render the triangles somehow.  We used both matplotlib's 3d facilities
    (mplot3d) and [PBRT][].
 5. Animate over different hyperplanes. Take the min and max along the w axis
@@ -102,8 +102,9 @@ Algorithm
 
 Also:
 
-- Rotate the camera
-- Rotate the polytope
+- Rotate the camera.
+- Rotate the polytope.  TODO: This can be done in different ways, and which
+  yields surprisingly different 3D animations!
 
 [120-cell]: https://bathsheba.com/sculpt/
 
